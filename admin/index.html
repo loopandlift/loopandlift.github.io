@@ -136,12 +136,47 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const toast = t => { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.append(d); setTimeout(() => d.remove(), 2200); };
 const STATUSES = ['pending', 'approved', 'invited', 'rejected'];
-// the emails the Email button opens, ready to send from your own mail app
+// the emails the Email button opens, ready to send from your own mail app. Written as Elio, person to person
+// (the owner: authentic and personal, never corporate)
+const first = t => (t.name || '').trim().split(/\s+/)[0] || 'there';
 const MAILS = {
-  pending: t => ({ s: 'Loop & Lift: thanks for signing up!', b: `Hi ${t.name},\n\nThanks for signing up to test Loop & Lift! We'll get back to you soon with the next test build.\n\nFollow @playloopandlift on Instagram for news.\n\nElio, Loop & Lift` }),
-  approved: t => ({ s: "You're in! Loop & Lift tester build", b: `Hi ${t.name},\n\nYou're in! You're one of the Loop & Lift testers.\n\nDownload the test build here: [LINK]\n\nTell us everything you build and anything that breaks: just reply to this email.\n\nElio, Loop & Lift` }),
-  invited: t => ({ s: 'Loop & Lift: how is the test going?', b: `Hi ${t.name},\n\nHow is the Loop & Lift test going? We'd love to hear what you built and what we should fix.\n\nElio, Loop & Lift` }),
-  rejected: t => ({ s: 'Loop & Lift tester sign-up', b: `Hi ${t.name},\n\nThanks so much for signing up! This test round is full, but you're on our list for the next one.\n\nElio, Loop & Lift` })
+  pending: t => ({ s: `Hey ${first(t)}, got your tester sign-up!`, b: `Hey ${first(t)}!
+
+It's Elio, the guy building Loop & Lift. I just saw your sign-up and honestly it made my day.
+
+I'm building this game mostly on my own, so every person who wants to try it means a lot to me. I'll send you the test build as soon as the next one is ready, hopefully soon :)
+
+Until then I post the progress on Instagram almost every day (@playloopandlift), if you want to see what's coming.
+
+Talk soon,
+Elio` }),
+  approved: t => ({ s: `${first(t)}, you're in!`, b: `Hey ${first(t)}!
+
+You're in. You're one of the very first people to play Loop & Lift.
+
+Here's the test build: [LINK]
+
+Fair warning: it's still a test, so things will break. When they do (or when you build something cool), just reply to this email. I read every single one myself, and a lot of what's in the game came from people like you.
+
+Can't wait to see your park.
+Elio` }),
+  invited: t => ({ s: `How's your park going, ${first(t)}?`, b: `Hey ${first(t)},
+
+Quick one: how's Loop & Lift treating you? What did you build so far?
+
+Anything that felt confusing, broken or just not fun, tell me. Even one line helps a lot.
+
+Elio` }),
+  rejected: t => ({ s: 'About the Loop & Lift test', b: `Hey ${first(t)},
+
+Thank you so much for signing up, really.
+
+This test round filled up faster than I expected, so I couldn't fit everyone in. You're on my list for the next round, and I'll write to you myself when it opens.
+
+Meanwhile the game's progress is on Instagram (@playloopandlift).
+
+Thanks for the support,
+Elio` })
 };
 
 if (!CFG) {
