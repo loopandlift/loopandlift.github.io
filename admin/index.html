@@ -115,6 +115,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 24px; }
     <div class="msg" id="loginMsg"></div>
   </section>
 
+  <div class="empty" id="boot" style="margin-top:12vh"><h2>Loading...</h2></div>
   <section class="hidden" id="app">
     <div class="stats" id="stats"></div>
     <div class="bar">
@@ -215,14 +216,24 @@ $('pw').addEventListener('click', async () => {
 $('out').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
 
 async function show(session) {
+  $('boot')?.remove();
   if (!session) { $('login').classList.remove('hidden'); $('app').classList.add('hidden'); $('me').classList.add('hidden'); return; }
-  const { data: ok } = await sb.rpc('is_admin');
+  const { data: ok, error: rpcErr } = await Promise.race([sb.rpc('is_admin'), new Promise(r => setTimeout(() => r({ error: { message: 'timeout' } }), 8000))]);
+  if (rpcErr) { $('login').classList.remove('hidden'); $('loginMsg').textContent = 'Could not reach the server. Check the connection and refresh.'; return; }
   if (!ok) { $('login').classList.remove('hidden'); $('loginMsg').textContent = 'This account has no admin access.'; await sb.auth.signOut(); return; }
   $('login').classList.add('hidden'); $('app').classList.remove('hidden'); $('me').classList.remove('hidden');
   $('meMail').textContent = session.user.email;
   load();
 }
-sb.auth.onAuthStateChange((_e, session) => show(session));
+// never await Supabase inside this callback: it holds the auth lock and the call never returns (a blank page
+// for a returning admin). Handle the session on the next tick instead.
+let shown = null;
+sb.auth.onAuthStateChange((_e, session) => {
+  const key = session?.user?.id ?? 'none';
+  if (key === shown) return; // token refreshes don't redraw the page
+  shown = key;
+  setTimeout(() => show(session), 0);
+});
 
 // ---------- data ----------
 async function load() {
