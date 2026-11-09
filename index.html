@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en" class="loading">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loop &amp; Lift</title>
+<meta name="description" content="Loop & Lift: build the theme park of your dreams. Join as a tester.">
+<link rel="preload" href="assets/fonts/fredoka-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/sky.jpg" as="image">
+<style>
+@font-face { font-family: 'Fredoka'; font-weight: 700; font-display: block; src: url(assets/fonts/fredoka-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Fredoka'; font-weight: 600; font-display: block; src: url(assets/fonts/fredoka-latin-600-normal.woff2) format('woff2'); }
+:root {
+  --ink: #3a0f63;
+  --ink-2: #2a0948;
+  --pink: #ff4fa0;
+  --sky-top: #6a2fb8;
+  --sky-low: #b0428f;
+  --f-title: 'Fredoka', 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--sky-top); color: #fff; font-family: var(--f-title); overflow-x: hidden; }
+
+/* ---------- the sky: the game's own fleecy high clouds ---------- */
+.hero {
+  position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden;
+  background: linear-gradient(180deg, var(--sky-top) 0%, #e0609e 60%, var(--sky-low) 100%);
+}
+.sky { position: absolute; inset: 0; background: url(assets/sky.jpg) center 70% / cover no-repeat; }
+/* the sunset glow at the horizon; a soft violet floor under it */
+.sky::after { content: ''; position: absolute; inset: auto 0 0 0; height: 18%; background: linear-gradient(180deg, rgba(176, 66, 143, 0), rgba(150, 50, 130, .55) 100%); }
+
+/* ---------- Moon Serpent (left): the tower top + the train's real run as a transparent video ---------- */
+.ms {
+  position: absolute; aspect-ratio: 1; height: var(--ms-h); left: var(--ms-x); top: var(--ms-y);
+  -webkit-mask-image: linear-gradient(180deg, #000 56%, transparent 95%);
+  mask-image: linear-gradient(180deg, #000 56%, transparent 95%);
+  pointer-events: none;
+  --ms-h: min(112vh, 110vw); --ms-x: calc(-2vw - min(112vh, 110vw) * .26); --ms-y: -6vh;
+}
+.ms img, .ms video { position: absolute; display: block; user-select: none; }
+
+/* ---------- Mega Wheel (bottom right): depth slices turning in 3D; only this layer is 3D ---------- */
+.stage { position: absolute; inset: 0; perspective: 9000px; perspective-origin: 50% 50%; pointer-events: none; overflow: hidden; }
+.wheel { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+.wheel div { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
+.wheel img { display: block; position: absolute; user-select: none; }
+/* the turning runs as CSS animations on the compositor: smooth even while the page is busy (video, layout) */
+.wheel .turn, .wheel .arm { animation: spin var(--T) linear infinite; animation-delay: var(--d, 0s); will-change: transform; }
+.wheel .level { animation: unspin var(--T) linear infinite; animation-delay: var(--d, 0s); will-change: transform; }
+.wheel .pos { transform: translateY(var(--r)); }
+.wheel .face { transform: rotateY(calc(var(--tilt) * -1)); }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes unspin { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+.loading .wheel .turn, .loading .wheel .arm, .loading .wheel .level { animation-play-state: paused; }
+
+/* ---------- centre: logo + the call to action (no transforms here: text stays pin-sharp) ---------- */
+.center {
+  position: absolute; inset: 0; z-index: 5;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+  padding: 0 4vw 10vh; text-align: center; pointer-events: none;
+}
+.center > * { pointer-events: auto; }
+.logo {
+  margin: 0; font-family: var(--f-title); font-weight: 700; line-height: .9; letter-spacing: .01em; white-space: nowrap;
+  font-size: clamp(54px, 10.5vw, 150px);
+  color: #ffb52e;
+  background: linear-gradient(180deg, #fffbe0 0%, #ffe14f 36%, #ffa51f 62%, #ff7a1a 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter:
+    drop-shadow(4px 0 0 var(--ink)) drop-shadow(-4px 0 0 var(--ink)) drop-shadow(0 4px 0 var(--ink)) drop-shadow(0 -4px 0 var(--ink))
+    drop-shadow(0 9px 0 var(--ink-2)) drop-shadow(0 18px 24px rgba(42, 9, 72, .4));
+}
+.logo .amp { background: linear-gradient(180deg, #ffd0ea, #ff4fa0 55%, #c3166e); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.loop-o { display: inline-block; width: .72em; height: .5625em; margin: 0 -.075em; vertical-align: -.05em; overflow: visible; }
+.tag {
+  margin: 0; font-weight: 600; font-size: clamp(19px, 2.5vw, 30px); line-height: 1.2;
+  text-shadow: 0 2px 0 rgba(42, 9, 72, .8), 0 0 3px rgba(42, 9, 72, .7), 0 0 22px rgba(42, 9, 72, .45);
+}
+.ctas { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+.btn {
+  font-family: var(--f-title); font-weight: 700; cursor: pointer; text-decoration: none; border: 0; line-height: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 20px;
+  transition: translate .15s ease, scale .15s ease, box-shadow .15s ease;
+}
+.btn-main {
+  font-size: clamp(21px, 2.6vw, 30px); padding: 20px 40px; color: #fff;
+  background: linear-gradient(180deg, #ff8ac4 0%, #ff4fa0 45%, #e0237f 100%);
+  box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2), 0 18px 40px rgba(255, 79, 160, .5);
+  text-shadow: 0 2px 0 rgba(58, 15, 99, .55);
+}
+.btn-main:hover { translate: 0 -3px; scale: 1.03; box-shadow: 0 0 0 4px var(--ink), 0 12px 0 4px var(--ink-2), 0 22px 54px rgba(255, 79, 160, .75); }
+.btn-main:active { translate: 0 4px; box-shadow: 0 0 0 4px var(--ink), 0 4px 0 4px var(--ink-2), 0 10px 24px rgba(255, 79, 160, .5); }
+.btn-alt { font-size: clamp(16px, 1.8vw, 20px); padding: 16px 24px; color: var(--ink); background: #fff; box-shadow: 0 0 0 3px var(--ink), 0 6px 0 3px var(--ink-2); }
+.btn-alt:hover { translate: 0 -2px; }
+
+/* ---------- loading: nothing shows until the font and every layer are ready, then all of it together ---------- */
+.loading .sky, .loading .ms, .loading .stage, .loading .center { opacity: 0; }
+.sky { transition: opacity .6s ease; }
+.ms, .stage { transition: opacity .8s ease .15s, translate .9s cubic-bezier(.2, .8, .2, 1) .15s; }
+.center { transition: opacity .6s ease .3s, scale .7s cubic-bezier(.2, 1.4, .4, 1) .3s; }
+.loading .ms { translate: -3vw 0; }
+.loading .stage { translate: 3vw 0; }
+.loading .center { scale: .94; }
+
+/* ---------- tester sign-up ---------- */
+dialog {
+  border: 0; padding: 0; border-radius: 26px; width: min(92vw, 460px); max-height: 92vh; overflow: auto; color: var(--ink); font-family: var(--f-title);
+  box-shadow: 0 0 0 4px var(--ink), 0 10px 0 4px var(--ink-2), 0 30px 80px rgba(20, 10, 60, .5);
+}
+dialog::backdrop { background: rgba(20, 30, 80, .45); backdrop-filter: blur(4px); }
+.form { padding: 26px 26px 22px; display: grid; gap: 12px; background: linear-gradient(180deg, #fff 0%, #f3f8ff 100%); }
+.form h2 { margin: 0; font-size: 28px; }
+.form p { margin: 0 0 4px; font-weight: 600; color: #5b3a7a; }
+.form label { display: grid; gap: 5px; font-weight: 600; font-size: 15px; }
+.form input, .form select, .form textarea { font: 600 16px var(--f-title); color: var(--ink); padding: 11px 13px; border-radius: 12px; border: 2px solid #d4c6ec; background: #fff; width: 100%; }
+.form input:focus, .form select:focus, .form textarea:focus { outline: none; border-color: var(--pink); }
+.form .row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px; }
+.form .btn-main { font-size: 20px; padding: 14px 26px; }
+.form .x { background: transparent; color: var(--ink); font-size: 16px; padding: 14px; box-shadow: none; }
+.form .opt { font-weight: 600; color: #8a72a6; font-size: 13px; }
+.form .hp { display: none; }
+.form .err { color: #d0145f; font-weight: 600; font-size: 15px; min-height: 0; }
+.form .err:empty { display: none; }
+.form-head { display: flex; align-items: flex-start; gap: 14px; }
+.form-head > div { flex: 1; }
+.photo { position: relative; flex: none; width: 84px; cursor: pointer; display: grid; justify-items: center; gap: 4px; margin-top: 2px; }
+.photo img, .photo .ph { width: 76px; height: 76px; border-radius: 50%; background: #efe8f8; border: 3px solid #fff; box-shadow: 0 0 0 2px #d9c8ee; object-fit: cover; transition: box-shadow .15s; }
+.photo:hover img, .photo:hover .ph { box-shadow: 0 0 0 3px var(--pink); }
+.photo .plus { position: absolute; top: 52px; right: 4px; width: 26px; height: 26px; border-radius: 50%; background: var(--pink); color: #fff; font: 700 20px/24px var(--f-title); text-align: center; border: 2px solid #fff; }
+.photo .cap { font-size: 12px; font-weight: 600; color: #8a72a6; }
+.done { display: none; padding: 30px 26px; text-align: center; }
+.done h2 { margin: 0 0 8px; }
+
+@media (max-width: 720px) {
+  .center { justify-content: flex-start; padding-top: 12vh; gap: 16px; }
+  .ms { --ms-h: 150vw; --ms-x: -44vw; --ms-y: 42vh; }
+}
+@media (prefers-reduced-motion: reduce) { .sky, .ms, .stage, .center { transition: none; } }
+</style>
+</head>
+<body>
+<main class="hero" id="hero">
+  <div class="sky" aria-hidden="true"></div>
+
+  <!-- Moon Serpent: the tower top; the train climbs to the very top, stops, rolls back down -->
+  <div class="ms" id="ms" aria-hidden="true"></div>
+
+  <!-- Mega Wheel: the top of its rim, turning slowly, tilted toward the viewer -->
+  <div class="stage" aria-hidden="true"><div class="wheel" id="wheel"></div></div>
+
+  <div class="center">
+    <h1 class="logo" aria-label="Loop &amp; Lift">Lo<svg class="loop-o" viewBox="-14 -2 128 100" aria-hidden="true">
+  <defs>
+    <linearGradient id="llo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe0"/><stop offset=".38" stop-color="#ffe14f"/><stop offset=".62" stop-color="#ffa51f"/><stop offset="1" stop-color="#ff7a1a"/></linearGradient>
+    <path id="llo-ride" d="M 50 84 A 35 35 0 0 0 50 14 A 35 35 0 0 0 50 84"/>
+  </defs>
+  <path d="M -14 90 C 14 90 34 89 50 84 A 35 35 0 0 0 50 14 A 35 35 0 0 0 50 84 C 66 89 86 90 114 90" fill="none" stroke="#3a0f63" stroke-width="26" stroke-linecap="round"/>
+  <path d="M -14 90 C 14 90 34 89 50 84 A 35 35 0 0 0 50 14 A 35 35 0 0 0 50 84 C 66 89 86 90 114 90" fill="none" stroke="url(#llo)" stroke-width="18" stroke-linecap="round"/>
+  <path d="M -14 90 C 14 90 34 89 50 84 A 35 35 0 0 0 50 14 A 35 35 0 0 0 50 84 C 66 89 86 90 114 90" fill="none" stroke="#3a0f63" stroke-width="6"/>
+  <path d="M -14 90 C 14 90 34 89 50 84 A 35 35 0 0 0 50 14 A 35 35 0 0 0 50 84 C 66 89 86 90 114 90" fill="none" stroke="url(#llo)" stroke-width="6" stroke-dasharray="2.2 8.8"/>
+  <g><rect x="-17" y="-19" width="15" height="10" rx="3.5" fill="#38d9ff" stroke="#3a0f63" stroke-width="2.6"/><rect x="0" y="-19" width="15" height="10" rx="3.5" fill="#ff4fa0" stroke="#3a0f63" stroke-width="2.6"/>
+    <animateMotion dur="2.2s" repeatCount="indefinite" rotate="auto" calcMode="spline" keyPoints="0;0.5;1" keyTimes="0;0.55;1" keySplines="0.15 0.55 0.5 1;0.5 0 0.85 0.45"><mpath href="#llo-ride"/></animateMotion></g>
+</svg>p <span class="amp">&amp;</span> Lift</h1>
+    <p class="tag">Build the theme park of your dreams.</p>
+    <div class="ctas">
+      <button class="btn btn-main" id="join" type="button">
+        Join as tester
+      </button>
+      <a class="btn btn-alt" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">Follow @playloopandlift</a>
+    </div>
+  </div>
+</main>
+
+<dialog id="dlg">
+  <form class="form" id="form" novalidate>
+    <div class="form-head">
+      <div>
+        <h2>Join as tester</h2>
+        <p>Play Loop &amp; Lift before everyone else and help shape it.</p>
+      </div>
+      <!-- an empty profile picture: tap it to add yours (recommended, so the testers get to know each other) -->
+      <label class="photo" title="Add your photo (recommended)">
+        <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" hidden>
+        <img alt="" hidden>
+        <svg class="ph" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="25" r="11" fill="#c8b6e2"/><path d="M11 56c2-12 11-18 21-18s19 6 21 18" fill="#c8b6e2"/></svg>
+        <span class="plus" aria-hidden="true">+</span>
+        <span class="cap">Add photo</span>
+      </label>
+    </div>
+    <label>Name <input name="name" required maxlength="80" autocomplete="name"></label>
+    <label>Email <input name="email" type="email" required maxlength="200" autocomplete="email" placeholder="you@mail.com"></label>
+    <label><span>Instagram <span class="opt">(optional)</span></span> <input name="instagram" maxlength="60" placeholder="@you"></label>
+    <label>Your PC
+      <select name="pc">
+        <option>Gaming PC / laptop</option>
+        <option>Regular laptop</option>
+        <option>Not sure</option>
+      </select>
+    </label>
+    <!-- left empty by people; bots fill it -->
+    <input name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+    <div class="err" id="err" role="alert"></div>
+    <div class="row">
+      <button class="btn x" type="button" id="close">Cancel</button>
+      <button class="btn btn-main" type="submit" id="send">Send</button>
+    </div>
+  </form>
+  <div class="done" id="done">
+    <h2>You're on the list!</h2>
+    <p>We'll message you when the next test build is ready.</p>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  // layout data written by the render scripts (build.py puts assets/*.json here)
+  const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/;
+  const W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
+  const A = 'assets/', V = '?v=' + /*VER*/1794225678/*VER*/;
+  const ms = document.getElementById('ms'), wheel = document.getElementById('wheel'), hero = document.getElementById('hero');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pct = v => (v / MS.frame) * 100 + '%';
+  const ready = [];
+  const img = (src, cls) => { const im = new Image(); im.src = A + src + V; im.alt = ''; if (cls) im.className = cls; ready.push(im.decode().catch(() => {})); return im; };
+
+  // ---------- Moon Serpent ----------
+  const tower = img('climb-tower.webp');
+  Object.assign(tower.style, { left: pct(MS.tower[0]), top: pct(MS.tower[1]), width: pct(MS.tower[2] - MS.tower[0]), height: pct(MS.tower[3] - MS.tower[1]) });
+  ms.append(tower);
+  const c = MS.clip;
+  const place = el => Object.assign(el.style, { left: pct(c.x), top: pct(c.y), width: pct(c.width), height: pct(c.height) });
+  const vid = document.createElement('video');
+  vid.muted = true; vid.playsInline = true; vid.preload = 'auto'; vid.setAttribute('muted', ''); vid.setAttribute('playsinline', '');
+  place(vid);
+  if (!reduce && vid.canPlayType('video/webm; codecs="vp09.00.10.08"')) {
+    vid.src = A + 'climb-train.webm' + V;
+    ms.append(vid);
+    ready.push(new Promise(r => { vid.addEventListener('canplaythrough', r, { once: true }); setTimeout(r, 6000); }));
+    // 7 s with the track empty between runs (the video's own empty head and tail count toward it)
+    const GAP = 7;
+    vid.addEventListener('ended', () => setTimeout(() => { vid.currentTime = 0; vid.play().catch(() => {}); }, Math.max(0, GAP - (MS.emptyHead ?? 0) - (MS.emptyTail ?? 0)) * 1000));
+  } else {
+    // no transparent video (Safari) or reduced motion: the train standing at the top
+    const still = img('climb-train-top.webp'); place(still); ms.append(still);
+  }
+
+  // ---------- Mega Wheel: depth slices + capsules that stay level ----------
+  // slice:  .slice (its depth) > .turn (spins) > img
+  // capsule: .arm (spins, started at the capsule's angle) > .pos (out to the capsule ring) > .level (spins back) > .face (turned to us) > img
+  const TILT = 28;           // the capsule was rendered from 28 deg to the left; the wheel turns its near side toward us
+  const T = 360 / 1.6;       // seconds per turn
+  wheel.style.setProperty('--T', T + 's');
+  wheel.style.setProperty('--tilt', TILT + 'deg');
+  const div = (cls, parent) => { const d = document.createElement('div'); d.className = cls; parent.append(d); return d; };
+  const slices = W.z.map((z, k) => { const d = div('slice', wheel), t = div('turn', d), im = img(`wheel-z${k}.webp`); t.append(im); return { d, im, z }; });
+  const caps = [];
+  const capLayer = document.createElement('div'); capLayer.className = 'caps';
+  for (let k = 0; k < W.N; k++) {
+    // capsule k hangs at angle a0 from the bottom; an arm turned by -a0 puts the bottom point there
+    const a0 = (k / W.N) * 360, arm = div('arm', capLayer);
+    arm.style.setProperty('--d', -(((360 - a0) % 360) / 360) * T + 's');
+    const lv = div('level', div('pos', arm)), face = div('face', lv), im = img('capsule.webp');
+    face.append(im);
+    caps.push({ im });
+  }
+  // the capsules sit between the two rims (z = 0): after the back slices, before the front ones
+  const mid = slices.findIndex(s => s.z >= 0);
+  wheel.insertBefore(capLayer, slices[mid].d);
+  function layoutWheel() {
+    const w = hero.clientWidth, h = hero.clientHeight;
+    // the hub sits past the bottom-right corner: only the top of the rim and its capsules show
+    const Rpx = Math.min(h * 0.8, w * 0.64), k = Rpx / W.R;
+    wheel.style.transform = `translate3d(${w + Rpx * 0.2}px, ${h + Rpx * 0.3}px, 0) rotateY(${TILT}deg)`;
+    wheel.style.setProperty('--r', W.R * k + 'px');
+    const size = W.px * W.mPerPx * k, cs = W.capPx * W.capMPerPx * k;
+    for (const s of slices) { s.d.style.transform = `translateZ(${s.z * k}px)`; Object.assign(s.im.style, { width: size + 'px', height: size + 'px', left: -size / 2 + 'px', top: -size / 2 + 'px' }); }
+    for (const q of caps) Object.assign(q.im.style, { width: cs + 'px', height: cs + 'px', left: -cs / 2 + 'px', top: -cs / 2 + 'px' });
+  }
+  if (reduce) wheel.querySelectorAll('.turn, .arm, .level').forEach(e => { e.style.animation = 'none'; });
+  layoutWheel();
+  addEventListener('resize', layoutWheel);
+
+  // ---------- show everything together once the font and every layer are in ----------
+  ready.push(document.fonts.load('700 100px Fredoka'), document.fonts.load('600 30px Fredoka'));
+  const sky = new Image(); sky.src = A + 'sky.jpg' + V;
+  document.querySelector('.sky').style.backgroundImage = `url(${sky.src})`; ready.push(sky.decode().catch(() => {}));
+  Promise.race([Promise.all(ready), new Promise(r => setTimeout(r, 8000))]).then(() => {
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove('loading');
+      if (vid.src) setTimeout(() => vid.play().catch(() => {}), 500);
+    });
+  });
+
+  // ---------- tester sign-up ----------
+  const dlg = document.getElementById('dlg'), form = document.getElementById('form'), done = document.getElementById('done');
+  document.getElementById('join').addEventListener('click', () => { form.style.display = ''; done.style.display = 'none'; dlg.showModal(); });
+  document.getElementById('close').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  // the photo: shown in the round frame, sent as a small JPEG (longest side 800 px)
+  const photoIn = form.querySelector('input[name=photo]'), photoImg = form.querySelector('.photo img'), photoPh = form.querySelector('.photo .ph');
+  let photoBlob = null;
+  photoIn.addEventListener('change', async () => {
+    const f = photoIn.files[0];
+    if (!f) return;
+    try {
+      const bmp = await createImageBitmap(f);
+      const s = Math.min(1, 800 / Math.max(bmp.width, bmp.height)), cv = document.createElement('canvas');
+      cv.width = Math.round(bmp.width * s); cv.height = Math.round(bmp.height * s);
+      cv.getContext('2d').drawImage(bmp, 0, 0, cv.width, cv.height);
+      photoBlob = await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.85));
+      photoImg.src = URL.createObjectURL(photoBlob); photoImg.hidden = false; photoPh.style.display = 'none'; form.querySelector('.photo .cap').textContent = 'Change'; form.querySelector('.photo .plus').hidden = true;
+    } catch (err) { photoBlob = null; }
+  });
+
+  const CFG = /*CFG*/{"url":"https://xirdyrvodzieqsuzcmyv.supabase.co","anon":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpcmR5cnZvZHppZXFzdXpjbXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTg5NzgsImV4cCI6MjEwOTc5NDk3OH0.rhFU6zEreDXFGGWiSPB9il8DYDRRLr1eUJ38js3ATvA"}/*CFG*/;
+  const errBox = document.getElementById('err'), send = document.getElementById('send');
+  const fail = msg => { errBox.textContent = msg; send.disabled = false; send.textContent = 'Send'; };
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    errBox.textContent = '';
+    const d = Object.fromEntries(new FormData(form));
+    if (d.website) { form.style.display = 'none'; done.style.display = 'block'; return; } // a bot
+    if (!d.name.trim()) return fail('Please write your name.');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email.trim())) return fail('Please check your email address.');
+    if (!CFG) return fail('Sign-ups open very soon. Follow @playloopandlift in the meantime!');
+    send.disabled = true; send.textContent = 'Sending...';
+    const H = { apikey: CFG.anon, Authorization: 'Bearer ' + CFG.anon };
+    try {
+      let photo_path = null;
+      if (photoBlob) {
+        const path = `applications/${crypto.randomUUID()}.jpg`;
+        const up = await fetch(`${CFG.url}/storage/v1/object/tester-photos/${path}`, { method: 'POST', headers: { ...H, 'Content-Type': 'image/jpeg' }, body: photoBlob });
+        if (up.ok) photo_path = path;
+      }
+      const ig = d.instagram.trim().replace(/^@?/, '@');
+      const r = await fetch(`${CFG.url}/rest/v1/testers`, {
+        method: 'POST',
+        headers: { ...H, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+        body: JSON.stringify({ name: d.name.trim(), email: d.email.trim(), instagram: ig === '@' ? null : ig, pc: d.pc, photo_path, lang: navigator.language || null })
+      });
+      if (r.status === 409) { form.style.display = 'none'; done.querySelector('h2').textContent = "You're already on the list!"; done.style.display = 'block'; return; }
+      if (!r.ok) throw new Error(r.status);
+      form.style.display = 'none'; done.style.display = 'block';
+    } catch (err) {
+      fail('Something went wrong. Please try again in a minute.');
+    }
+  });
+})();
+</script>
+</body>
+</html>

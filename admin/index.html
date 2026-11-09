@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Loop &amp; Lift Admin</title>
+<style>
+@font-face { font-family: 'Fredoka'; font-weight: 700; font-display: swap; src: url(../assets/fonts/fredoka-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Fredoka'; font-weight: 600; font-display: swap; src: url(../assets/fonts/fredoka-latin-600-normal.woff2) format('woff2'); }
+:root {
+  --ink: #2a0948; --text: #2b2336; --muted: #6f6680; --line: #e7e1ef; --bg: #f6f3fa; --card: #ffffff;
+  --pink: #ff4fa0; --violet: #7b3cf0;
+  --pending: #b26a00; --pending-bg: #fff3dc; --approved: #137a3f; --approved-bg: #ddf6e7;
+  --invited: #2557c7; --invited-bg: #e0eaff; --rejected: #9a2340; --rejected-bg: #fde3ea;
+  --f-title: 'Fredoka', system-ui, sans-serif; --f-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 var(--f-body); }
+h1, h2, h3, .brand, .num { font-family: var(--f-title); }
+button { font: 600 14px var(--f-body); cursor: pointer; }
+a { color: var(--violet); }
+.hidden { display: none !important; }
+
+/* ---------- top bar ---------- */
+.top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 16px; padding: 12px 24px; background: var(--ink); color: #fff; }
+.brand { font-size: 22px; font-weight: 700; }
+.brand b { color: #ffcf3a; }
+.brand span { color: var(--pink); }
+.top nav { display: flex; gap: 4px; margin-left: 12px; }
+.top nav a { color: #fff; text-decoration: none; font-weight: 600; padding: 6px 12px; border-radius: 999px; opacity: .75; }
+.top nav a[aria-current] { background: rgba(255, 255, 255, .14); opacity: 1; }
+.top .me { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; opacity: .9; }
+.top .me button { background: rgba(255, 255, 255, .14); color: #fff; border: 0; border-radius: 999px; padding: 6px 12px; }
+
+main { max-width: 1240px; margin: 0 auto; padding: 24px; }
+
+/* ---------- login ---------- */
+.login { max-width: 420px; margin: 12vh auto; background: var(--card); border-radius: 22px; padding: 30px; box-shadow: 0 10px 40px rgba(42, 9, 72, .12); }
+.login h1 { margin: 0 0 4px; font-size: 28px; color: var(--ink); }
+.login p { color: var(--muted); margin: 0 0 18px; }
+.login input { width: 100%; font: 16px var(--f-body); padding: 12px 14px; border: 2px solid var(--line); border-radius: 12px; }
+.login input:focus { outline: none; border-color: var(--violet); }
+.login button { margin-top: 12px; width: 100%; padding: 13px; border: 0; border-radius: 12px; background: var(--violet); color: #fff; font-size: 16px; }
+.login .msg { margin-top: 12px; font-weight: 600; }
+
+/* ---------- stats ---------- */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.stat { background: var(--card); border-radius: 16px; padding: 14px 16px; border: 1px solid var(--line); }
+.stat .num { font-size: 30px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.stat .lbl { color: var(--muted); font-size: 13px; font-weight: 600; }
+
+/* ---------- toolbar ---------- */
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 16px; }
+.bar input[type=search] { flex: 1 1 240px; font: 15px var(--f-body); padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 999px; padding: 7px 12px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+.chip .c { opacity: .65; margin-left: 4px; }
+.tool { border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 9px 12px; color: var(--text); }
+
+/* ---------- applicants ---------- */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 10px; }
+.head { display: flex; gap: 12px; align-items: center; }
+.avatar { flex: none; width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: linear-gradient(135deg, #ffd6ea, #e5d6ff); display: grid; place-items: center; font: 700 24px var(--f-title); color: var(--ink); cursor: zoom-in; }
+.who { min-width: 0; }
+.who h3 { margin: 0; font-size: 19px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.who .sub { color: var(--muted); font-size: 13px; }
+.badge { margin-left: auto; align-self: flex-start; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; text-transform: capitalize; }
+.badge.pending { color: var(--pending); background: var(--pending-bg); }
+.badge.approved { color: var(--approved); background: var(--approved-bg); }
+.badge.invited { color: var(--invited); background: var(--invited-bg); }
+.badge.rejected { color: var(--rejected); background: var(--rejected-bg); }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 14px; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; overflow-wrap: anywhere; }
+.note { background: var(--bg); border-radius: 12px; padding: 10px 12px; font-size: 14px; white-space: pre-wrap; }
+.mine { width: 100%; font: 14px var(--f-body); border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; resize: vertical; min-height: 38px; background: #fffdf6; }
+.acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.acts button { border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 7px 11px; color: var(--text); }
+.acts .ok { background: var(--approved); color: #fff; border-color: var(--approved); }
+.acts .no { color: var(--rejected); }
+.acts .mail { background: var(--invited); color: #fff; border-color: var(--invited); }
+.acts .del { margin-left: auto; color: var(--muted); border-color: transparent; }
+.empty { text-align: center; color: var(--muted); padding: 60px 20px; background: var(--card); border-radius: 18px; border: 1px dashed var(--line); }
+.empty h2 { color: var(--ink); margin: 0 0 6px; }
+
+.zoom { position: fixed; inset: 0; background: rgba(20, 10, 40, .8); display: grid; place-items: center; z-index: 20; cursor: zoom-out; }
+.zoom img { max-width: 90vw; max-height: 90vh; border-radius: 16px; }
+.toast { position: fixed; bottom: 20px; left: 50%; translate: -50% 0; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 600; z-index: 30; }
+
+@media (max-width: 640px) { main { padding: 14px; } .top { padding: 10px 14px; } .top nav { display: none; } .grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><b>Loop</b> <span>&amp;</span> <b>Lift</b> admin</div>
+  <nav aria-label="Sections"><a href="#testers" aria-current="page">Testers</a></nav>
+  <div class="me hidden" id="me"><span id="meMail"></span><button id="out" type="button">Sign out</button></div>
+</header>
+
+<main>
+  <!-- sign in: a one-time link to the owner's email (no passwords, no public sign-ups) -->
+  <section class="login hidden" id="login">
+    <h1>Admin sign in</h1>
+    <p>We'll email you a one-time sign-in link.</p>
+    <form id="loginForm"><input type="email" id="loginEmail" required placeholder="you@mail.com" autocomplete="email"><button type="submit">Send me a link</button></form>
+    <div class="msg" id="loginMsg"></div>
+  </section>
+
+  <section class="hidden" id="app">
+    <div class="stats" id="stats"></div>
+    <div class="bar">
+      <input type="search" id="q" placeholder="Search name, email, Instagram, notes...">
+      <div class="chips" id="chips"></div>
+      <button class="tool" id="copy" type="button" title="Emails of the shown testers, ready for BCC">Copy emails</button>
+      <button class="tool" id="csv" type="button">Export CSV</button>
+      <button class="tool" id="reload" type="button">Refresh</button>
+    </div>
+    <div class="grid" id="list"></div>
+  </section>
+</main>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
+
+const CFG = /*CFG*/{"url":"https://xirdyrvodzieqsuzcmyv.supabase.co","anon":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpcmR5cnZvZHppZXFzdXpjbXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTg5NzgsImV4cCI6MjEwOTc5NDk3OH0.rhFU6zEreDXFGGWiSPB9il8DYDRRLr1eUJ38js3ATvA"}/*CFG*/;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+const toast = t => { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.append(d); setTimeout(() => d.remove(), 2200); };
+const STATUSES = ['pending', 'approved', 'invited', 'rejected'];
+// the emails the Email button opens, ready to send from your own mail app
+const MAILS = {
+  pending: t => ({ s: 'Loop & Lift: thanks for signing up!', b: `Hi ${t.name},\n\nThanks for signing up to test Loop & Lift! We'll get back to you soon with the next test build.\n\nFollow @playloopandlift on Instagram for news.\n\nElio, Loop & Lift` }),
+  approved: t => ({ s: "You're in! Loop & Lift tester build", b: `Hi ${t.name},\n\nYou're in! You're one of the Loop & Lift testers.\n\nDownload the test build here: [LINK]\n\nTell us everything you build and anything that breaks: just reply to this email.\n\nElio, Loop & Lift` }),
+  invited: t => ({ s: 'Loop & Lift: how is the test going?', b: `Hi ${t.name},\n\nHow is the Loop & Lift test going? We'd love to hear what you built and what we should fix.\n\nElio, Loop & Lift` }),
+  rejected: t => ({ s: 'Loop & Lift tester sign-up', b: `Hi ${t.name},\n\nThanks so much for signing up! This test round is full, but you're on our list for the next one.\n\nElio, Loop & Lift` })
+};
+
+if (!CFG) {
+  document.querySelector('main').innerHTML = '<div class="empty"><h2>Not connected yet</h2><p>The back office server isn\'t set up yet (site/supabase/setup.py).</p></div>';
+  throw new Error('no config');
+}
+const sb = createClient(CFG.url, CFG.anon, { auth: { persistSession: true, detectSessionInUrl: true } });
+let rows = [], photos = new Map(), filter = 'all';
+
+// ---------- sign in ----------
+$('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('loginEmail').value.trim();
+  $('loginMsg').textContent = 'Sending...';
+  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname } });
+  $('loginMsg').textContent = error ? "That email isn't an admin." : 'Check your inbox for the sign-in link.';
+});
+$('out').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
+
+async function show(session) {
+  if (!session) { $('login').classList.remove('hidden'); $('app').classList.add('hidden'); $('me').classList.add('hidden'); return; }
+  const { data: ok } = await sb.rpc('is_admin');
+  if (!ok) { $('login').classList.remove('hidden'); $('loginMsg').textContent = 'This account has no admin access.'; await sb.auth.signOut(); return; }
+  $('login').classList.add('hidden'); $('app').classList.remove('hidden'); $('me').classList.remove('hidden');
+  $('meMail').textContent = session.user.email;
+  load();
+}
+sb.auth.onAuthStateChange((_e, session) => show(session));
+
+// ---------- data ----------
+async function load() {
+  const { data, error } = await sb.from('testers').select('*').order('created_at', { ascending: false });
+  if (error) return toast('Could not load: ' + error.message);
+  rows = data;
+  // photos are private: short-lived signed links, made in one call
+  const need = rows.filter(r => r.photo_path && !photos.has(r.photo_path)).map(r => r.photo_path);
+  if (need.length) {
+    const { data: urls } = await sb.storage.from('tester-photos').createSignedUrls(need, 3600);
+    for (const u of urls || []) if (u.signedUrl) photos.set(u.path, u.signedUrl);
+  }
+  render();
+}
+$('reload').addEventListener('click', load);
+setInterval(() => { if (!document.hidden && !$('app').classList.contains('hidden')) load(); }, 60000);
+
+async function update(id, patch) {
+  const { error } = await sb.from('testers').update(patch).eq('id', id);
+  if (error) return toast('Not saved: ' + error.message);
+  Object.assign(rows.find(r => r.id === id), patch);
+  render();
+}
+
+// ---------- view ----------
+function visible() {
+  const q = $('q').value.trim().toLowerCase();
+  return rows.filter(r => (filter === 'all' || r.status === filter) &&
+    (!q || [r.name, r.email, r.instagram, r.note, r.admin_notes, r.pc].some(v => String(v ?? '').toLowerCase().includes(q))));
+}
+function render() {
+  const n = s => rows.filter(r => r.status === s).length, week = rows.filter(r => Date.now() - new Date(r.created_at) < 7 * 864e5).length;
+  $('stats').innerHTML = [['Sign-ups', rows.length], ['This week', week], ['Waiting', n('pending')], ['Approved', n('approved')], ['Build sent', n('invited')]]
+    .map(([l, v]) => `<div class="stat"><div class="num">${v}</div><div class="lbl">${l}</div></div>`).join('');
+  $('chips').innerHTML = ['all', ...STATUSES].map(s => `<button class="chip" data-s="${s}" aria-pressed="${filter === s}">${s === 'all' ? 'All' : s === 'invited' ? 'Build sent' : s[0].toUpperCase() + s.slice(1)}<span class="c">${s === 'all' ? rows.length : n(s)}</span></button>`).join('');
+  const list = visible();
+  if (!list.length) { $('list').innerHTML = `<div class="empty" style="grid-column:1/-1"><h2>${rows.length ? 'Nobody here' : 'No sign-ups yet'}</h2><p>${rows.length ? 'Try another filter.' : 'When someone presses "Join as tester" on the site, they show up here.'}</p></div>`; return; }
+  $('list').innerHTML = list.map(r => {
+    const url = r.photo_path && photos.get(r.photo_path);
+    const ig = r.instagram ? `<a href="https://instagram.com/${encodeURIComponent(r.instagram.replace(/^@/, ''))}" target="_blank" rel="noopener">${esc(r.instagram)}</a>` : '—';
+    return `<article class="card" data-id="${r.id}">
+      <div class="head">
+        ${url ? `<img class="avatar" src="${esc(url)}" alt="" data-zoom="${esc(url)}">` : `<div class="avatar">${esc((r.name || '?').trim()[0]?.toUpperCase() || '?')}</div>`}
+        <div class="who"><h3>${esc(r.name)}</h3><div class="sub">${new Date(r.created_at).toLocaleString()}</div></div>
+        <span class="badge ${r.status}">${r.status === 'invited' ? 'build sent' : r.status}</span>
+      </div>
+      <dl class="facts">
+        <dt>Email</dt><dd><a href="mailto:${esc(r.email)}">${esc(r.email)}</a></dd>
+        <dt>Instagram</dt><dd>${ig}</dd>
+        <dt>PC</dt><dd>${esc(r.pc || '—')}</dd>
+        ${r.lang ? `<dt>Language</dt><dd>${esc(r.lang)}</dd>` : ''}
+      </dl>
+      ${r.note ? `<div class="note">${esc(r.note)}</div>` : ''}
+      <textarea class="mine" data-notes placeholder="Your notes (only you see these)">${esc(r.admin_notes || '')}</textarea>
+      <div class="acts">
+        ${r.status !== 'approved' && r.status !== 'invited' ? '<button class="ok" data-act="approved">Approve</button>' : ''}
+        <button class="mail" data-act="mail">Email</button>
+        ${r.status === 'approved' ? '<button data-act="invited">Mark build sent</button>' : ''}
+        ${r.status !== 'rejected' ? '<button class="no" data-act="rejected">Reject</button>' : '<button data-act="pending">Back to waiting</button>'}
+        <button class="del" data-act="delete" title="Delete this sign-up">Delete</button>
+      </div>
+    </article>`;
+  }).join('');
+}
+$('q').addEventListener('input', render);
+$('chips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { filter = b.dataset.s; render(); } });
+$('list').addEventListener('click', async e => {
+  const z = e.target.closest('[data-zoom]');
+  if (z) { const d = document.createElement('div'); d.className = 'zoom'; d.innerHTML = `<img src="${z.dataset.zoom}" alt="">`; d.onclick = () => d.remove(); document.body.append(d); return; }
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const id = b.closest('.card').dataset.id, r = rows.find(x => x.id === id), act = b.dataset.act;
+  if (act === 'mail') { const m = MAILS[r.status](r); location.href = `mailto:${encodeURIComponent(r.email)}?subject=${encodeURIComponent(m.s)}&body=${encodeURIComponent(m.b)}`; return; }
+  if (act === 'delete') {
+    if (!confirm(`Delete ${r.name}'s sign-up for good?`)) return;
+    if (r.photo_path) await sb.storage.from('tester-photos').remove([r.photo_path]);
+    const { error } = await sb.from('testers').delete().eq('id', id);
+    if (error) return toast('Not deleted: ' + error.message);
+    rows = rows.filter(x => x.id !== id); render(); return;
+  }
+  update(id, act === 'invited' ? { status: 'invited', invited_at: new Date().toISOString() } : { status: act });
+});
+// notes save a moment after you stop typing
+let noteT;
+$('list').addEventListener('input', e => {
+  if (!e.target.matches('[data-notes]')) return;
+  const id = e.target.closest('.card').dataset.id, v = e.target.value;
+  clearTimeout(noteT);
+  noteT = setTimeout(async () => { const { error } = await sb.from('testers').update({ admin_notes: v || null }).eq('id', id); if (!error) { rows.find(r => r.id === id).admin_notes = v; toast('Note saved'); } }, 700);
+});
+$('copy').addEventListener('click', async () => { const m = visible().map(r => r.email).join(', '); await navigator.clipboard.writeText(m); toast(`${visible().length} emails copied`); });
+$('csv').addEventListener('click', () => {
+  const cols = ['created_at', 'name', 'email', 'instagram', 'pc', 'note', 'status', 'admin_notes', 'invited_at', 'lang'];
+  const cell = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const csv = '﻿' + [cols.join(','), ...visible().map(r => cols.map(c => cell(r[c])).join(','))].join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); a.download = `testers-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+});
+</script>
+</body>
+</html>
