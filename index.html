@@ -174,7 +174,7 @@ dialog::backdrop { background: rgba(20, 30, 80, .45); backdrop-filter: blur(4px)
       <button class="btn btn-main" id="join" type="button">
         Join as tester
       </button>
-      <a class="btn btn-alt" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">Follow @playloopandlift</a>
+      <a class="btn btn-alt" href="https://www.instagram.com/loopsandlift/" target="_blank" rel="noopener">Follow @loopsandlift</a>
     </div>
   </div>
 </main>
@@ -224,7 +224,7 @@ dialog::backdrop { background: rgba(20, 30, 80, .45); backdrop-filter: blur(4px)
   // layout data written by the render scripts (build.py puts assets/*.json here)
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/;
   const W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
-  const A = 'assets/', V = '?v=' + /*VER*/1794229207/*VER*/;
+  const A = 'assets/', V = '?v=' + /*VER*/1794229531/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel'), hero = document.getElementById('hero');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const pct = v => (v / MS.frame) * 100 + '%';
@@ -373,7 +373,7 @@ dialog::backdrop { background: rgba(20, 30, 80, .45); backdrop-filter: blur(4px)
     if (d.website) { form.style.display = 'none'; done.style.display = 'block'; return; } // a bot
     if (!d.name.trim()) return fail('Please write your name.');
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email.trim())) return fail('Please check your email address.');
-    if (!CFG) return fail('Sign-ups open very soon. Follow @playloopandlift in the meantime!');
+    if (!CFG) return fail('Sign-ups open very soon. Follow @loopsandlift in the meantime!');
     send.disabled = true; send.textContent = 'Sending...';
     const H = { apikey: CFG.anon, Authorization: 'Bearer ' + CFG.anon };
     try {
