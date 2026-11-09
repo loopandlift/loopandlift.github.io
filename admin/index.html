@@ -43,6 +43,7 @@ main { max-width: 1240px; margin: 0 auto; padding: 24px; }
 .login input:focus { outline: none; border-color: var(--violet); }
 .login button { margin-top: 12px; width: 100%; padding: 13px; border: 0; border-radius: 12px; background: var(--violet); color: #fff; font-size: 16px; }
 .login .msg { margin-top: 12px; font-weight: 600; }
+.login .linkish { background: none; color: var(--violet); width: auto; padding: 6px 0; margin-top: 8px; font-size: 14px; text-align: left; }
 
 /* ---------- stats ---------- */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
@@ -97,15 +98,20 @@ main { max-width: 1240px; margin: 0 auto; padding: 24px; }
 <header class="top">
   <div class="brand"><b>Loop</b> <span>&amp;</span> <b>Lift</b> admin</div>
   <nav aria-label="Sections"><a href="#testers" aria-current="page">Testers</a></nav>
-  <div class="me hidden" id="me"><span id="meMail"></span><button id="out" type="button">Sign out</button></div>
+  <div class="me hidden" id="me"><span id="meMail"></span><button id="pw" type="button">Set password</button><button id="out" type="button">Sign out</button></div>
 </header>
 
 <main>
   <!-- sign in: a one-time link to the owner's email (no passwords, no public sign-ups) -->
   <section class="login hidden" id="login">
     <h1>Admin sign in</h1>
-    <p>We'll email you a one-time sign-in link.</p>
-    <form id="loginForm"><input type="email" id="loginEmail" required placeholder="you@mail.com" autocomplete="email"><button type="submit">Send me a link</button></form>
+    <p>Only the Loop &amp; Lift team can sign in here.</p>
+    <form id="loginForm">
+      <input type="email" id="loginEmail" required placeholder="you@mail.com" autocomplete="username">
+      <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" style="margin-top:10px">
+      <button type="submit">Sign in</button>
+    </form>
+    <button type="button" class="linkish" id="byLink">No password yet / forgot it? Email me a sign-in link</button>
     <div class="msg" id="loginMsg"></div>
   </section>
 
@@ -145,13 +151,31 @@ if (!CFG) {
 const sb = createClient(CFG.url, CFG.anon, { auth: { persistSession: true, detectSessionInUrl: true } });
 let rows = [], photos = new Map(), filter = 'all';
 
-// ---------- sign in ----------
+// ---------- sign in: password, or a one-time link by email (the free mailer sends only a few an hour) ----------
+const why = e => /rate limit/i.test(e.message) ? 'Too many sign-in emails in the last hour (the free mailer allows only a few). Use your password, or try again later.'
+  : /invalid login/i.test(e.message) ? 'Wrong email or password.' : /signups not allowed|not found/i.test(e.message) ? "That email isn't an admin." : e.message;
 $('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
+  const email = $('loginEmail').value.trim(), password = $('loginPass').value;
+  if (!password) return $('byLink').click();
+  $('loginMsg').textContent = 'Signing in...';
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  $('loginMsg').textContent = error ? why(error) : '';
+});
+$('byLink').addEventListener('click', async () => {
   const email = $('loginEmail').value.trim();
+  if (!email) return ($('loginMsg').textContent = 'Write your email first.');
   $('loginMsg').textContent = 'Sending...';
   const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname } });
-  $('loginMsg').textContent = error ? "That email isn't an admin." : 'Check your inbox for the sign-in link.';
+  $('loginMsg').textContent = error ? why(error) : 'Check your inbox for the sign-in link.';
+});
+// signed in: choose a password, so the next sign-ins need no email
+$('pw').addEventListener('click', async () => {
+  const p = prompt('Choose a password (at least 10 characters):');
+  if (!p) return;
+  if (p.length < 10) return toast('At least 10 characters');
+  const { error } = await sb.auth.updateUser({ password: p });
+  toast(error ? 'Not saved: ' + error.message : 'Password saved. Next time sign in with it.');
 });
 $('out').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
 
