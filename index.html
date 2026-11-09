@@ -2,7 +2,8 @@
 <html lang="en" class="loading">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#602b89">
 <title>Loop &amp; Lift</title>
 <meta name="description" content="Loop & Lift: build the theme park of your dreams. Join as a tester.">
 <link rel="preload" href="assets/fonts/fredoka-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -20,11 +21,14 @@
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; }
-body { background: var(--sky-top); color: #fff; font-family: var(--f-title); overflow-x: hidden; }
+/* behind Safari's bars and the overscroll bounce: the sky's own colours, never a flat purple band */
+html { background: linear-gradient(180deg, #602b89, #953d6c) fixed; }
+body { background: transparent; color: #fff; font-family: var(--f-title); overflow: hidden; }
 
 /* ---------- the sky: the game's own fleecy high clouds ---------- */
 .hero {
-  position: relative; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden;
+  /* the scene fills the whole screen, under the phone's address bar and toolbar too (they float over it) */
+  position: fixed; inset: 0; overflow: hidden;
   background: linear-gradient(180deg, var(--sky-top) 0%, #e0609e 60%, var(--sky-low) 100%);
 }
 .sky { position: absolute; inset: 0; background: url(assets/sky.jpg) center 70% / cover no-repeat; }
@@ -218,7 +222,7 @@ dialog::backdrop { background: rgba(20, 30, 80, .45); backdrop-filter: blur(4px)
   // layout data written by the render scripts (build.py puts assets/*.json here)
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/;
   const W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
-  const A = 'assets/', V = '?v=' + /*VER*/1794226103/*VER*/;
+  const A = 'assets/', V = '?v=' + /*VER*/1794226317/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel'), hero = document.getElementById('hero');
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const pct = v => (v / MS.frame) * 100 + '%';
