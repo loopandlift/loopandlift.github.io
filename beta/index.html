@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#602b89">
+<title>Loop &amp; Lift Beta</title>
+<meta name="description" content="Download the Loop & Lift tester beta for Windows: build the theme park of your dreams.">
+<link rel="preload" href="../assets/fonts/fredoka-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face { font-family: 'Fredoka'; font-weight: 700; font-display: swap; src: url(../assets/fonts/fredoka-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Fredoka'; font-weight: 600; font-display: swap; src: url(../assets/fonts/fredoka-latin-600-normal.woff2) format('woff2'); }
+:root { --ink: #3a0f63; --ink-2: #2a0948; --pink: #ff4fa0; --muted: #6d5a8a; --f: 'Fredoka', 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif; color-scheme: light; }
+* { box-sizing: border-box; }
+html { background: linear-gradient(180deg, #602b89, #953d6c) fixed; }
+body { margin: 0; font-family: var(--f); color: var(--ink); }
+.sky { position: fixed; inset: 0; z-index: -1; background: url(../assets/sky.jpg) center 70% / cover no-repeat, linear-gradient(180deg, #6a2fb8, #e0609e 60%, #b0428f); }
+main { max-width: 980px; margin: 0 auto; padding: 40px 16px 60px; }
+header { text-align: center; color: #fff; display: grid; gap: 14px; justify-items: center; }
+.logo { margin: 0; font-weight: 700; line-height: .9; white-space: nowrap; font-size: clamp(46px, 9vw, 104px); color: #ffb52e;
+  background: linear-gradient(180deg, #fffbe0 0%, #ffe14f 36%, #ffa51f 62%, #ff7a1a 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(3px 0 0 var(--ink)) drop-shadow(-3px 0 0 var(--ink)) drop-shadow(0 3px 0 var(--ink)) drop-shadow(0 -3px 0 var(--ink)) drop-shadow(0 7px 0 var(--ink-2)) drop-shadow(0 14px 20px rgba(42, 9, 72, .4)); }
+.logo .amp { background: linear-gradient(180deg, #ffd0ea, #ff4fa0 55%, #c3166e); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.badge { display: inline-block; font-weight: 700; font-size: 15px; letter-spacing: .14em; padding: 7px 14px; border-radius: 99px; color: #fff; background: linear-gradient(180deg, #ff8ac4, #ff4fa0 55%, #e0237f); box-shadow: 0 0 0 3px var(--ink); }
+.tag { margin: 0; font-weight: 600; font-size: clamp(19px, 2.6vw, 28px); text-shadow: 0 2px 0 rgba(42, 9, 72, .8), 0 0 18px rgba(42, 9, 72, .5); }
+.btn { font-family: var(--f); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 12px; border-radius: 20px; transition: translate .15s ease, scale .15s ease; line-height: 1; }
+.btn-main { font-size: clamp(21px, 2.6vw, 28px); padding: 20px 34px; color: #fff; background: linear-gradient(180deg, #ff8ac4 0%, #ff4fa0 45%, #e0237f 100%);
+  box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2), 0 18px 40px rgba(255, 79, 160, .5); text-shadow: 0 2px 0 rgba(58, 15, 99, .55); }
+.btn-main:hover { translate: 0 -3px; scale: 1.02; }
+.btn-main svg { width: 30px; height: 30px; }
+.small { font-size: 14px; font-weight: 600; color: #fff; opacity: .92; text-shadow: 0 1px 2px rgba(0, 0, 0, .4); }
+.nowin { display: none; max-width: 520px; background: #fff; border-radius: 16px; padding: 12px 16px; box-shadow: 0 0 0 3px var(--ink); color: var(--ink); font-weight: 600; }
+.card { background: rgba(255, 255, 255, .94); border-radius: 22px; padding: 22px 24px; box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2), 0 22px 50px rgba(42, 9, 72, .35); margin-top: 34px; }
+h2 { margin: 0 0 14px; font-size: 28px; }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.step { background: #f6f0ff; border-radius: 16px; padding: 14px; display: grid; gap: 8px; align-content: start; }
+.step b { font-size: 18px; }
+.step p { margin: 0; font-weight: 600; font-size: 15px; line-height: 1.4; color: #4d3a6b; }
+.num { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 20px; background: linear-gradient(180deg, #ff8ac4, #ff4fa0 55%, #e0237f); box-shadow: 0 0 0 3px var(--ink); }
+/* a little picture of Windows' warning, so nobody is scared off by it */
+.ss { background: #0f4c81; color: #fff; border-radius: 6px; padding: 10px 11px; font: 13px 'Segoe UI', system-ui, sans-serif; display: grid; gap: 6px; }
+.ss .t { font-size: 15px; font-weight: 600; }
+.ss u { color: #cfe6ff; }
+.ss .row { display: flex; justify-content: flex-end; gap: 6px; }
+.ss span.b { border: 1px solid #fff; padding: 3px 10px; border-radius: 2px; }
+.ss span.b.hi { background: #fff; color: #0f4c81; outline: 3px solid #ffd23f; outline-offset: 2px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+ul { margin: 0; padding-left: 20px; font-weight: 600; line-height: 1.6; color: #4d3a6b; }
+details { border-top: 2px solid #eee4fa; padding: 10px 0; }
+details:first-of-type { border-top: 0; }
+summary { cursor: pointer; font-size: 18px; font-weight: 700; }
+details p { margin: 8px 0 0; font-weight: 600; line-height: 1.5; color: #4d3a6b; }
+code { background: #f1e9ff; padding: 1px 6px; border-radius: 6px; font-size: 14px; }
+a { color: #b0137a; }
+footer { text-align: center; margin-top: 30px; color: #fff; font-weight: 600; text-shadow: 0 1px 2px rgba(0, 0, 0, .4); }
+footer a { color: #fff; }
+@media (max-width: 820px) { .steps { grid-template-columns: 1fr 1fr; } .two { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .steps { grid-template-columns: 1fr; } .card { padding: 18px 16px; } }
+</style>
+</head>
+<body>
+<div class="sky"></div>
+<main>
+  <header>
+    <span class="badge">TESTER BETA</span>
+    <h1 class="logo" aria-label="Loop &amp; Lift">Loop <span class="amp">&amp;</span> Lift</h1>
+    <p class="tag">Build the theme park of your dreams.</p>
+    <a class="btn btn-main" id="dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
+      Download for Windows
+    </a>
+    <div class="small" id="ver">Windows 10 and 11 · free tester version · about 20 MB</div>
+    <div class="nowin" id="nowin">Loop &amp; Lift runs on Windows PCs for now. Open this page on your Windows computer to download it, and follow <a href="https://www.instagram.com/loopandlift/">@loopandlift</a> to hear when it comes to Mac.</div>
+  </header>
+
+  <section class="card">
+    <h2>How to get in</h2>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><b>Download</b><p>Press the pink button. The installer is small and installs just for you, no admin needed.</p></div>
+      <div class="step"><span class="num">2</span><b>Run it</b><p>Windows doesn't know this new game yet and shows a blue warning. Press <b>More info</b>, then <b>Run anyway</b>.</p>
+        <div class="ss" aria-hidden="true"><div class="t">Windows protected your PC</div><div>Microsoft Defender SmartScreen prevented an unrecognized app from starting. <u>More info</u></div><div class="row"><span class="b hi">Run anyway</span><span class="b">Don't run</span></div></div></div>
+      <div class="step"><span class="num">3</span><b>Create your tester pass</b><p>The game opens on the station. Pick a username and a password, and you're on the list.</p></div>
+      <div class="step"><span class="num">4</span><b>Get approved</b><p>Every pass is checked by hand, so it can take a while. Close the game meanwhile: once you're approved, it opens straight into the park the next time you start it.</p></div>
+    </div>
+  </section>
+
+  <section class="card two">
+    <div>
+      <h2>Your computer</h2>
+      <ul>
+        <li>Windows 10 or 11, 64-bit</li>
+        <li>A graphics card from the last few years (laptops with Intel Iris Xe or better run it on Medium/High)</li>
+        <li>8 GB of memory</li>
+        <li>About 200 MB free</li>
+        <li>Internet to sign in (then it also plays offline for a couple of days)</li>
+      </ul>
+    </div>
+    <div>
+      <h2>As a tester you get</h2>
+      <ul>
+        <li>The game before anyone else, with every new version</li>
+        <li>The <b>Founding Tester</b> medal and your number, for good</li>
+        <li>Your name in the credits</li>
+        <li>A direct line to the team: Send feedback (F8) in the game</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Questions</h2>
+    <details><summary>Is it free?</summary><p>Yes. The beta is free for testers.</p></details>
+    <details><summary>Why does Windows warn me?</summary><p>Loop &amp; Lift is a brand-new game by one developer, and Windows warns about any program it hasn't seen many people download yet. The installer only puts the game in your user folder.</p></details>
+    <details><summary>Can I share videos and screenshots?</summary><p>Please do! Just don't share the installer or your account: every tester needs their own pass.</p></details>
+    <details><summary>Where are my parks saved?</summary><p>On your computer, in <code>%APPDATA%\com.loopandlift.game\saves</code>. They stay when the game updates.</p></details>
+    <details><summary>What do you collect?</summary><p>Your account, how you play (time, rides you build, frame rate, crashes) and copies of your parks, to fix bugs and make the game better. Nothing outside the game. The details are in the <a href="../privacy/">Privacy Notice</a> and the <a href="../terms/">Beta Terms</a>. Ask any time and your account is deleted.</p></details>
+    <details><summary>How do I uninstall it?</summary><p>Windows Settings, Apps, Installed apps, Loop and Lift, Uninstall.</p></details>
+    <details><summary>Mac or phone?</summary><p>Not yet: Windows first. Follow <a href="https://www.instagram.com/loopandlift/">@loopandlift</a> to hear when.</p></details>
+  </section>
+
+  <footer><a href="../">loopandlift.github.io</a> · <a href="../terms/">Beta Terms</a> · <a href="../privacy/">Privacy</a> · <a href="https://www.instagram.com/loopandlift/">Instagram</a></footer>
+</main>
+<script>
+  // not on Windows: say so instead of handing over a file that won't run
+  const win = /Windows/i.test(navigator.userAgent) && !/Phone|Android|iPad|iPhone/i.test(navigator.userAgent);
+  if (!win) { document.getElementById('nowin').style.display = 'block'; document.getElementById('dl').style.display = 'none'; document.getElementById('ver').style.display = 'none'; }
+</script>
+</body>
+</html>

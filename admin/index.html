@@ -13,23 +13,29 @@
   --pink: #ff4fa0; --violet: #7b3cf0;
   --pending: #b26a00; --pending-bg: #fff3dc; --approved: #137a3f; --approved-bg: #ddf6e7;
   --invited: #2557c7; --invited-bg: #e0eaff; --rejected: #9a2340; --rejected-bg: #fde3ea;
+  --grey: #5d566b; --grey-bg: #ece8f1;
   --f-title: 'Fredoka', system-ui, sans-serif; --f-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 var(--f-body); }
 h1, h2, h3, .brand, .num { font-family: var(--f-title); }
 button { font: 600 14px var(--f-body); cursor: pointer; }
+input, select, textarea { font: 14px var(--f-body); color: var(--text); }
 a { color: var(--violet); }
 .hidden { display: none !important; }
+.muted { color: var(--muted); }
+code { font: 12.5px ui-monospace, Consolas, monospace; background: var(--bg); padding: 1px 5px; border-radius: 6px; }
 
-/* ---------- top bar ---------- */
-.top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 16px; padding: 12px 24px; background: var(--ink); color: #fff; }
+/* ---------- top bar: brand + account on the first row, the tabs on their own (scrollable) row ---------- */
+.top { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 12px 24px 0; background: var(--ink); color: #fff; }
 .brand { font-size: 22px; font-weight: 700; }
 .brand b { color: #ffcf3a; }
 .brand span { color: var(--pink); }
-.top nav { display: flex; gap: 4px; margin-left: 12px; }
-.top nav a { color: #fff; text-decoration: none; font-weight: 600; padding: 6px 12px; border-radius: 999px; opacity: .75; }
+.top nav { order: 3; flex-basis: 100%; display: flex; gap: 4px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.top nav::-webkit-scrollbar { display: none; }
+.top nav a { flex: none; color: #fff; text-decoration: none; font-weight: 600; padding: 6px 12px; border-radius: 999px; opacity: .75; white-space: nowrap; }
 .top nav a[aria-current] { background: rgba(255, 255, 255, .14); opacity: 1; }
+.top nav .cnt { display: inline-block; min-width: 20px; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: var(--pink); color: #fff; font-size: 12px; text-align: center; }
 .top .me { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; opacity: .9; }
 .top .me button { background: rgba(255, 255, 255, .14); color: #fff; border: 0; border-radius: 999px; padding: 6px 12px; }
 
@@ -45,64 +51,234 @@ main { max-width: 1240px; margin: 0 auto; padding: 24px; }
 .login .msg { margin-top: 12px; font-weight: 600; }
 .login .linkish { background: none; color: var(--violet); width: auto; padding: 6px 0; margin-top: 8px; font-size: 14px; text-align: left; }
 
+/* ---------- view header ---------- */
+.vh { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 16px; }
+.vh h2 { margin: 0; font-size: 26px; color: var(--ink); }
+.vh .sub { color: var(--muted); font-size: 14px; }
+.vh .tool:first-of-type { margin-left: auto; }
+.back { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; text-decoration: none; margin-bottom: 12px; }
+.back svg { width: 16px; height: 16px; }
+
 /* ---------- stats ---------- */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
-.stat { background: var(--card); border-radius: 16px; padding: 14px 16px; border: 1px solid var(--line); }
+.stat { background: var(--card); border-radius: 16px; padding: 14px 16px; border: 1px solid var(--line); color: inherit; text-decoration: none; display: block; }
+a.stat:hover { border-color: var(--violet); }
 .stat .num { font-size: 30px; font-weight: 700; color: var(--ink); line-height: 1.1; }
+.stat .num.long { font-size: 24px; line-height: 1.25; }
 .stat .lbl { color: var(--muted); font-size: 13px; font-weight: 600; }
+.stat.hot .num { color: var(--pink); }
+.stat.bad .num { color: var(--rejected); }
 
 /* ---------- toolbar ---------- */
 .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 16px; }
 .bar input[type=search] { flex: 1 1 240px; font: 15px var(--f-body); padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.bar select { padding: 9px 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
 .chips { display: flex; gap: 6px; flex-wrap: wrap; }
 .chip { border: 1px solid var(--line); background: var(--card); color: var(--text); border-radius: 999px; padding: 7px 12px; }
 .chip[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
 .chip .c { opacity: .65; margin-left: 4px; }
-.tool { border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 9px 12px; color: var(--text); }
+.tool { border: 1px solid var(--line); background: var(--card); border-radius: 12px; padding: 9px 12px; color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+.tool svg { width: 15px; height: 15px; flex: none; }
+.tool.sm { padding: 6px 10px; border-radius: 10px; font-size: 13px; }
+.tool.ok { background: var(--approved); color: #fff; border-color: var(--approved); }
+.tool.pri { background: var(--violet); color: #fff; border-color: var(--violet); }
+.tool.no { color: var(--rejected); }
+.tool:disabled { opacity: .45; cursor: not-allowed; }
 
-/* ---------- applicants ---------- */
+/* ---------- cards (applications, players, feedback) ---------- */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 14px; }
-.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 10px; }
-.head { display: flex; gap: 12px; align-items: center; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.head { display: flex; gap: 12px; align-items: center; min-width: 0; }
 .avatar { flex: none; width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: linear-gradient(135deg, #ffd6ea, #e5d6ff); display: grid; place-items: center; font: 700 24px var(--f-title); color: var(--ink); cursor: zoom-in; }
-.who { min-width: 0; }
+.avatar.sm { width: 48px; height: 48px; font-size: 20px; cursor: default; }
+.who { min-width: 0; flex: 1; }
 .who h3 { margin: 0; font-size: 19px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.who .sub { color: var(--muted); font-size: 13px; }
-.badge { margin-left: auto; align-self: flex-start; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; text-transform: capitalize; }
+.who h3 a { color: inherit; text-decoration: none; }
+.who h3 a:hover { text-decoration: underline; }
+.who .sub, .sub { color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.badge { margin-left: auto; align-self: flex-start; flex: none; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; text-transform: capitalize; white-space: nowrap; }
+.badge.inl { margin-left: 0; align-self: center; }
 .badge.pending { color: var(--pending); background: var(--pending-bg); }
 .badge.approved { color: var(--approved); background: var(--approved-bg); }
 .badge.invited { color: var(--invited); background: var(--invited-bg); }
-.badge.rejected { color: var(--rejected); background: var(--rejected-bg); }
-.facts { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 14px; }
+.badge.rejected, .badge.blocked { color: var(--rejected); background: var(--rejected-bg); }
+.badge.plan { color: var(--violet); background: #efe7ff; text-transform: none; }
+.badge.fs-new { color: #b0005c; background: #ffe1ef; }
+.badge.fs-seen, .badge.fs-wontfix { color: var(--grey); background: var(--grey-bg); }
+.badge.fs-planned { color: var(--invited); background: var(--invited-bg); }
+.badge.fs-fixed { color: var(--approved); background: var(--approved-bg); }
+.kind { flex: none; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
+.kind.k-bug { color: var(--rejected); background: var(--rejected-bg); }
+.kind.k-idea { color: var(--invited); background: var(--invited-bg); }
+.kind.k-love { color: #b0005c; background: #ffe1ef; }
+.kind.k-other { color: var(--grey); background: var(--grey-bg); }
+.online { display: inline-flex; align-items: center; gap: 5px; color: var(--approved); font-weight: 700; }
+.online::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #1fbf63; box-shadow: 0 0 0 3px #d4f5e1; }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 14px; margin: 0; }
 .facts dt { color: var(--muted); }
-.facts dd { margin: 0; overflow-wrap: anywhere; }
-.note { background: var(--bg); border-radius: 12px; padding: 10px 12px; font-size: 14px; white-space: pre-wrap; }
+.facts dd { margin: 0; overflow-wrap: anywhere; min-width: 0; }
+.facts select { padding: 2px 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); max-width: 100%; }
+.note { background: var(--bg); border-radius: 12px; padding: 10px 12px; font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .mine { width: 100%; font: 14px var(--f-body); border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; resize: vertical; min-height: 38px; background: #fffdf6; }
 .acts { display: flex; flex-wrap: wrap; gap: 6px; }
-.acts button { border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 7px 11px; color: var(--text); }
+.acts button, .acts a.btn { border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 7px 11px; color: var(--text); text-decoration: none; font: 600 14px var(--f-body); }
 .acts .ok { background: var(--approved); color: #fff; border-color: var(--approved); }
 .acts .no { color: var(--rejected); }
 .acts .mail { background: var(--invited); color: #fff; border-color: var(--invited); }
 .acts .del { margin-left: auto; color: var(--muted); border-color: transparent; }
 .empty { text-align: center; color: var(--muted); padding: 60px 20px; background: var(--card); border-radius: 18px; border: 1px dashed var(--line); }
 .empty h2 { color: var(--ink); margin: 0 0 6px; }
+.empty.sm { padding: 22px 14px; font-size: 14px; }
+
+/* ---------- panels (overview, player detail, settings) ---------- */
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 16px; min-width: 0; margin-bottom: 14px; }
+.panel > h3 { margin: 0 0 10px; font-size: 18px; color: var(--ink); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.panel > h3 .sub { font: 13px var(--f-body); }
+.panel > h3 .tool { margin-left: auto; }
+.cols { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+.cols > div { min-width: 0; }
+.row2 { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 14px; }
+.row2 label { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 600; }
+.row2 select, .row2 input, .field input, .field select, .field textarea { padding: 7px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.row2 input { width: 110px; }
+.field { display: grid; gap: 4px; margin-bottom: 12px; }
+.field > span { font-weight: 600; font-size: 14px; }
+.field small { color: var(--muted); font-size: 12.5px; }
+.field textarea { width: 100%; min-height: 64px; resize: vertical; }
+.pw { margin-top: 10px; background: #fffbe8; border: 1px solid #f3e2a4; border-radius: 12px; padding: 10px 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; }
+.pw code { font-size: 17px; background: #fff; padding: 4px 10px; letter-spacing: .5px; user-select: all; }
+
+/* switch */
+.switch { position: relative; display: inline-block; width: 42px; height: 24px; flex: none; }
+.switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
+.switch span { position: absolute; inset: 0; background: #d6cfe0; border-radius: 999px; transition: background .15s; }
+.switch span::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .15s; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); }
+.switch input:checked + span { background: var(--approved); }
+.switch input:checked + span::after { transform: translateX(18px); }
+.switch input:focus-visible + span { outline: 2px solid var(--violet); outline-offset: 2px; }
+.swrow { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-weight: 600; }
+
+/* feature chips */
+.ce { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.fchip { display: inline-flex; align-items: center; gap: 4px; font: 12.5px ui-monospace, Consolas, monospace; background: #efe7ff; color: var(--ink); border-radius: 999px; padding: 3px 4px 3px 10px; }
+.fchip.neg { background: var(--rejected-bg); color: var(--rejected); }
+.fchip button { border: 0; background: rgba(0, 0, 0, .08); color: inherit; width: 20px; height: 20px; border-radius: 50%; padding: 0; line-height: 20px; font-size: 13px; }
+.ce input, .tbl .ce input[data-cein] { width: 150px; min-width: 0; padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; font: 12.5px ui-monospace, Consolas, monospace; }
+
+/* tables */
+.tw { overflow-x: auto; margin: 0 -4px; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tbl th { text-align: left; font-size: 12px; color: var(--muted); font-weight: 700; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.tbl td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tbl th.n { text-align: right; }
+.tbl input:not([type=checkbox]), .tbl select, .tbl textarea { width: 100%; min-width: 90px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
+.tbl textarea { min-height: 34px; resize: vertical; min-width: 200px; }
+.nowrap { white-space: nowrap; }
+.expired { color: var(--rejected); font-weight: 600; }
+
+/* charts */
+.chart { position: relative; height: 190px; }
+.chart svg { display: block; overflow: visible; }
+.chart .bar { fill: var(--violet); }
+.chart .bar.on { fill: var(--ink); }
+.chart .grid line { stroke: var(--line); }
+.chart text { fill: var(--muted); font: 11px var(--f-body); }
+.chart .none { fill: var(--muted); font-size: 13px; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; font-size: 12.5px; line-height: 1.4; padding: 7px 10px; border-radius: 10px; white-space: nowrap; transform: translate(-50%, -100%); z-index: 2; }
+.hbars { display: grid; gap: 8px; }
+.hbar { display: grid; grid-template-columns: minmax(90px, 34%) 1fr auto; gap: 10px; align-items: center; font-size: 14px; }
+.hbar .lab { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hbar .trk { height: 12px; }
+.hbar .fill { height: 12px; min-width: 3px; background: var(--violet); border-radius: 0 4px 4px 0; }
+.hbar .v { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* activity timeline */
+.tl h4 { margin: 14px 0 6px; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.tl h4:first-child { margin-top: 0; }
+.tl ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.tl li { display: grid; grid-template-columns: 52px 10px 1fr; gap: 8px; align-items: baseline; padding: 4px 6px; border-radius: 8px; font-size: 14px; min-width: 0; }
+.tl li > div { min-width: 0; overflow-wrap: anywhere; }
+.tl time { color: var(--muted); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.tl .dot { width: 8px; height: 8px; border-radius: 50%; background: #c9c1d6; align-self: center; }
+.tl .k-build .dot { background: var(--approved); }
+.tl .k-remove .dot { background: #e08a00; }
+.tl .k-design .dot { background: var(--violet); }
+.tl .k-fb .dot { background: var(--pink); }
+.tl .k-error { background: var(--rejected-bg); }
+.tl .k-error .dot { background: var(--rejected); }
+.tl .who { font-weight: 700; color: var(--ink); text-decoration: none; }
+.tl details summary { cursor: pointer; }
+.pre { margin: 6px 0 0; padding: 10px; background: #1f1630; color: #efe9f7; border-radius: 10px; font: 12px/1.45 ui-monospace, Consolas, monospace; max-height: 320px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; }
+details > summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+
+/* parks */
+.parks { display: grid; gap: 14px; }
+.park { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 14px; border: 1px solid var(--line); border-radius: 16px; padding: 12px; }
+.pthumb { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 12px; background: linear-gradient(135deg, #ffd6ea, #e5d6ff); display: grid; place-items: center; color: var(--muted); font-size: 13px; cursor: zoom-in; }
+.park h4 { margin: 0; font: 700 18px var(--f-title); color: var(--ink); overflow-wrap: anywhere; }
+.pstats { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.pstats span { background: var(--bg); border-radius: 999px; padding: 3px 10px; font-size: 13px; }
+.pstats b { color: var(--ink); }
+.shots { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0; }
+.shots figure { margin: 0; flex: none; width: 128px; }
+.shots img { width: 128px; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 8px; cursor: zoom-in; display: block; }
+.shots figcaption { font-size: 11.5px; color: var(--muted); }
+.minis { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.mini { text-decoration: none; color: inherit; }
+.mini img, .mini .ph { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; background: linear-gradient(135deg, #ffd6ea, #e5d6ff); display: block; }
+.mini b { display: block; font-size: 14px; color: var(--ink); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mini span { font-size: 12.5px; color: var(--muted); }
+
+/* feedback */
+.fbgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 14px; }
+.fb .shot { width: 100%; max-height: 260px; object-fit: contain; background: #120a1f; border-radius: 12px; cursor: zoom-in; }
+.fb .reply { display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 10px; }
+.fb .reply textarea { width: 100%; min-height: 60px; resize: vertical; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; }
+.fb .reply .sent .note { background: #efe7ff; }
+.fb .reply button { justify-self: start; }
 
 .zoom { position: fixed; inset: 0; background: rgba(20, 10, 40, .8); display: grid; place-items: center; z-index: 20; cursor: zoom-out; }
-.zoom img { max-width: 90vw; max-height: 90vh; border-radius: 16px; }
-.toast { position: fixed; bottom: 20px; left: 50%; translate: -50% 0; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 600; z-index: 30; }
+.zoom img { max-width: 92vw; max-height: 90vh; border-radius: 16px; }
+.ask-bg { position: fixed; inset: 0; z-index: 60; background: rgba(23, 8, 42, .55); display: grid; place-items: center; padding: 16px; }
+.ask { background: #fff; color: var(--ink); width: min(460px, 100%); border-radius: 16px; padding: 18px 20px; box-shadow: 0 0 0 3px var(--ink), 0 14px 40px rgba(0, 0, 0, .35); display: grid; gap: 12px; }
+.ask p { margin: 0; white-space: pre-wrap; font-weight: 600; line-height: 1.45; }
+.ask textarea { width: 100%; font: inherit; padding: 8px 10px; border-radius: 10px; border: 2px solid #d9ccef; resize: vertical; }
+.ask-row { display: flex; justify-content: flex-end; gap: 8px; }
+.ask-row button { font: inherit; font-weight: 700; padding: 8px 16px; border-radius: 10px; border: 2px solid var(--ink); cursor: pointer; background: #fff; }
+.ask-row .ask-ok { background: var(--ink); color: #fff; }
+.toast { position: fixed; bottom: 20px; left: 50%; translate: -50% 0; background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; font-weight: 600; z-index: 30; max-width: 92vw; }
 
-@media (max-width: 640px) { main { padding: 14px; } .top { padding: 10px 14px; } .top nav { display: none; } .grid { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  main { padding: 14px; } .top { padding: 10px 14px 0; } .top .me span { display: none; }
+  .grid, .fbgrid { grid-template-columns: 1fr; }
+  .park { grid-template-columns: 1fr; }
+  .vh h2 { font-size: 22px; }
+  .stat .num { font-size: 24px; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="brand"><b>Loop</b> <span>&amp;</span> <b>Lift</b> admin</div>
-  <nav aria-label="Sections"><a href="#testers" aria-current="page">Testers</a></nav>
-  <div class="me hidden" id="me"><span id="meMail"></span><button id="pw" type="button">Set password</button><button id="out" type="button">Sign out</button></div>
+  <nav aria-label="Sections" id="tabs" class="hidden">
+    <a href="#overview" data-v="overview">Overview</a>
+    <a href="#players" data-v="players">Players<span class="cnt hidden" id="cntPending"></span></a>
+    <a href="#feedback" data-v="feedback">Feedback<span class="cnt hidden" id="cntFeedback"></span></a>
+    <a href="#builds" data-v="builds">Builds</a>
+    <a href="#settings" data-v="settings">Game settings</a>
+    <a href="#plans" data-v="plans">Plans &amp; features</a>
+    <a href="#invites" data-v="invites">Invites</a>
+    <a href="#applications" data-v="applications">Applications</a>
+  </nav>
+  <div class="me hidden" id="me"><span id="meMail"></span><button id="pw" type="button">My password</button><button id="out" type="button">Sign out</button></div>
 </header>
 
 <main>
-  <!-- sign in: a one-time link to the owner's email (no passwords, no public sign-ups) -->
+  <!-- sign in: email + password, or a one-time link to the owner's email (no public sign-ups) -->
   <section class="login hidden" id="login">
     <h1>Admin sign in</h1>
     <p>Only the Loop &amp; Lift team can sign in here.</p>
@@ -117,25 +293,59 @@ main { max-width: 1240px; margin: 0 auto; padding: 24px; }
 
   <div class="empty" id="boot" style="margin-top:12vh"><h2>Loading...</h2></div>
   <section class="hidden" id="app">
-    <div class="stats" id="stats"></div>
-    <div class="bar">
-      <input type="search" id="q" placeholder="Search name, email, Instagram, notes...">
-      <div class="chips" id="chips"></div>
-      <button class="tool" id="copy" type="button" title="Emails of the shown testers, ready for BCC">Copy emails</button>
-      <button class="tool" id="csv" type="button">Export CSV</button>
-      <button class="tool" id="reload" type="button">Refresh</button>
-    </div>
-    <div class="grid" id="list"></div>
+    <section class="view hidden" id="v-overview"></section>
+    <section class="view hidden" id="v-players"></section>
+    <section class="view hidden" id="v-player"></section>
+    <section class="view hidden" id="v-feedback"></section>
+    <section class="view hidden" id="v-builds"></section>
+    <section class="view hidden" id="v-settings"></section>
+    <section class="view hidden" id="v-plans"></section>
+    <section class="view hidden" id="v-invites"></section>
+    <!-- the landing page's "Join as tester" sign-ups -->
+    <section class="view hidden" id="v-applications">
+      <div class="vh"><h2>Applications</h2><span class="sub">"Join as tester" sign-ups from the website</span></div>
+      <div class="stats" id="stats"></div>
+      <div class="bar">
+        <input type="search" id="q" placeholder="Search name, email, Instagram, notes...">
+        <div class="chips" id="chips"></div>
+        <button class="tool" id="copy" type="button" title="Emails of the shown testers, ready for BCC">Copy emails</button>
+        <button class="tool" id="csv" type="button">Export CSV</button>
+        <button class="tool" id="reload" type="button">Refresh</button>
+      </div>
+      <div class="grid" id="list"></div>
+    </section>
   </section>
 </main>
+<datalist id="featList"></datalist>
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
 
 const CFG = /*CFG*/{"url":"https://xirdyrvodzieqsuzcmyv.supabase.co","anon":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpcmR5cnZvZHppZXFzdXpjbXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTg5NzgsImV4cCI6MjEwOTc5NDk3OH0.rhFU6zEreDXFGGWiSPB9il8DYDRRLr1eUJ38js3ATvA"}/*CFG*/;
 const $ = id => document.getElementById(id);
+// Questions drawn in the page itself: the browser's own prompt()/confirm() are silently refused in some windows
+// (VS Code's browser, blocked dialogs), and the Block button then did nothing.
+function dialog(message, input) {
+  return new Promise(resolve => {
+    const bg = document.createElement('div');
+    bg.className = 'ask-bg';
+    bg.innerHTML = `<form class="ask" method="dialog"><p></p>${input !== undefined ? '<textarea rows="3"></textarea>' : ''}<div class="ask-row"><button type="button" class="ask-no">Cancel</button><button type="submit" class="ask-ok">OK</button></div></form>`;
+    bg.querySelector('p').textContent = message;
+    const ta = bg.querySelector('textarea');
+    if (ta) ta.value = input || '';
+    const done = v => { bg.remove(); resolve(v); };
+    bg.querySelector('form').onsubmit = e => { e.preventDefault(); done(ta ? ta.value : true); };
+    bg.querySelector('.ask-no').onclick = () => done(ta ? null : false);
+    bg.addEventListener('keydown', e => { if (e.key === 'Escape') done(ta ? null : false); if (e.key === 'Enter' && ta && !e.shiftKey) { e.preventDefault(); done(ta.value); } });
+    document.body.append(bg);
+    (ta || bg.querySelector('.ask-ok')).focus();
+  });
+}
+const ask = (message, value = '') => dialog(message, value);
+const sure = message => dialog(message);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
-const toast = t => { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.append(d); setTimeout(() => d.remove(), 2200); };
+// one at a time: a newer message replaces the one showing (two at once overlapped)
+const toast = t => { document.querySelectorAll('.toast').forEach(x => x.remove()); const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.append(d); setTimeout(() => d.remove(), 2600); };
 const STATUSES = ['pending', 'approved', 'invited', 'rejected'];
 // the emails the Email button opens, ready to send from your own mail app. Written as Elio, person to person
 // (the owner: authentic and personal, never corporate)
@@ -185,7 +395,82 @@ if (!CFG) {
   throw new Error('no config');
 }
 const sb = createClient(CFG.url, CFG.anon, { auth: { persistSession: true, detectSessionInUrl: true } });
-let rows = [], photos = new Map(), filter = 'all';
+
+// ---------- small helpers ----------
+const ICON = {
+  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg>'
+};
+/** Unwraps a Supabase reply: the data, or throws its error. */
+const q = async p => { const { data, error } = await p; if (error) throw error; return data; };
+/** "3 h 12 min" */
+const dur = s => { s = Math.max(0, +s || 0); const m = Math.round(s / 60), h = Math.floor(m / 60); return h ? (m % 60 ? `${h} h ${m % 60} min` : `${h} h`) : m || !s ? `${m} min` : '< 1 min'; };
+const when = t => t ? new Date(t).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : '—';
+const day = t => t ? new Date(t).toLocaleDateString([], { dateStyle: 'medium' }) : '—';
+const clock = t => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const ago = t => {
+  if (!t) return 'never';
+  const s = (Date.now() - new Date(t)) / 1000;
+  return s < 60 ? 'just now' : s < 3600 ? `${Math.floor(s / 60)} min ago` : s < 86400 ? `${Math.floor(s / 3600)} h ago` : s < 30 * 86400 ? `${Math.floor(s / 86400)} d ago` : day(t);
+};
+const num = (v, d = 0) => v == null || v === '' || isNaN(+v) ? '—' : (+v).toLocaleString(undefined, { maximumFractionDigits: d });
+const size = b => b == null ? '—' : b < 1024 ? `${b} B` : b < 1048576 ? `${(b / 1024).toFixed(1)} KB` : `${(b / 1048576).toFixed(1)} MB`;
+const label = k => String(k).replace(/[_-]+/g, ' ').replace(/^./, c => c.toUpperCase());
+const pretty = t => label(String(t ?? '').replace(/\./g, ' '));
+const loading = () => '<div class="empty"><h2>Loading...</h2></div>';
+const failed = e => `<div class="empty"><h2>Could not load</h2><p>${esc(e?.message || e)}</p></div>`;
+const MIN3 = () => new Date(Date.now() - 180e3).toISOString();
+const MODES = { park: 'In the park', designer: 'Coaster designer', ride: 'Riding (ride camera)', photo: 'Photo mode', title: 'Title screen' };
+const PLAYER_ST = ['pending', 'approved', 'blocked'];
+const yes = v => v ? 'Yes' : 'No';
+/** An object as label / value rows (nested keys joined), for the computer specs and feedback system info. */
+function kv(o) {
+  if (o == null) return '<div class="muted">Nothing sent</div>';
+  if (typeof o !== 'object') return `<div>${esc(o)}</div>`;
+  const rows = [];
+  const walk = (v, k) => {
+    if (v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length) for (const [a, b] of Object.entries(v)) walk(b, k ? `${k} / ${a}` : a);
+    else rows.push([k, Array.isArray(v) ? v.map(x => typeof x === 'object' ? JSON.stringify(x) : x).join(', ') : v && typeof v === 'object' ? '' : v]);
+  };
+  walk(o, '');
+  if (!rows.length) return '<div class="muted">Nothing sent</div>';
+  return `<dl class="facts">${rows.map(([k, v]) => `<dt>${esc(label(k))}</dt><dd>${esc(v === true ? 'yes' : v === false ? 'no' : v)}</dd>`).join('')}</dl>`;
+}
+
+// ---------- private files: short-lived signed links, made in batches and kept ~50 min ----------
+const links = new Map();
+async function sign(paths) {
+  const need = [...new Set(paths.filter(p => p && !(links.get(p)?.until > Date.now())))];
+  for (let i = 0; i < need.length; i += 100) {
+    const { data } = await sb.storage.from('player-files').createSignedUrls(need.slice(i, i + 100), 3600);
+    for (const u of data || []) if (u.signedUrl) links.set(u.path, { url: u.signedUrl, until: Date.now() + 50 * 60e3 });
+  }
+}
+const link = p => p && links.get(p)?.url;
+const fileName = s => String(s || 'park').replace(/[\\/:*?"<>|\x00-\x1f]+/g, '_').trim().slice(0, 80) || 'park';
+/** Park files are a gzip of the park JSON: unpacked here, saved as <name>.json. */
+async function downloadPark(path, name) {
+  try {
+    await sign([path]);
+    const u = link(path);
+    if (!u) return toast('File not found');
+    const r = await fetch(u);
+    if (!r.ok) return toast('Download failed: ' + r.status);
+    const buf = new Uint8Array(await r.arrayBuffer());
+    // already plain when the server sent it with Content-Encoding: gzip (the browser unpacked it)
+    const text = buf[0] === 0x1f && buf[1] === 0x8b
+      ? await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).text()
+      : new TextDecoder().decode(buf);
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+    a.download = fileName(name) + '.json';
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+    toast(`Saved ${a.download} (${size(text.length)})`);
+  } catch (e) { toast('Download failed: ' + e.message); }
+}
 
 // ---------- sign in: password, or a one-time link by email (the free mailer sends only a few an hour) ----------
 const why = e => /rate limit/i.test(e.message) ? 'Too many sign-in emails in the last hour (the free mailer allows only a few). Use your password, or try again later.'
@@ -207,7 +492,7 @@ $('byLink').addEventListener('click', async () => {
 });
 // signed in: choose a password, so the next sign-ins need no email
 $('pw').addEventListener('click', async () => {
-  const p = prompt('Choose a password (at least 10 characters):');
+  const p = await ask('Choose a password for your admin account (at least 10 characters):');
   if (!p) return;
   if (p.length < 10) return toast('At least 10 characters');
   const { error } = await sb.auth.updateUser({ password: p });
@@ -217,13 +502,15 @@ $('out').addEventListener('click', async () => { await sb.auth.signOut(); locati
 
 async function show(session) {
   $('boot')?.remove();
-  if (!session) { $('login').classList.remove('hidden'); $('app').classList.add('hidden'); $('me').classList.add('hidden'); return; }
+  if (!session) { $('login').classList.remove('hidden'); $('app').classList.add('hidden'); $('me').classList.add('hidden'); $('tabs').classList.add('hidden'); return; }
   const { data: ok, error: rpcErr } = await Promise.race([sb.rpc('is_admin'), new Promise(r => setTimeout(() => r({ error: { message: 'timeout' } }), 8000))]);
   if (rpcErr) { $('login').classList.remove('hidden'); $('loginMsg').textContent = 'Could not reach the server. Check the connection and refresh.'; return; }
   if (!ok) { $('login').classList.remove('hidden'); $('loginMsg').textContent = 'This account has no admin access.'; await sb.auth.signOut(); return; }
-  $('login').classList.add('hidden'); $('app').classList.remove('hidden'); $('me').classList.remove('hidden');
+  $('login').classList.add('hidden'); $('app').classList.remove('hidden'); $('me').classList.remove('hidden'); $('tabs').classList.remove('hidden');
   $('meMail').textContent = session.user.email;
-  load();
+  await loadCatalog().catch(e => toast('Plans not loaded: ' + e.message));
+  refreshCounts();
+  route();
 }
 // never await Supabase inside this callback: it holds the auth lock and the call never returns (a blank page
 // for a returning admin). Handle the session on the next tick instead.
@@ -235,8 +522,955 @@ sb.auth.onAuthStateChange((_e, session) => {
   setTimeout(() => show(session), 0);
 });
 
-// ---------- data ----------
-async function load() {
+// ---------- tabs ----------
+const LOADERS = {
+  overview: loadOverview, players: loadPlayers, player: loadPlayer, feedback: loadFeedback, builds: loadBuilds,
+  settings: loadSettings, plans: loadPlans, invites: loadInvites, applications: loadApps
+};
+function here() {
+  const [v, arg] = location.hash.slice(1).split('/');
+  return { v: v === 'testers' ? 'applications' : LOADERS[v] ? v : 'overview', arg: arg && decodeURIComponent(arg) };
+}
+async function route() {
+  if ($('app').classList.contains('hidden')) return;
+  const { v, arg } = here();
+  for (const s of document.querySelectorAll('.view')) s.classList.toggle('hidden', s.id !== 'v-' + v);
+  for (const a of $('tabs').querySelectorAll('a')) {
+    if (a.dataset.v === (v === 'player' ? 'players' : v)) { a.setAttribute('aria-current', 'page'); a.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+    else a.removeAttribute('aria-current');
+  }
+  try { await LOADERS[v](arg); } catch (e) { console.error(e); $('v-' + v).innerHTML = failed(e); }
+}
+window.addEventListener('hashchange', () => { route(); scrollTo(0, 0); });
+// lists refresh themselves while open, unless you're typing in them
+setInterval(() => {
+  if (document.hidden || $('app').classList.contains('hidden')) return;
+  const { v } = here(), view = $('v-' + v);
+  if (!['overview', 'players', 'applications'].includes(v) || view.contains(document.activeElement) && document.activeElement.matches('input, textarea, select')) return;
+  LOADERS[v](here().arg).catch(() => {});
+}, 60000);
+
+// plans + the feature catalogue: needed by several tabs
+let plans = [], features = [];
+async function loadCatalog() {
+  [plans, features] = await Promise.all([
+    q(sb.from('plans').select('*').order('sort').order('id')),
+    q(sb.from('features').select('*').order('grp').order('sort').order('key'))
+  ]);
+  // suggestions for the feature chips: '*', every group ('coaster.*'), every key, and each one taken away ('!key')
+  const groups = [...new Set(features.map(f => f.key.split('.')[0]).filter(g => g && !g.includes('*')))].map(g => g + '.*');
+  const all = ['*', ...groups, ...features.map(f => f.key)];
+  $('featList').innerHTML = [...all, ...all.map(k => '!' + k)].map(k => `<option value="${esc(k)}">${esc(features.find(f => f.key === k.replace(/^!/, ''))?.name || '')}</option>`).join('');
+}
+const planName = id => plans.find(p => p.id === id)?.name || id;
+const planOptions = cur => [...plans.map(p => p.id), ...(plans.some(p => p.id === cur) ? [] : [cur])]
+  .map(id => `<option value="${esc(id)}"${id === cur ? ' selected' : ''}>${esc(planName(id))}</option>`).join('');
+
+async function refreshCounts() {
+  const { data } = await sb.rpc('admin_overview');
+  if (!data) return;
+  const set = (el, n) => { el.textContent = n; el.classList.toggle('hidden', !n); };
+  set($('cntPending'), data.pending); set($('cntFeedback'), data.feedback_new);
+  return data;
+}
+
+// ---------- charts ----------
+/** 30-day play-time bars (one series: no legend, the panel title names it), hover for the day's numbers. */
+function chart(box, rows, days, withPlayers) {
+  const by = new Map((rows || []).map(r => [String(r.day).slice(0, 10), r])), now = new Date(), list = [];
+  // the server groups by its own (UTC) day
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - i)), r = by.get(d.toISOString().slice(0, 10));
+    list.push({ d, s: +(r?.seconds || 0), n: +(r?.sessions || 0), p: +(r?.players || 0) });
+  }
+  let lastW = 0;
+  const draw = () => {
+    const W = Math.max(260, box.clientWidth), H = 190, L = 46, R = 6, T = 12, B = 24;
+    if (W === lastW) return;
+    lastW = W;
+    const max = Math.max(0, ...list.map(x => x.s)), hours = max >= 7200, u = hours ? 3600 : 60;
+    const v = Math.max(max / u, hours ? 2 : 4), raw = v / 4, p = 10 ** Math.floor(Math.log10(raw));
+    const step = Math.max(1, [1, 2, 2.5, 5, 10].map(m => m * p).find(s => s >= raw)), top = step * Math.ceil(v / step);
+    const ph = H - T - B, cw = (W - L - R) / days, bw = Math.max(2, Math.min(26, cw - 2)), y = val => H - B - val / top * ph;
+    let g = '';
+    for (let t = 0; t <= top + 1e-9; t += step) g += `<line x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}"/><text x="${L - 6}" y="${y(t) + 4}" text-anchor="end">${num(t, 1)} ${hours ? 'h' : 'min'}</text>`;
+    let bars = '', xl = '';
+    list.forEach((x, i) => {
+      if (x.s) {
+        const h = Math.max(2, x.s / u / top * ph), bx = L + i * cw + (cw - bw) / 2, by = H - B - h, r = Math.min(4, bw / 2, h);
+        bars += `<path class="bar" data-i="${i}" d="M${bx},${by + h}V${by + r}Q${bx},${by} ${bx + r},${by}H${bx + bw - r}Q${bx + bw},${by} ${bx + bw},${by + r}V${by + h}Z"/>`;
+      }
+      if ((days - 1 - i) % 7 === 0) {
+        const last = i === days - 1;
+        xl += `<text x="${last ? W - R : L + i * cw + cw / 2}" y="${H - 6}" text-anchor="${last ? 'end' : 'middle'}">${x.d.toLocaleDateString([], { month: 'short', day: 'numeric', timeZone: 'UTC' })}</text>`;
+      }
+    });
+    box.innerHTML = `<svg width="${W}" height="${H}" role="img" aria-label="Play time per day, last ${days} days"><g class="grid">${g}</g>${bars}${xl}
+      ${max ? '' : `<text class="none" x="${(L + W) / 2}" y="${H / 2}" text-anchor="middle">No play time in these ${days} days</text>`}
+      <rect x="${L}" y="${T}" width="${W - L - R}" height="${ph}" fill="transparent"/></svg><div class="tip hidden"></div>`;
+    const svg = box.querySelector('svg'), tip = box.querySelector('.tip');
+    const hover = e => {
+      const rc = svg.getBoundingClientRect(), i = Math.floor((e.clientX - rc.left - L) / cw);
+      if (i < 0 || i >= days) return leave();
+      const x = list[i];
+      box.querySelectorAll('.bar.on').forEach(b => b.classList.remove('on'));
+      box.querySelector(`.bar[data-i="${i}"]`)?.classList.add('on');
+      tip.innerHTML = `<b>${x.d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })}</b><br>${dur(x.s)} played<br>${x.n} session${x.n === 1 ? '' : 's'}${withPlayers ? ` · ${x.p} player${x.p === 1 ? '' : 's'}` : ''}`;
+      const cx = Math.min(Math.max(L + i * cw + cw / 2, 80), W - 80);
+      tip.style.left = cx + 'px'; tip.style.top = Math.max(y(x.s / u) - 8, 40) + 'px';
+      tip.classList.remove('hidden');
+    };
+    const leave = () => { tip.classList.add('hidden'); box.querySelectorAll('.bar.on').forEach(b => b.classList.remove('on')); };
+    svg.addEventListener('pointermove', hover); svg.addEventListener('pointerdown', hover); svg.addEventListener('pointerleave', leave);
+  };
+  box._ro?.disconnect();
+  box._ro = new ResizeObserver(draw);
+  box._ro.observe(box);
+  draw();
+}
+/** Horizontal bars: [label, value, shown value]. */
+const hbars = (rows, empty) => rows.length ? `<div class="hbars">${rows.map(([l, v, t]) => {
+  const max = Math.max(...rows.map(r => r[1])) || 1;
+  return `<div class="hbar"><span class="lab" title="${esc(l)}">${esc(l)}</span><div class="trk"><div class="fill" style="width:${(v / max * 100).toFixed(1)}%"></div></div><span class="v">${esc(t)}</span></div>`;
+}).join('')}</div>` : `<div class="empty sm">${empty}</div>`;
+
+// ---------- what an event means, in words ----------
+const EV_GROUP = { 'ride.built': 'build', 'shop.built': 'build', 'park.new': 'build', 'ride.removed': 'remove', 'coaster.designed': 'design', 'designer.open': 'design', 'feedback.sent': 'fb', error: 'error' };
+function evText(e, name = '') {
+  const d = e.data && typeof e.data === 'object' ? e.data : {}, t = s => esc(s ?? ''), quoted = s => s ? ` "${esc(s)}"` : '';
+  const m = s => s ? ` <span class="muted">${s}</span>` : '';
+  switch (e.kind) {
+    case 'session.start': return 'Started the game' + m([d.version && 'v' + t(d.version), t(d.quality), d.w && `${t(d.w)}x${t(d.h)}`, t(d.gpu)].filter(Boolean).join(' · '));
+    case 'park.new': return 'Started a new park' + (d.mode ? ` (${t(d.mode)})` : '');
+    case 'park.open': return 'Opened the park' + quoted(d.name);
+    case 'ride.built': return `Built ${d.kind === 'coaster' ? 'a coaster' : d.kind === 'cable' ? 'a cable car' : 'a ride'}${quoted(d.name)}` + m([t(pretty(d.type)), d.design && 'design ' + t(d.design)].filter(Boolean).join(' · '));
+    case 'ride.removed': return 'Removed a ride' + m(t(pretty(d.type)));
+    case 'coaster.designed': return `Designed a coaster` + m([t(pretty(d.type)), d.pieces != null && `${num(d.pieces)} pieces`, d.length != null && `${num(d.length)} m long`,
+      d.height != null && `${num(d.height)} m high`, d.inversions != null && `${num(d.inversions)} inversions`,
+      d.excitement != null && `excitement ${num(d.excitement, 2)}`, d.intensity != null && `intensity ${num(d.intensity, 2)}`].filter(Boolean).join(' · '));
+    case 'shop.built': return 'Built a shop' + m(t(pretty(d.type)));
+    case 'designer.open': return 'Opened the coaster designer' + m(t(pretty(d.type)));
+    case 'photo.mode': return 'Used photo mode';
+    case 'feedback.sent': return 'Sent feedback';
+    case 'error': return `<details><summary>${name}Error: ${t(d.msg || 'unknown')}</summary>${d.src ? `<div class="muted">${t(d.src)}</div>` : ''}${d.stack ? `<pre class="pre">${t(d.stack)}</pre>` : ''}</details>`;
+    default: return `<code>${t(e.kind)}</code>` + (e.data != null ? m(t(JSON.stringify(e.data).slice(0, 300))) : '');
+  }
+}
+/** Events grouped by local day; `who` adds the player's name (the overview's activity feed). */
+function timeline(evs, who) {
+  if (!evs.length) return '<div class="empty sm">Nothing yet. When the game sends events, they show up here.</div>';
+  let out = '', cur = '';
+  for (const e of evs) {
+    const d = new Date(e.at).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+    if (d !== cur) { out += (cur ? '</ul>' : '') + `<h4>${esc(d)}</h4><ul>`; cur = d; }
+    const name = who ? `<a class="who" href="#player/${esc(e.player)}">${esc(e.players?.username || '?')}</a> ` : '';
+    out += `<li class="k-${EV_GROUP[e.kind] || 'other'}"><time>${clock(e.at)}</time><span class="dot"></span><div>${e.kind === 'error' ? evText(e, name) : name + evText(e)}</div></li>`;
+  }
+  return `<div class="tl">${out}</ul></div>`;
+}
+
+// =====================================================================================================
+// Overview
+// =====================================================================================================
+async function loadOverview() {
+  const el = $('v-overview');
+  if (!el.dataset.ok) el.innerHTML = loading();
+  const [ov, daily, acts, newest, on] = await Promise.all([
+    q(sb.rpc('admin_overview')),
+    q(sb.rpc('admin_daily', { p_player: null, p_days: 30 })),
+    q(sb.from('events').select('id,at,kind,data,player,players(username)').order('at', { ascending: false }).limit(30)),
+    q(sb.from('parks').select('player,park,name,updated_at,stats,thumb,players(username)').order('updated_at', { ascending: false }).limit(8)),
+    q(sb.from('sessions').select('player,last_beat,started_at,seconds,park,perf,players(username)').gt('last_beat', MIN3()).order('last_beat', { ascending: false }))
+  ]);
+  await sign(newest.map(p => p.thumb));
+  const tile = (n, l, href, cls = '') => `<${href ? `a href="${href}"` : 'div'} class="stat ${cls}"><div class="num${String(n).length > 6 ? ' long' : ''}">${n}</div><div class="lbl">${l}</div></${href ? 'a' : 'div'}>`;
+  const online = [...new Map(on.map(s => [s.player, s])).values()];
+  const month = (daily || []).reduce((a, r) => a + +r.seconds, 0);
+  el.dataset.ok = 1;
+  el.innerHTML = `
+    <div class="vh"><h2>Overview</h2><span class="sub">The installed game, live</span><button class="tool" data-reload type="button">${ICON.refresh}Refresh</button></div>
+    <div class="stats">
+      ${tile(num(ov.pending), 'Waiting for approval', '#players/pending', ov.pending ? 'hot' : '')}
+      ${tile(num(ov.approved), 'Approved players', '#players/approved')}
+      ${tile(num(ov.blocked), 'Blocked', '#players/blocked')}
+      ${tile(num(ov.online), 'Online now')}
+      ${tile(dur(ov.week_seconds), 'Played this week')}
+      ${tile(num(ov.week_players), 'Players this week')}
+      ${tile(num(ov.feedback_new), 'New feedback', '#feedback/new', ov.feedback_new ? 'hot' : '')}
+      ${tile(num(ov.errors_week), 'Errors this week', '', ov.errors_week ? 'bad' : '')}
+      ${tile(num(ov.parks), 'Parks saved')}
+    </div>
+    <div class="panel"><h3>Play time per day <span class="sub">last 30 days · ${dur(month)} in all</span></h3><div class="chart" id="ovChart"></div></div>
+    <div class="cols">
+      <div>
+        <div class="panel"><h3>Latest activity</h3>${timeline(acts, true)}</div>
+      </div>
+      <div>
+        <div class="panel"><h3>Online now <span class="sub">${online.length}</span></h3>${online.length ? `<div class="tw"><table class="tbl"><tr><th>Player</th><th>Playing for</th><th>FPS</th></tr>${online.map(s =>
+          `<tr><td><a href="#player/${esc(s.player)}"><b>${esc(s.players?.username || '?')}</b></a></td><td class="nowrap">${dur((Date.now() - new Date(s.started_at)) / 1000)}</td><td class="n">${num(s.perf?.fps)}</td></tr>`).join('')}</table></div>` : '<div class="empty sm">Nobody is playing right now.</div>'}</div>
+        <div class="panel"><h3>Most built rides <span class="sub">last 30 days</span></h3>${hbars((ov.top_rides || []).map(r => [pretty(r.type || 'unknown'), +r.n, num(r.n)]), 'No rides built yet.')}</div>
+        <div class="panel"><h3>Latest parks</h3>${newest.length ? `<div class="minis">${newest.map(p => {
+          const u = link(p.thumb);
+          return `<a class="mini" href="#player/${esc(p.player)}">${u ? `<img src="${esc(u)}" alt="" loading="lazy">` : '<div class="ph"></div>'}<b>${esc(p.name || p.park)}</b><span>${esc(p.players?.username || '?')} · ${ago(p.updated_at)}</span></a>`;
+        }).join('')}</div>` : '<div class="empty sm">No parks yet.</div>'}</div>
+      </div>
+    </div>`;
+  chart($('ovChart'), daily, 30, true);
+  const set = (id, n) => { $(id).textContent = n; $(id).classList.toggle('hidden', !n); };
+  set('cntPending', ov.pending); set('cntFeedback', ov.feedback_new);
+}
+
+// =====================================================================================================
+// Players
+// =====================================================================================================
+let players = [], online = new Set(), pFilter = 'all', pSort = 'new';
+async function loadPlayers(arg) {
+  if (PLAYER_ST.includes(arg) || arg === 'all') pFilter = arg;
+  const el = $('v-players');
+  if (!el.dataset.ok) {
+    el.dataset.ok = 1;
+    el.innerHTML = `
+      <div class="vh"><h2>Players</h2><span class="sub">Accounts made in the game</span><button class="tool" data-reload type="button">${ICON.refresh}Refresh</button></div>
+      <div class="bar">
+        <input type="search" id="plQ" placeholder="Search username, email, country, Instagram, notes...">
+        <div class="chips" id="plChips"></div>
+        <select id="plSort" aria-label="Sort"><option value="new">Newest first</option><option value="seen">Last seen</option><option value="time">Most play time</option><option value="name">Username</option></select>
+      </div>
+      <div class="grid" id="plList">${loading()}</div>`;
+    $('plQ').addEventListener('input', renderPlayers);
+    $('plSort').addEventListener('change', e => { pSort = e.target.value; renderPlayers(); });
+    $('plChips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { pFilter = b.dataset.s; renderPlayers(); } });
+  }
+  const [p, s] = await Promise.all([
+    q(sb.from('players').select('*,parks(count)').order('created_at', { ascending: false })),
+    q(sb.from('sessions').select('player').gt('last_beat', MIN3()))
+  ]);
+  players = p; online = new Set(s.map(x => x.player));
+  renderPlayers();
+}
+function renderPlayers() {
+  const n = s => players.filter(p => p.status === s).length;
+  $('plChips').innerHTML = ['all', ...PLAYER_ST].map(s => `<button class="chip" type="button" data-s="${s}" aria-pressed="${pFilter === s}">${s === 'all' ? 'All' : label(s)}<span class="c">${s === 'all' ? players.length : n(s)}</span></button>`).join('');
+  const qq = $('plQ').value.trim().toLowerCase();
+  const list = players.filter(p => (pFilter === 'all' || p.status === pFilter) &&
+    (!qq || [p.username, p.email, p.country, p.instagram, p.admin_notes, p.tester_no && '#' + p.tester_no].some(v => String(v ?? '').toLowerCase().includes(qq))));
+  const t = x => x ? +new Date(x) : 0;
+  list.sort(pSort === 'seen' ? (a, b) => t(b.last_seen) - t(a.last_seen) : pSort === 'time' ? (a, b) => b.play_seconds - a.play_seconds
+    : pSort === 'name' ? (a, b) => a.username.localeCompare(b.username) : (a, b) => t(b.created_at) - t(a.created_at));
+  if (!list.length) { $('plList').innerHTML = `<div class="empty" style="grid-column:1/-1"><h2>${players.length ? 'Nobody here' : 'No players yet'}</h2><p>${players.length ? 'Try another filter.' : 'When someone signs up in the game, they show up here.'}</p></div>`; return; }
+  $('plList').innerHTML = list.map(playerCard).join('');
+}
+const ig = v => v ? `<a href="https://instagram.com/${encodeURIComponent(String(v).replace(/^@/, ''))}" target="_blank" rel="noopener">${esc(v)}</a>` : '—';
+const seen = p => online.has(p.id) ? '<span class="online">Online</span>' : esc(ago(p.last_seen));
+function playerActs(p) {
+  if (p.plan === 'admin') return '<span class="sub">Owner account</span>';
+  return (p.status === 'pending' ? `<button class="ok" type="button" data-pact="approve">Approve</button>` : '') +
+    (p.status === 'blocked' ? `<button type="button" data-pact="unblock">Unblock</button>` : `<button class="no" type="button" data-pact="block">Block</button>`);
+}
+function playerCard(p) {
+  return `<article class="card" data-pid="${esc(p.id)}">
+    <div class="head">
+      <div class="avatar sm">${esc(p.username[0]?.toUpperCase() || '?')}</div>
+      <div class="who"><h3><a href="#player/${esc(p.id)}">${esc(p.username)}</a></h3><div class="sub">${esc(p.email)}</div></div>
+      <span class="badge ${esc(p.status)}">${esc(p.status)}</span>
+    </div>
+    <dl class="facts">
+      <dt>Plan</dt><dd><select data-plan aria-label="Plan">${planOptions(p.plan)}</select></dd>
+      <dt>Tester</dt><dd>${p.tester_no ? '#' + esc(p.tester_no) : '—'}</dd>
+      <dt>Country</dt><dd>${esc(p.country || '—')}</dd>
+      <dt>Instagram</dt><dd>${ig(p.instagram)}</dd>
+      <dt>Signed up</dt><dd>${esc(when(p.created_at))}</dd>
+      <dt>Last seen</dt><dd>${seen(p)}</dd>
+      <dt>Play time</dt><dd>${esc(dur(p.play_seconds))}</dd>
+      <dt>Parks</dt><dd>${num(p.parks?.[0]?.count ?? 0)}</dd>
+      ${p.status === 'blocked' && p.block_reason ? `<dt>Blocked for</dt><dd>${esc(p.block_reason)}</dd>` : ''}
+    </dl>
+    ${p.admin_notes ? `<div class="note">${esc(p.admin_notes)}</div>` : ''}
+    <div class="acts"><a class="btn" href="#player/${esc(p.id)}">Open</a>${playerActs(p)}</div>
+  </article>`;
+}
+
+/** Saves a change to a player and redraws whatever shows them. */
+async function updatePlayer(id, patch, msg = 'Saved') {
+  const { data, error } = await sb.from('players').update(patch).eq('id', id).select('*');
+  if (error || !data?.length) { toast('Not saved: ' + (error?.message || 'no access')); return null; }
+  const row = data[0], i = players.findIndex(x => x.id === id);
+  if (i >= 0) players[i] = { ...players[i], ...row };
+  if (cur?.p.id === id) Object.assign(cur.p, row);
+  toast(msg);
+  refreshCounts();
+  if (!$('v-players').classList.contains('hidden')) renderPlayers();
+  if (!$('v-player').classList.contains('hidden') && cur?.p.id === id) { renderHead(); renderAccess(); }
+  return row;
+}
+const findPlayer = id => players.find(x => x.id === id) || (cur?.p.id === id ? cur.p : null);
+async function playerAct(id, act) {
+  const p = findPlayer(id);
+  if (!p) return;
+  if (act === 'approve') return updatePlayer(id, { status: 'approved' }, `${p.username} approved`);
+  if (act === 'block') {
+    const r = await ask(`Block ${p.username}? They can't play until you unblock them (their game stops at the next check).\n\nReason (the player sees it):`, p.block_reason || '');
+    if (r === null) return;
+    return updatePlayer(id, { status: 'blocked', block_reason: r.trim().slice(0, 500) || null }, `${p.username} blocked`);
+  }
+  if (act === 'unblock') {
+    if (!await sure(`Unblock ${p.username}? They can play again.`)) return;
+    return updatePlayer(id, { status: 'approved', block_reason: null }, `${p.username} unblocked`);
+  }
+}
+async function setPlan(id, plan, sel) {
+  const p = findPlayer(id);
+  if (plan === 'admin' && !await sure(`Give ${p.username} the Owner plan? Everything opens, no watermark, the game never closes for them.`)) { sel.value = p.plan; return; }
+  if (!await updatePlayer(id, { plan }, `${p.username}: ${planName(plan)}`)) sel.value = p.plan;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-pact]');
+  if (b) playerAct(b.closest('[data-pid]').dataset.pid, b.dataset.pact);
+});
+document.addEventListener('change', e => {
+  if (e.target.matches('[data-plan]')) setPlan(e.target.closest('[data-pid]').dataset.pid, e.target.value, e.target);
+});
+
+// =====================================================================================================
+// One player: everything they did
+// =====================================================================================================
+let cur = null;
+async function loadPlayer(id) {
+  const el = $('v-player');
+  el.innerHTML = loading();
+  if (!/^[0-9a-f-]{36}$/.test(id || '')) { el.innerHTML = '<div class="empty"><h2>No such player</h2><p><a href="#players">Back to players</a></p></div>'; return; }
+  const [p, devs, sess, daily, parks, shots, fbs, evs] = await Promise.all([
+    q(sb.from('players').select('*').eq('id', id).maybeSingle()),
+    q(sb.from('devices').select('*').eq('player', id).order('last_seen', { ascending: false })),
+    q(sb.from('sessions').select('*').eq('player', id).order('started_at', { ascending: false }).limit(1000)),
+    q(sb.rpc('admin_daily', { p_player: id, p_days: 30 })),
+    q(sb.from('parks').select('*').eq('player', id).order('updated_at', { ascending: false })),
+    q(sb.from('park_shots').select('*').eq('player', id).order('at')),
+    q(sb.from('feedback').select('*').eq('player', id).order('at', { ascending: false })),
+    q(sb.from('events').select('*').eq('player', id).order('at', { ascending: false }).limit(200))
+  ]);
+  if (!p) { el.innerHTML = '<div class="empty"><h2>No such player</h2><p>The account may have been deleted. <a href="#players">Back to players</a></p></div>'; return; }
+  await sign([...parks.map(x => x.thumb), ...shots.map(x => x.path), ...fbs.map(x => x.shot)]);
+  for (const f of fbs) fbIndex.set(f.id, f);
+  cur = { p, devs, sess, daily, parks, shots, fbs, evs, online: sess.some(s => new Date(s.last_beat) > Date.now() - 180e3) };
+  renderPlayer();
+}
+function renderPlayer() {
+  const { p, sess, daily, parks, fbs, evs } = cur;
+  const month = (daily || []).reduce((a, r) => a + +r.seconds, 0);
+  const rides = parks.reduce((a, k) => a + (Array.isArray(k.rides) ? k.rides.length : 0), 0);
+  const fps = sess.map(s => +s.perf?.fps).filter(v => v > 0).sort((a, b) => a - b);
+  // time per mode: the game reports seconds per mode in every heartbeat
+  const modes = {};
+  for (const s of sess) for (const [k, v] of Object.entries(s.modes || {})) modes[k] = (modes[k] || 0) + +v;
+  const modeRows = Object.entries(modes).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]).map(([k, v]) => [MODES[k] || label(k), v, dur(v)]);
+  // what each session started with (the game's session.start event), for the GPU / quality columns
+  const starts = new Map(evs.filter(e => e.kind === 'session.start' && e.session).map(e => [e.session, e.data || {}]));
+  const tile = (n, l) => `<div class="stat"><div class="num${String(n).length > 6 ? ' long' : ''}">${n}</div><div class="lbl">${l}</div></div>`;
+  $('v-player').innerHTML = `
+    <a class="back" href="#players">${ICON.back}All players</a>
+    <div id="pdHead"></div>
+    <div class="stats">
+      ${tile(dur(p.play_seconds), 'Play time in all')}
+      ${tile(dur(month), 'Last 30 days')}
+      ${tile(num(sess.length) + (sess.length >= 1000 ? '+' : ''), 'Sessions')}
+      ${tile(num(parks.length), 'Parks')}
+      ${tile(num(rides), 'Rides in their parks')}
+      ${tile(num(fbs.length), 'Feedback sent')}
+      ${tile(fps.length ? num(fps[fps.length >> 1]) : '—', 'Typical FPS')}
+    </div>
+    <div class="cols">
+      <div>
+        <div class="panel"><h3>Play time per day <span class="sub">last 30 days</span></h3><div class="chart" id="pdChart"></div></div>
+        <div class="panel"><h3>Time per mode</h3>${hbars(modeRows, 'No play time yet.')}</div>
+        <div class="panel"><h3>Sessions <span class="sub">latest ${Math.min(sess.length, 30)} of ${num(sess.length)}</span></h3>${sess.length ? `<div class="tw"><table class="tbl">
+          <tr><th>Started</th><th class="n">Length</th><th>Version</th><th>Park</th><th class="n">FPS</th><th>Quality</th><th>GPU</th></tr>
+          ${sess.slice(0, 30).map(s => {
+            const pf = s.perf || {}, st = starts.get(s.id) || {}, live = new Date(s.last_beat) > Date.now() - 180e3;
+            return `<tr><td class="nowrap">${esc(when(s.started_at))}${live ? ' <span class="online">now</span>' : ''}</td><td class="n">${esc(dur(s.seconds))}</td>
+              <td class="nowrap">${esc(s.version ? 'v' + s.version : '—')}${s.build ? `<div class="sub">${esc(s.build.slice(0, 8))}</div>` : ''}</td><td>${esc(parks.find(k => k.park === s.park)?.name || s.park || '—')}</td>
+              <td class="n">${num(pf.fps)}${pf.low != null ? `<div class="sub">low ${num(pf.low)}</div>` : ''}</td><td>${esc(pf.quality || st.quality || '—')}</td><td>${esc(pf.gpu || st.gpu || '—')}</td></tr>`;
+          }).join('')}</table></div>` : '<div class="empty sm">No sessions yet.</div>'}</div>
+      </div>
+      <div>
+        <div class="panel" id="pdAccess"></div>
+        <div class="panel"><h3>Your notes</h3><textarea class="mine" id="pdNotes" placeholder="Only you see these" rows="3">${esc(p.admin_notes || '')}</textarea></div>
+        <div class="panel"><h3>Profile and consents</h3><dl class="facts">
+          <dt>Username</dt><dd>${esc(p.username)}</dd>
+          <dt>Email</dt><dd><a href="mailto:${esc(p.email)}">${esc(p.email)}</a></dd>
+          <dt>Country</dt><dd>${esc(p.country || '—')}</dd>
+          <dt>Instagram</dt><dd>${ig(p.instagram)}</dd>
+          <dt>Heard from</dt><dd>${esc(p.heard || '—')}</dd>
+          <dt>Signed up</dt><dd>${esc(when(p.created_at))}</dd>
+          <dt>Approved</dt><dd>${esc(when(p.approved_at))}</dd>
+          <dt>Old enough</dt><dd>${yes(p.age_ok)}</dd>
+          <dt>Terms</dt><dd>${esc(p.terms_version || '—')}${p.consent_at ? ` · agreed ${esc(when(p.consent_at))}` : ''}</dd>
+          <dt>Parks in videos</dt><dd>${p.show_parks ? '<b>Yes</b>, may show my parks in videos' : 'No'}</dd>
+          <dt>News emails</dt><dd>${yes(p.news)}</dd>
+          <dt>Game version</dt><dd>${esc(p.version ? 'v' + p.version : '—')}${p.build ? ` · build ${esc(p.build.slice(0, 8))}` : ''}</dd>
+        </dl></div>
+        <div class="panel" id="pdDevices"></div>
+        <div class="panel"><h3>Computer</h3>${kv(p.pc)}</div>
+      </div>
+    </div>
+    <div class="panel"><h3>Parks <span class="sub">${parks.length}</span></h3>${parks.length ? `<div class="parks">${parks.map(parkCard).join('')}</div>` : '<div class="empty sm">No parks saved yet.</div>'}</div>
+    <div class="panel"><h3>Feedback <span class="sub">${fbs.length}</span></h3>${fbs.length ? `<div class="fbgrid">${fbs.map(f => fbCard(f, false)).join('')}</div>` : '<div class="empty sm">No feedback from this player.</div>'}</div>
+    <div class="panel"><h3>What they did <span class="sub">latest ${evs.length} events</span></h3>${timeline(evs, false)}</div>`;
+  renderHead(); renderAccess(); renderDevices();
+  chart($('pdChart'), daily, 30, false);
+  let t;
+  $('pdNotes').addEventListener('input', e => {
+    clearTimeout(t);
+    const v = e.target.value, id = cur.p.id;
+    t = setTimeout(async () => {
+      const { error } = await sb.from('players').update({ admin_notes: v || null }).eq('id', id);
+      if (error) return toast('Note not saved: ' + error.message);
+      cur.p.admin_notes = v; const r = players.find(x => x.id === id); if (r) r.admin_notes = v;
+      toast('Note saved');
+    }, 700);
+  });
+}
+function renderHead() {
+  const p = cur.p;
+  $('pdHead').innerHTML = `<div class="card" data-pid="${esc(p.id)}" style="margin-bottom:14px">
+    <div class="head">
+      <div class="avatar sm">${esc(p.username[0]?.toUpperCase() || '?')}</div>
+      <div class="who"><h3 style="font-size:24px">${esc(p.username)}</h3><div class="sub">${esc(p.email)} · ${cur.online ? '<span class="online">Online</span>' : 'last seen ' + esc(ago(p.last_seen))}</div></div>
+    </div>
+    <div class="acts" style="align-items:center">
+      <span class="badge inl ${esc(p.status)}">${esc(p.status)}</span>
+      <span class="badge inl plan">${esc(planName(p.plan))}</span>
+      ${p.tester_no ? `<span class="badge inl plan">Tester #${esc(p.tester_no)}</span>` : ''}
+      <span style="flex:1"></span>${playerActs(p)}
+    </div>
+    ${p.status === 'blocked' ? `<div class="note"><b>Blocked:</b> ${esc(p.block_reason || 'no reason given')}</div>` : ''}
+  </div>`;
+}
+function renderAccess() {
+  const p = cur.p;
+  $('pdAccess').innerHTML = `<h3>Access</h3>
+    <div data-pid="${esc(p.id)}">
+      <label class="field"><span>Plan</span><select data-plan>${planOptions(p.plan)}</select>
+        <small>${esc((plans.find(x => x.id === p.plan)?.features || []).join('  ') || 'nothing')} · ${plans.find(x => x.id === p.plan)?.watermark ? 'tester watermark' : 'no watermark'}</small></label>
+      <div class="field"><span>Extra features for ${esc(p.username)}</span>${chipEdit('grant:' + p.id, p.grant_features || [], 'coaster.giga or !designer.ai')}
+        <small>Added on top of the plan. Start with ! to take something away.</small></div>
+      <label class="field"><span>Computers allowed</span><input type="number" id="pdMax" min="0" max="20" value="${esc(p.max_devices)}" style="width:90px"></label>
+      <div class="acts">
+        <button type="button" data-pd="kick">Sign out everywhere</button>
+        <button type="button" data-pd="password">Set new password</button>
+        ${p.plan === 'admin' ? '' : '<button class="no" type="button" data-pd="delete">Delete account</button>'}
+      </div>
+      ${p.kick_at ? `<div class="sub" style="margin-top:6px">Last signed out everywhere: ${esc(when(p.kick_at))}</div>` : ''}
+      <div id="pdPw"></div>
+    </div>`;
+  $('pdMax').addEventListener('change', e => {
+    const v = Math.max(0, Math.min(20, Math.round(+e.target.value || 0)));
+    e.target.value = v;
+    updatePlayer(p.id, { max_devices: v }, `Computers allowed: ${v}`);
+  });
+}
+function renderDevices() {
+  const { p, devs } = cur;
+  $('pdDevices').innerHTML = `<h3>Computers <span class="sub">${devs.length} of ${esc(p.max_devices)}</span><button class="tool sm" type="button" data-pd="reset"${devs.length ? '' : ' disabled'}>Reset devices</button></h3>
+    ${devs.length ? `<div class="tw"><table class="tbl"><tr><th>Computer</th><th>First seen</th><th>Last seen</th></tr>${devs.map(d => {
+      const pc = d.pc || {}, what = [pc.os, pc.gpu, pc.cpu].filter(Boolean).map(String).join(' · ');
+      return `<tr><td><code>${esc(d.device.slice(0, 8))}</code>${what ? `<div class="sub">${esc(what)}</div>` : ''}</td><td class="nowrap">${esc(day(d.first_seen))}</td><td class="nowrap">${esc(ago(d.last_seen))}</td></tr>`;
+    }).join('')}</table></div>` : '<div class="empty sm">No computers yet. The first sign-ins add them.</div>'}`;
+}
+// random, readable (no 0/O, 1/l/I), from the browser's crypto
+function newPassword(n = 12) {
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789', out = [];
+  while (out.length < n) for (const b of crypto.getRandomValues(new Uint8Array(32))) if (b < 224 && out.length < n) out.push(abc[b % 56]);
+  return out.join('');
+}
+$('v-player').addEventListener('click', async e => {
+  const b = e.target.closest('[data-pd]');
+  if (!b || !cur) return;
+  const p = cur.p, act = b.dataset.pd;
+  if (act === 'reset') {
+    if (!await sure(`Forget ${p.username}'s computers? They can then sign in on up to ${p.max_devices} new ones.`)) return;
+    const { error } = await sb.rpc('admin_reset_devices', { p_player: p.id });
+    if (error) return toast('Not reset: ' + error.message);
+    cur.devs = await q(sb.from('devices').select('*').eq('player', p.id));
+    renderDevices(); toast('Devices reset');
+  }
+  if (act === 'kick') {
+    if (!await sure(`Sign ${p.username} out on every computer? They sign in again with their password.`)) return;
+    updatePlayer(p.id, { kick_at: new Date().toISOString() }, `${p.username} signed out everywhere`);
+  }
+  if (act === 'password') {
+    if (!await sure(`Give ${p.username} a new password? The old one stops working.`)) return;
+    const password = newPassword();
+    b.disabled = true;
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      const r = await fetch(`${CFG.url}/functions/v1/game`, {
+        method: 'POST', headers: { 'content-type': 'application/json', apikey: CFG.anon, Authorization: `Bearer ${session?.access_token}` },
+        body: JSON.stringify({ action: 'set_password', player: p.id, password })
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) return toast('Not changed: ' + (j.error || r.status));
+      $('pdPw').innerHTML = `<div class="pw"><span>New password for <b>${esc(p.username)}</b>:</span><code id="pdPwVal">${esc(password)}</code>
+        <button class="tool sm" type="button" id="pdPwCopy">${ICON.copy}Copy</button><span class="sub">Shown only now. Send it to them yourself.</span></div>`;
+      $('pdPwCopy').onclick = async () => { await navigator.clipboard.writeText(password).catch(() => {}); toast('Password copied'); };
+    } catch (err) { toast('Not changed: ' + err.message); } finally { b.disabled = false; }
+  }
+  // players can't delete themselves (the owner hid it); they ask, and the owner deletes here
+  if (act === 'delete') {
+    if (!await sure(`Delete ${p.username}'s account for good?\n\nTheir pass, park copies, pictures, feedback and play history are deleted. The parks on their own computer stay. This can't be undone.`)) return;
+    const typed = await ask(`Type the username "${p.username}" to delete it:`, '');
+    if (typed === null) return;
+    if (typed.trim().toLowerCase() !== p.username.toLowerCase()) return toast('Not deleted: the username did not match');
+    b.disabled = true;
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      const r = await fetch(`${CFG.url}/functions/v1/game`, {
+        method: 'POST', headers: { 'content-type': 'application/json', apikey: CFG.anon, Authorization: `Bearer ${session?.access_token}` },
+        body: JSON.stringify({ action: 'admin_delete', player: p.id })
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) { b.disabled = false; return toast('Not deleted: ' + (j.error || r.status)); }
+      players = players.filter(x => x.id !== p.id);
+      toast(`${p.username} deleted (${j.files ?? 0} files)`);
+      location.hash = '#players';
+    } catch (err) { b.disabled = false; toast('Not deleted: ' + err.message); }
+  }
+});
+
+// ---------- a park: picture, stats, rides, pictures over time, the file ----------
+const STAT_KEYS = [['guests', 'guests'], ['rides', 'rides'], ['coasters', 'coasters'], ['money', 'money'], ['rating', 'rating'], ['day', 'day'], ['mode', 'mode']];
+const RIDE_COLS = [['kind', 'Kind'], ['type', 'Type'], ['name', 'Name'], ['excitement', 'Excitement', 2], ['intensity', 'Intensity', 2], ['length', 'Length (m)'], ['height', 'Height (m)'], ['inversions', 'Inversions'], ['speed', 'Top speed (km/h)']];
+function parkCard(k) {
+  const u = link(k.thumb), st = k.stats && typeof k.stats === 'object' ? k.stats : {};
+  const known = STAT_KEYS.map(([key]) => key);
+  const chips = [...STAT_KEYS.filter(([key]) => st[key] != null).map(([key, l]) => key === 'money' ? `<span><b>$${num(st.money)}</b> money</span>`
+    : key === 'mode' ? `<span><b>${esc(label(st.mode))}</b> mode</span>` : `<span><b>${num(st[key], 1)}</b> ${l}</span>`),
+    ...Object.entries(st).filter(([key, v]) => !known.includes(key) && (typeof v === 'number' || typeof v === 'string')).map(([key, v]) => `<span><b>${esc(typeof v === 'number' ? num(v, 1) : v)}</b> ${esc(label(key).toLowerCase())}</span>`)];
+  const rides = Array.isArray(k.rides) ? k.rides : [];
+  const cols = RIDE_COLS.filter(([key]) => rides.some(r => r?.[key] != null && r[key] !== ''));
+  const shots = cur.shots.filter(s => s.park === k.park);
+  return `<article class="park">
+    <div>${u ? `<img class="pthumb" src="${esc(u)}" alt="" data-zoom="${esc(u)}" loading="lazy">` : '<div class="pthumb">No picture</div>'}</div>
+    <div style="min-width:0">
+      <h4>${esc(k.name || k.park)}</h4>
+      <div class="sub">Updated ${esc(ago(k.updated_at))} · started ${esc(day(k.created_at))}${k.data_size ? ` · ${esc(size(k.data_size))}` : ''}</div>
+      ${chips.length ? `<div class="pstats">${chips.join('')}</div>` : ''}
+      ${rides.length ? `<details${rides.length <= 12 ? ' open' : ''}><summary>Rides (${rides.length})</summary><div class="tw"><table class="tbl"><tr>${cols.map(([, l, d]) => `<th${d != null || /\(|Inv/.test(l) ? ' class="n"' : ''}>${esc(l)}</th>`).join('')}</tr>
+        ${rides.map(r => `<tr>${cols.map(([key, , d]) => { const v = r?.[key]; return typeof v === 'number' ? `<td class="n">${num(v, d ?? 0)}</td>` : `<td>${esc(['kind', 'type'].includes(key) ? pretty(v ?? '') : v ?? '—')}</td>`; }).join('')}</tr>`).join('')}</table></div></details>` : '<div class="sub">No rides yet.</div>'}
+      ${shots.length ? `<div class="sub" style="margin-top:8px">Pictures over time</div><div class="shots">${shots.map(s => { const su = link(s.path); return su ? `<figure><img src="${esc(su)}" alt="" data-zoom="${esc(su)}" loading="lazy"><figcaption>${esc(when(s.at))}</figcaption></figure>` : ''; }).join('')}</div>` : ''}
+      <div class="acts" style="margin-top:8px">${k.data ? `<button type="button" data-dl="${esc(k.data)}" data-name="${esc(k.name || k.park)}">${ICON.down.replace('<svg', '<svg width="15" height="15" style="vertical-align:-2px;margin-right:4px"')}Download park</button>` : '<span class="sub">No park file uploaded yet</span>'}</div>
+    </div>
+  </article>`;
+}
+
+// =====================================================================================================
+// Feedback inbox
+// =====================================================================================================
+const FB_ST = ['new', 'seen', 'planned', 'fixed', 'wontfix'];
+const FB_ST_L = { new: 'New', seen: 'Seen', planned: 'Planned', fixed: 'Fixed', wontfix: "Won't fix" };
+const FB_KIND = { bug: 'Bug', idea: 'Idea', love: 'Love it', other: 'Other' };
+const fbIndex = new Map();
+let fbs = [], fbSt = 'all', fbKind = 'all';
+function fbCard(f, withPlayer = true) {
+  const shot = link(f.shot), user = f.players?.username || (cur?.p.id === f.player ? cur.p.username : '?');
+  const lines = f.log ? f.log.split('\n').length : 0;
+  return `<article class="card fb" data-fid="${esc(f.id)}">
+    <div class="head">
+      <span class="kind k-${esc(f.kind)}">${esc(FB_KIND[f.kind] || f.kind)}</span>
+      <div class="who">${withPlayer ? `<h3><a href="#player/${esc(f.player)}">${esc(user)}</a></h3>` : ''}<div class="sub">${esc(when(f.at))}${f.version ? ' · v' + esc(f.version) : ''}${f.build ? ' · build ' + esc(f.build.slice(0, 8)) : ''}${f.park ? ' · park ' + esc(f.park) : ''}</div></div>
+      <span class="badge fs-${esc(f.status)}">${esc(FB_ST_L[f.status] || f.status)}</span>
+    </div>
+    ${shot ? `<img class="shot" src="${esc(shot)}" alt="Screenshot" data-zoom="${esc(shot)}" loading="lazy">` : f.shot ? '<div class="sub">Screenshot not found</div>' : ''}
+    <div class="note">${esc(f.text)}</div>
+    ${f.sys ? `<details><summary>System</summary>${kv(f.sys)}</details>` : ''}
+    ${f.log ? `<details><summary>Log (${lines} line${lines === 1 ? '' : 's'})</summary><pre class="pre">${esc(f.log)}</pre></details>` : ''}
+    ${f.park_file ? `<div><button class="tool sm" type="button" data-dl="${esc(f.park_file)}" data-name="${esc((f.park || 'park') + '-feedback-' + f.id)}">${ICON.down}Download their park</button></div>` : ''}
+    <div class="row2">
+      <label>Status <select data-fbst>${FB_ST.map(s => `<option value="${s}"${s === f.status ? ' selected' : ''}>${FB_ST_L[s]}</option>`).join('')}</select></label>
+      <label>Fixed in <input data-fbfix value="${esc(f.fixed_in || '')}" placeholder="e.g. 0.2.0" maxlength="20"></label>
+    </div>
+    <textarea class="mine" data-fbnote placeholder="Your notes (only you see these)">${esc(f.admin_notes || '')}</textarea>
+    <div class="reply">
+      ${f.reply ? `<div class="sent"><div class="sub">Your reply · ${esc(when(f.reply_at))} · ${f.reply_seen_at ? 'seen ' + esc(when(f.reply_seen_at)) : 'not seen yet'}</div><div class="note">${esc(f.reply)}</div></div>` : ''}
+      <textarea data-fbreply-text maxlength="5000" placeholder="${f.reply ? 'A new reply (replaces the one above)' : 'Reply to the player (they see it in the game)'}"></textarea>
+      <button class="tool pri sm" type="button" data-fbreply>Send reply</button>
+    </div>
+  </article>`;
+}
+async function loadFeedback(arg) {
+  if (FB_ST.includes(arg) || arg === 'all') fbSt = arg;
+  const el = $('v-feedback');
+  if (!el.dataset.ok) {
+    el.dataset.ok = 1;
+    el.innerHTML = `
+      <div class="vh"><h2>Feedback</h2><span class="sub">Reports and ideas sent from the game</span><button class="tool" data-reload type="button">${ICON.refresh}Refresh</button></div>
+      <div class="bar"><input type="search" id="fbQ" placeholder="Search text, player, version..."><div class="chips" id="fbSt"></div></div>
+      <div class="bar"><div class="chips" id="fbKind"></div></div>
+      <div class="fbgrid" id="fbList">${loading()}</div>`;
+    $('fbQ').addEventListener('input', renderFeedback);
+    $('fbSt').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { fbSt = b.dataset.s; renderFeedback(); } });
+    $('fbKind').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { fbKind = b.dataset.s; renderFeedback(); } });
+  }
+  fbs = await q(sb.from('feedback').select('*,players(username)').order('at', { ascending: false }).limit(500));
+  for (const f of fbs) fbIndex.set(f.id, f);
+  await sign(fbs.map(f => f.shot));
+  renderFeedback();
+}
+function renderFeedback() {
+  const n = (k, v) => fbs.filter(f => f[k] === v).length;
+  $('fbSt').innerHTML = ['all', ...FB_ST].map(s => `<button class="chip" type="button" data-s="${s}" aria-pressed="${fbSt === s}">${s === 'all' ? 'All' : FB_ST_L[s]}<span class="c">${s === 'all' ? fbs.length : n('status', s)}</span></button>`).join('');
+  $('fbKind').innerHTML = ['all', ...Object.keys(FB_KIND)].map(s => `<button class="chip" type="button" data-s="${s}" aria-pressed="${fbKind === s}">${s === 'all' ? 'Every kind' : FB_KIND[s]}<span class="c">${s === 'all' ? fbs.length : n('kind', s)}</span></button>`).join('');
+  const qq = $('fbQ').value.trim().toLowerCase();
+  const list = fbs.filter(f => (fbSt === 'all' || f.status === fbSt) && (fbKind === 'all' || f.kind === fbKind) &&
+    (!qq || [f.text, f.players?.username, f.version, f.park, f.admin_notes, f.reply].some(v => String(v ?? '').toLowerCase().includes(qq))));
+  $('fbList').innerHTML = list.length ? list.map(f => fbCard(f)).join('')
+    : `<div class="empty" style="grid-column:1/-1"><h2>${fbs.length ? 'Nothing here' : 'No feedback yet'}</h2><p>${fbs.length ? 'Try another filter.' : 'When a player sends feedback from the game, it shows up here.'}</p></div>`;
+}
+async function updateFb(id, patch, msg, redraw = true) {
+  const { data, error } = await sb.from('feedback').update(patch).eq('id', id).select('*');
+  if (error || !data?.length) { toast('Not saved: ' + (error?.message || 'no access')); return false; }
+  const f = fbIndex.get(id);
+  Object.assign(f, data[0]);
+  if (msg) toast(msg);
+  if (redraw) for (const card of document.querySelectorAll(`.fb[data-fid="${id}"]`)) {
+    const withPlayer = !!card.closest('#v-feedback');
+    card.outerHTML = fbCard(f, withPlayer);
+  }
+  refreshCounts();
+  return true;
+}
+const fbOf = el => +el.closest('[data-fid]').dataset.fid;
+document.addEventListener('change', e => {
+  if (e.target.matches('[data-fbst]')) updateFb(fbOf(e.target), { status: e.target.value }, 'Status: ' + FB_ST_L[e.target.value]);
+  if (e.target.matches('[data-fbfix]')) updateFb(fbOf(e.target), { fixed_in: e.target.value.trim().slice(0, 20) || null }, 'Saved', false);
+});
+let fbNoteT;
+document.addEventListener('input', e => {
+  if (!e.target.matches('[data-fbnote]')) return;
+  const id = fbOf(e.target), v = e.target.value;
+  clearTimeout(fbNoteT);
+  fbNoteT = setTimeout(() => updateFb(id, { admin_notes: v || null }, 'Note saved', false), 700);
+});
+document.addEventListener('click', async e => {
+  const r = e.target.closest('[data-fbreply]');
+  if (r) {
+    const card = r.closest('[data-fid]'), id = fbOf(r), text = card.querySelector('[data-fbreply-text]').value.trim();
+    if (!text) return toast('Write the reply first');
+    const f = fbIndex.get(id);
+    // a new reply shows as unread in the player's game again
+    const patch = { reply: text.slice(0, 5000), reply_at: new Date().toISOString(), reply_seen_at: null };
+    if (f.status === 'new') patch.status = 'seen';
+    r.disabled = true;
+    if (!await updateFb(id, patch, 'Reply sent. They see it in the game.')) r.disabled = false;
+    return;
+  }
+  const d = e.target.closest('[data-dl]');
+  if (d) { d.disabled = true; await downloadPark(d.dataset.dl, d.dataset.name); d.disabled = false; return; }
+  const z = e.target.closest('[data-zoom]');
+  if (z && !z.closest('#v-applications')) {
+    const o = document.createElement('div'); o.className = 'zoom'; o.innerHTML = `<img src="${esc(z.dataset.zoom)}" alt="">`; o.onclick = () => o.remove(); document.body.append(o);
+    return;
+  }
+  if (e.target.closest('[data-reload]')) { const { v, arg } = here(); LOADERS[v](arg).catch(err => toast(err.message)); }
+});
+
+// =====================================================================================================
+// Builds
+// =====================================================================================================
+let builds = [];
+async function loadBuilds() {
+  const el = $('v-builds');
+  if (!el.dataset.ok) el.innerHTML = loading();
+  // never select=* here: the key column is not readable from the browser
+  const [b, pl] = await Promise.all([
+    q(sb.from('builds').select('id,version,created_at,released,released_at,notes,size').order('created_at', { ascending: false })),
+    q(sb.from('players').select('build'))
+  ]);
+  builds = b;
+  const on = id => pl.filter(x => x.build === id).length;
+  el.dataset.ok = 1;
+  el.innerHTML = `
+    <div class="vh"><h2>Builds</h2><span class="sub">Every desktop build. Testers can only open released ones.</span><button class="tool" data-reload type="button">${ICON.refresh}Refresh</button></div>
+    <div class="panel">${b.length ? `<div class="tw"><table class="tbl">
+      <tr><th>Build</th><th>Version</th><th>Made</th><th class="n">Size</th><th class="n">Players on it</th><th>Released</th><th>Release notes</th></tr>
+      ${b.map(x => `<tr data-bid="${esc(x.id)}">
+        <td><code title="${esc(x.id)}">${esc(x.id.slice(0, 8))}</code></td>
+        <td class="nowrap"><b>v${esc(x.version)}</b></td>
+        <td class="nowrap">${esc(when(x.created_at))}</td>
+        <td class="n">${esc(size(x.size))}</td>
+        <td class="n">${num(on(x.id))}</td>
+        <td class="nowrap"><label class="switch" title="Released"><input type="checkbox" data-brel${x.released ? ' checked' : ''} aria-label="Released"><span></span></label>${x.released_at ? `<div class="sub">${esc(day(x.released_at))}</div>` : ''}</td>
+        <td><textarea data-bnote placeholder="What's new (players may see this)">${esc(x.notes || '')}</textarea></td>
+      </tr>`).join('')}</table></div>` : '<div class="empty sm">No builds yet. Each desktop build registers itself here.</div>'}</div>`;
+}
+$('v-builds').addEventListener('change', async e => {
+  if (!e.target.matches('[data-brel]')) return;
+  const id = e.target.closest('[data-bid]').dataset.bid, b = builds.find(x => x.id === id), on = e.target.checked;
+  if (!await sure(on ? `Release v${b.version} (${id.slice(0, 8)})? Approved testers can play it from now on.` : `Take v${b.version} (${id.slice(0, 8)}) back? Testers on it can't start the game until they update.`)) { e.target.checked = !on; return; }
+  const patch = { released: on, released_at: on ? new Date().toISOString() : null };
+  const { error } = await sb.from('builds').update(patch).eq('id', id);
+  if (error) { e.target.checked = !on; return toast('Not saved: ' + error.message); }
+  Object.assign(b, patch); toast(on ? `v${b.version} released` : `v${b.version} taken back`);
+  loadBuilds();
+});
+let bNoteT;
+$('v-builds').addEventListener('input', e => {
+  if (!e.target.matches('[data-bnote]')) return;
+  const id = e.target.closest('[data-bid]').dataset.bid, v = e.target.value;
+  clearTimeout(bNoteT);
+  bNoteT = setTimeout(async () => { const { error } = await sb.from('builds').update({ notes: v || null }).eq('id', id); toast(error ? 'Not saved: ' + error.message : 'Notes saved'); }, 800);
+});
+
+// =====================================================================================================
+// Game settings
+// =====================================================================================================
+let config = null;
+async function loadSettings() {
+  const el = $('v-settings');
+  el.innerHTML = loading();
+  config = await q(sb.from('game_config').select('*').eq('id', 1).single());
+  const c = config;
+  el.innerHTML = `
+    <div class="vh"><h2>Game settings</h2><span class="sub">For every player, at their next check (about a minute)</span></div>
+    <form class="panel" id="cfgForm" style="max-width:760px">
+      <div class="swrow"><label class="switch"><input type="checkbox" id="cfgOpen"${c.open ? ' checked' : ''}><span></span></label><span>The game is open</span><span class="sub" id="cfgOpenSub">${c.open ? 'Approved players can play.' : 'Closed: only you can play.'}</span></div>
+      <label class="field"><span>Maintenance message</span><textarea id="cfgMaint" maxlength="500" placeholder="Shown while the game is closed, e.g. Back in an hour with a new update!">${esc(c.maintenance || '')}</textarea></label>
+      <label class="field"><span>Message to everyone</span><textarea id="cfgMsg" maxlength="500" placeholder="Shown to every player in the game. Empty = no message.">${esc(c.message || '')}</textarea></label>
+      <label class="field"><span>Minimum version</span><input id="cfgMin" value="${esc(c.min_version || '')}" placeholder="e.g. 0.2.0" style="width:140px">
+        <small>Older games must update before they can play. Empty = any version.</small></label>
+      <label class="field"><span>Offline hours</span><input id="cfgOff" type="number" min="0" max="720" value="${esc(c.offline_hours)}" style="width:110px">
+        <small>How long the game keeps working without internet before it has to check in again (0 to 720).</small></label>
+      <div class="acts" style="align-items:center"><button class="ok" type="submit">Save settings</button><span class="sub">Terms version ${esc(c.terms_version)} · last saved ${esc(when(c.updated_at))}</span></div>
+    </form>`;
+  $('cfgOpen').addEventListener('change', e => { $('cfgOpenSub').textContent = e.target.checked ? 'Approved players can play.' : 'Closed: only you can play.'; });
+  $('cfgForm').addEventListener('submit', saveSettings);
+}
+async function saveSettings(e) {
+  e.preventDefault();
+  const min = $('cfgMin').value.trim(), off = +$('cfgOff').value;
+  if (min && !/^\d+\.\d+\.\d+$/.test(min)) return toast('Minimum version looks like 0.2.0 (or leave it empty)');
+  if (!Number.isInteger(off) || off < 0 || off > 720) return toast('Offline hours: a whole number from 0 to 720');
+  const open = $('cfgOpen').checked;
+  if (!open && config.open && !await sure('Close the game for everyone except you?')) return;
+  const patch = { open, maintenance: $('cfgMaint').value.trim() || null, message: $('cfgMsg').value.trim() || null, min_version: min || null, offline_hours: off, updated_at: new Date().toISOString() };
+  const { data, error } = await sb.from('game_config').update(patch).eq('id', 1).select('*');
+  if (error || !data?.length) return toast('Not saved: ' + (error?.message || 'no access'));
+  config = data[0]; toast('Settings saved');
+  loadSettings();
+}
+
+// =====================================================================================================
+// Plans & features
+// =====================================================================================================
+/** Chips for feature patterns + an input with the catalogue as suggestions. id = 'grant:<player>' or 'plan:<id>'. */
+function chipEdit(id, vals, ph) {
+  return `<div class="ce" data-ce="${esc(id)}">${vals.map(v => `<span class="fchip${v.startsWith('!') ? ' neg' : ''}" data-v="${esc(v)}">${esc(v)}<button type="button" data-cerm aria-label="Remove ${esc(v)}">&times;</button></span>`).join('')}
+    <input list="featList" data-cein placeholder="${esc(ph)}" maxlength="61" aria-label="Add a feature pattern"><button type="button" class="tool sm" data-ceadd>Add</button></div>`;
+}
+const PATTERN = /^!?[a-z0-9_.*-]{1,60}$/;
+async function chipSave(ce, list) {
+  const [kind, id] = ce.dataset.ce.split(/:(.*)/s);
+  if (kind === 'grant') {
+    const p = findPlayer(id);
+    return updatePlayer(id, { grant_features: list }, `${p?.username || 'Player'}: features saved`);
+  }
+  if (kind === 'plan') {
+    const { error } = await sb.from('plans').update({ features: list }).eq('id', id);
+    if (error) return toast('Not saved: ' + error.message);
+    plans.find(p => p.id === id).features = list;
+    toast(`${planName(id)}: features saved`);
+    renderPlans();
+  }
+}
+function chipAdd(ce) {
+  const inp = ce.querySelector('[data-cein]'), v = inp.value.trim().toLowerCase();
+  if (!v) return;
+  if (!PATTERN.test(v)) return toast('A pattern looks like coaster.giga, coaster.* or !designer.ai');
+  const list = [...ce.querySelectorAll('.fchip')].map(c => c.dataset.v);
+  if (list.includes(v)) return toast('Already there');
+  chipSave(ce, [...list, v]);
+}
+document.addEventListener('click', e => {
+  const rm = e.target.closest('[data-cerm]');
+  if (rm) { const ce = rm.closest('[data-ce]'), v = rm.parentElement.dataset.v; chipSave(ce, [...ce.querySelectorAll('.fchip')].map(c => c.dataset.v).filter(x => x !== v)); }
+  const add = e.target.closest('[data-ceadd]');
+  if (add) chipAdd(add.closest('[data-ce]'));
+});
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('[data-cein]')) { e.preventDefault(); chipAdd(e.target.closest('[data-ce]')); } });
+
+let planUse = new Map();
+async function loadPlans() {
+  const el = $('v-plans');
+  if (!el.dataset.ok) el.innerHTML = loading();
+  const [, pl] = await Promise.all([loadCatalog(), q(sb.from('players').select('plan'))]);
+  planUse = new Map();
+  for (const x of pl) planUse.set(x.plan, (planUse.get(x.plan) || 0) + 1);
+  el.dataset.ok = 1;
+  renderPlans();
+}
+function renderPlans() {
+  $('v-plans').innerHTML = `
+    <div class="vh"><h2>Plans &amp; features</h2><span class="sub">What each plan unlocks. Players get the change at their next sign-in.</span><button class="tool" data-reload type="button">${ICON.refresh}Refresh</button></div>
+    <div class="panel"><h3>Plans</h3>
+      <p class="sub" style="margin:0 0 10px">Patterns: <code>*</code> everything, <code>coaster.*</code> a group, <code>ride.megawheel</code> one thing, <code>!designer.ai</code> takes it away again.</p>
+      <div class="tw"><table class="tbl">
+        <tr><th>Plan</th><th>Name</th><th>Unlocks</th><th>Watermark</th><th class="n">Order</th><th class="n">Players</th><th></th></tr>
+        ${plans.map(p => `<tr data-plid="${esc(p.id)}">
+          <td><code>${esc(p.id)}</code></td>
+          <td><input data-plf="name" value="${esc(p.name)}" maxlength="40"></td>
+          <td style="min-width:260px">${chipEdit('plan:' + p.id, p.features || [], 'add a pattern')}</td>
+          <td><label class="switch" title="Tester watermark"><input type="checkbox" data-plf="watermark"${p.watermark ? ' checked' : ''} aria-label="Watermark"><span></span></label></td>
+          <td class="n"><input data-plf="sort" type="number" value="${esc(p.sort)}" style="width:70px;min-width:0"></td>
+          <td class="n">${num(planUse.get(p.id) || 0)}</td>
+          <td>${p.id === 'admin' || planUse.get(p.id) ? '' : `<button class="tool sm no" type="button" data-pldel>Delete</button>`}</td>
+        </tr>`).join('')}
+      </table></div>
+      <form class="row2" id="plAdd" style="margin-top:12px">
+        <input id="plNewId" placeholder="id, e.g. pro_plus" maxlength="20" style="width:150px" required>
+        <input id="plNewName" placeholder="Name, e.g. Pro Plus" maxlength="40" style="width:180px" required>
+        <label>Copy from <select id="plNewFrom"><option value="">nothing</option>${plans.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select></label>
+        <button class="tool pri sm" type="submit">Add plan</button>
+      </form>
+    </div>
+    <div class="panel"><h3>Feature catalogue <span class="sub">the things the game knows how to lock (${features.length})</span></h3>
+      ${features.length ? `<div class="tw"><table class="tbl">
+        <tr><th>Key</th><th>Name</th><th>Group</th><th class="n">Order</th><th></th></tr>
+        ${features.map(f => `<tr data-fkey="${esc(f.key)}">
+          <td><code>${esc(f.key)}</code></td>
+          <td><input data-ff="name" value="${esc(f.name)}" maxlength="80"></td>
+          <td><input data-ff="grp" value="${esc(f.grp)}" maxlength="40"></td>
+          <td class="n"><input data-ff="sort" type="number" value="${esc(f.sort)}" style="width:70px;min-width:0"></td>
+          <td><button class="tool sm no" type="button" data-fdel>Delete</button></td>
+        </tr>`).join('')}
+      </table></div>` : '<div class="empty sm">No features listed yet.</div>'}
+      <form class="row2" id="fAdd" style="margin-top:12px">
+        <input id="fNewKey" placeholder="key, e.g. coaster.giga" maxlength="60" style="width:180px" required>
+        <input id="fNewName" placeholder="Name, e.g. Giga Coaster" maxlength="80" style="width:180px" required>
+        <input id="fNewGrp" placeholder="Group, e.g. Coasters" maxlength="40" style="width:150px">
+        <button class="tool pri sm" type="submit">Add feature</button>
+      </form>
+    </div>`;
+}
+$('v-plans').addEventListener('change', async e => {
+  const t = e.target, pr = t.closest('[data-plid]'), fr = t.closest('[data-fkey]');
+  if (pr && t.dataset.plf) {
+    const id = pr.dataset.plid, f = t.dataset.plf, v = f === 'watermark' ? t.checked : f === 'sort' ? Math.round(+t.value || 0) : t.value.trim();
+    if (f === 'name' && !v) return toast('A plan needs a name');
+    const { error } = await sb.from('plans').update({ [f]: v }).eq('id', id);
+    if (error) return toast('Not saved: ' + error.message);
+    plans.find(p => p.id === id)[f] = v; toast('Plan saved');
+  }
+  if (fr && t.dataset.ff) {
+    const key = fr.dataset.fkey, f = t.dataset.ff, v = f === 'sort' ? Math.round(+t.value || 0) : t.value.trim() || (f === 'grp' ? 'Other' : '');
+    if (f === 'name' && !v) return toast('A feature needs a name');
+    const { error } = await sb.from('features').update({ [f]: v }).eq('key', key);
+    if (error) return toast('Not saved: ' + error.message);
+    features.find(x => x.key === key)[f] = v; toast('Feature saved');
+  }
+});
+$('v-plans').addEventListener('click', async e => {
+  const pd = e.target.closest('[data-pldel]');
+  if (pd) {
+    const id = pd.closest('[data-plid]').dataset.plid;
+    if (!await sure(`Delete the plan "${planName(id)}"?`)) return;
+    const { error } = await sb.from('plans').delete().eq('id', id);
+    if (error) return toast('Not deleted: ' + error.message);
+    toast('Plan deleted'); loadPlans();
+  }
+  const fd = e.target.closest('[data-fdel]');
+  if (fd) {
+    const key = fd.closest('[data-fkey]').dataset.fkey;
+    if (!await sure(`Delete "${key}" from the catalogue? Plans that name it keep the pattern.`)) return;
+    const { error } = await sb.from('features').delete().eq('key', key);
+    if (error) return toast('Not deleted: ' + error.message);
+    toast('Feature deleted'); loadPlans();
+  }
+});
+$('v-plans').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (e.target.id === 'plAdd') {
+    const id = $('plNewId').value.trim().toLowerCase(), name = $('plNewName').value.trim(), from = plans.find(p => p.id === $('plNewFrom').value);
+    if (!/^[a-z0-9_-]{2,20}$/.test(id)) return toast('Plan id: 2-20 of a-z, 0-9, _ and -');
+    const { error } = await sb.from('plans').insert({ id, name, features: from?.features || [], watermark: from ? from.watermark : true, sort: Math.max(0, ...plans.map(p => p.sort)) + 1 });
+    if (error) return toast('Not added: ' + error.message);
+    toast(`Plan ${name} added`); loadPlans();
+  }
+  if (e.target.id === 'fAdd') {
+    const key = $('fNewKey').value.trim().toLowerCase(), name = $('fNewName').value.trim(), grp = $('fNewGrp').value.trim() || 'Other';
+    if (!/^[a-z0-9_.*-]{2,60}$/.test(key)) return toast('Key: 2-60 of a-z, 0-9 and _ . * -');
+    const { error } = await sb.from('features').insert({ key, name, grp, sort: features.filter(f => f.grp === grp).length });
+    if (error) return toast('Not added: ' + error.message);
+    toast(`${key} added`); loadPlans();
+  }
+});
+
+// =====================================================================================================
+// Invites
+// =====================================================================================================
+const inviteCode = () => 'LOOPA-' + [...crypto.getRandomValues(new Uint8Array(4))].map(b => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 32]).join('');
+let invites = [];
+async function loadInvites() {
+  const el = $('v-invites');
+  if (!el.dataset.ok) el.innerHTML = loading();
+  invites = await q(sb.from('invites').select('*').order('created_at', { ascending: false }));
+  el.dataset.ok = 1;
+  const exp = i => i.expires_at && new Date(i.expires_at) < Date.now();
+  el.innerHTML = `
+    <div class="vh"><h2>Invites</h2><span class="sub">A code typed at sign-up approves the player at once</span><button class="tool" data-reload type="button">${ICON.refresh}Refresh</button></div>
+    <form class="panel" id="invForm">
+      <h3>New invite code</h3>
+      <div class="row2">
+        <label>Code <input id="invCode" value="${inviteCode()}" maxlength="24" style="width:160px;text-transform:uppercase" required></label>
+        <button class="tool sm" type="button" id="invNew">New code</button>
+        <label>Plan <select id="invPlan">${planOptions('tester')}</select></label>
+        <label>Uses <input id="invUses" type="number" min="1" max="10000" value="1" style="width:80px"></label>
+        <label>Expires <input id="invExp" type="datetime-local" style="width:auto"></label>
+      </div>
+      <div class="row2" style="margin-top:10px">
+        <input id="invNote" placeholder="Note, e.g. for the Instagram giveaway" maxlength="200" style="flex:1;width:auto;min-width:200px">
+        <button class="tool pri" type="submit">Create invite</button>
+      </div>
+    </form>
+    <div class="panel"><h3>Codes <span class="sub">${invites.length}</span></h3>${invites.length ? `<div class="tw"><table class="tbl">
+      <tr><th>Code</th><th>Plan</th><th class="n">Used</th><th class="n">Left</th><th>Expires</th><th>Note</th><th>Made</th><th></th></tr>
+      ${invites.map(i => `<tr data-code="${esc(i.code)}">
+        <td class="nowrap"><code>${esc(i.code)}</code> <button class="tool sm" type="button" data-invcopy title="Copy">${ICON.copy}</button></td>
+        <td>${esc(planName(i.plan))}</td><td class="n">${num(i.used)}</td><td class="n">${num(i.uses_left)}</td>
+        <td class="nowrap${exp(i) ? ' expired' : ''}">${i.expires_at ? esc(when(i.expires_at)) + (exp(i) ? ' (expired)' : '') : 'never'}</td>
+        <td>${esc(i.note || '')}</td><td class="nowrap">${esc(day(i.created_at))}</td>
+        <td><button class="tool sm no" type="button" data-invdel>Delete</button></td>
+      </tr>`).join('')}</table></div>` : '<div class="empty sm">No invite codes yet.</div>'}</div>`;
+  $('invNew').onclick = () => { $('invCode').value = inviteCode(); };
+  $('invForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const code = $('invCode').value.trim().toUpperCase(), uses = Math.round(+$('invUses').value), x = $('invExp').value;
+    if (!/^[A-Z0-9-]{4,24}$/.test(code)) return toast('Code: 4-24 of A-Z, 0-9 and -');
+    if (!(uses >= 1)) return toast('Uses: at least 1');
+    const row = { code, plan: $('invPlan').value, uses_left: uses, note: $('invNote').value.trim() || null, expires_at: x ? new Date(x).toISOString() : null };
+    const { error } = await sb.from('invites').insert(row);
+    if (error) return toast(/duplicate/i.test(error.message) ? 'That code already exists' : 'Not created: ' + error.message);
+    await navigator.clipboard?.writeText(code).catch(() => {});
+    toast(`${code} created and copied`); loadInvites();
+  });
+}
+$('v-invites').addEventListener('click', async e => {
+  const c = e.target.closest('[data-invcopy]');
+  if (c) { const code = c.closest('[data-code]').dataset.code; await navigator.clipboard?.writeText(code).catch(() => {}); return toast(code + ' copied'); }
+  const d = e.target.closest('[data-invdel]');
+  if (d) {
+    const code = d.closest('[data-code]').dataset.code;
+    if (!await sure(`Delete the code ${code}? Nobody can use it after this.`)) return;
+    const { error } = await sb.from('invites').delete().eq('code', code);
+    if (error) return toast('Not deleted: ' + error.message);
+    toast('Deleted'); loadInvites();
+  }
+});
+
+// =====================================================================================================
+// Applications: "Join as tester" sign-ups from the landing page
+// =====================================================================================================
+let rows = [], photos = new Map(), filter = 'all';
+async function loadApps() {
   const { data, error } = await sb.from('testers').select('*').order('created_at', { ascending: false });
   if (error) return toast('Could not load: ' + error.message);
   rows = data;
@@ -248,8 +1482,7 @@ async function load() {
   }
   render();
 }
-$('reload').addEventListener('click', load);
-setInterval(() => { if (!document.hidden && !$('app').classList.contains('hidden')) load(); }, 60000);
+$('reload').addEventListener('click', loadApps);
 
 async function update(id, patch) {
   const { error } = await sb.from('testers').update(patch).eq('id', id);
@@ -258,7 +1491,6 @@ async function update(id, patch) {
   render();
 }
 
-// ---------- view ----------
 function visible() {
   const q = $('q').value.trim().toLowerCase();
   return rows.filter(r => (filter === 'all' || r.status === filter) &&
@@ -274,11 +1506,11 @@ function render() {
   $('list').innerHTML = list.map(r => {
     const url = r.photo_path && photos.get(r.photo_path);
     const ig = r.instagram ? `<a href="https://instagram.com/${encodeURIComponent(r.instagram.replace(/^@/, ''))}" target="_blank" rel="noopener">${esc(r.instagram)}</a>` : '—';
-    return `<article class="card" data-id="${r.id}">
+    return `<article class="card" data-id="${esc(r.id)}">
       <div class="head">
         ${url ? `<img class="avatar" src="${esc(url)}" alt="" data-zoom="${esc(url)}">` : `<div class="avatar">${esc((r.name || '?').trim()[0]?.toUpperCase() || '?')}</div>`}
         <div class="who"><h3>${esc(r.name)}</h3><div class="sub">${new Date(r.created_at).toLocaleString()}</div></div>
-        <span class="badge ${r.status}">${r.status === 'invited' ? 'build sent' : r.status}</span>
+        <span class="badge ${esc(r.status)}">${r.status === 'invited' ? 'build sent' : esc(r.status)}</span>
       </div>
       <dl class="facts">
         <dt>Email</dt><dd><a href="mailto:${esc(r.email)}">${esc(r.email)}</a></dd>
@@ -302,12 +1534,12 @@ $('q').addEventListener('input', render);
 $('chips').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { filter = b.dataset.s; render(); } });
 $('list').addEventListener('click', async e => {
   const z = e.target.closest('[data-zoom]');
-  if (z) { const d = document.createElement('div'); d.className = 'zoom'; d.innerHTML = `<img src="${z.dataset.zoom}" alt="">`; d.onclick = () => d.remove(); document.body.append(d); return; }
+  if (z) { const d = document.createElement('div'); d.className = 'zoom'; d.innerHTML = `<img src="${esc(z.dataset.zoom)}" alt="">`; d.onclick = () => d.remove(); document.body.append(d); return; }
   const b = e.target.closest('[data-act]'); if (!b) return;
   const id = b.closest('.card').dataset.id, r = rows.find(x => x.id === id), act = b.dataset.act;
   if (act === 'mail') { const m = MAILS[r.status](r); location.href = `mailto:${encodeURIComponent(r.email)}?subject=${encodeURIComponent(m.s)}&body=${encodeURIComponent(m.b)}`; return; }
   if (act === 'delete') {
-    if (!confirm(`Delete ${r.name}'s sign-up for good?`)) return;
+    if (!await sure(`Delete ${r.name}'s sign-up for good?`)) return;
     if (r.photo_path) await sb.storage.from('tester-photos').remove([r.photo_path]);
     const { error } = await sb.from('testers').delete().eq('id', id);
     if (error) return toast('Not deleted: ' + error.message);
