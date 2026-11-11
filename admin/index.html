@@ -1413,6 +1413,9 @@ async function loadInvites() {
   const el = $('v-invites');
   if (!el.dataset.ok) el.innerHTML = loading();
   invites = await q(sb.from('invites').select('*').order('created_at', { ascending: false }));
+  // who signed up with each code (players.invite)
+  const usedBy = {};
+  for (const p of await q(sb.from('players').select('id,username,invite').not('invite', 'is', null))) (usedBy[p.invite] ??= []).push(p);
   el.dataset.ok = 1;
   const exp = i => i.expires_at && new Date(i.expires_at) < Date.now();
   el.innerHTML = `
@@ -1432,10 +1435,11 @@ async function loadInvites() {
       </div>
     </form>
     <div class="panel"><h3>Codes <span class="sub">${invites.length}</span></h3>${invites.length ? `<div class="tw"><table class="tbl">
-      <tr><th>Code</th><th>Plan</th><th class="n">Used</th><th class="n">Left</th><th>Expires</th><th>Note</th><th>Made</th><th></th></tr>
+      <tr><th>Code</th><th>Plan</th><th class="n">Used</th><th class="n">Left</th><th>Used by</th><th>Expires</th><th>Note</th><th>Made</th><th></th></tr>
       ${invites.map(i => `<tr data-code="${esc(i.code)}">
         <td class="nowrap"><code>${esc(i.code)}</code> <button class="tool sm" type="button" data-invcopy title="Copy">${ICON.copy}</button></td>
         <td>${esc(planName(i.plan))}</td><td class="n">${num(i.used)}</td><td class="n">${num(i.uses_left)}</td>
+        <td>${(usedBy[i.code] || []).map(p => `<a href="#player/${esc(p.id)}">${esc(p.username)}</a>`).join(', ') || '<span class="sub">nobody yet</span>'}</td>
         <td class="nowrap${exp(i) ? ' expired' : ''}">${i.expires_at ? esc(when(i.expires_at)) + (exp(i) ? ' (expired)' : '') : 'never'}</td>
         <td>${esc(i.note || '')}</td><td class="nowrap">${esc(day(i.created_at))}</td>
         <td><button class="tool sm no" type="button" data-invdel>Delete</button></td>
