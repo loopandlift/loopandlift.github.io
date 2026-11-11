@@ -272,6 +272,7 @@ details > summary { cursor: pointer; font-weight: 600; font-size: 14px; }
     <a href="#settings" data-v="settings">Game settings</a>
     <a href="#plans" data-v="plans">Plans &amp; features</a>
     <a href="#invites" data-v="invites">Invites</a>
+    <a href="#waitlist" data-v="waitlist">Waitlist</a>
     <a href="#applications" data-v="applications">Applications</a>
   </nav>
   <div class="me hidden" id="me"><span id="meMail"></span><button id="pw" type="button">My password</button><button id="out" type="button">Sign out</button></div>
@@ -301,6 +302,7 @@ details > summary { cursor: pointer; font-weight: 600; font-size: 14px; }
     <section class="view hidden" id="v-settings"></section>
     <section class="view hidden" id="v-plans"></section>
     <section class="view hidden" id="v-invites"></section>
+    <section class="view hidden" id="v-waitlist"></section>
     <!-- the landing page's "Join as tester" sign-ups -->
     <section class="view hidden" id="v-applications">
       <div class="vh"><h2>Applications</h2><span class="sub">"Join as tester" sign-ups from the website</span></div>
@@ -357,7 +359,7 @@ It's Elio, the guy building Loop & Lift. I just saw your sign-up and honestly it
 
 I'm building this game mostly on my own, so every person who wants to try it means a lot to me. I'll send you the test build as soon as the next one is ready, hopefully soon :)
 
-Until then I post the progress on Instagram almost every day (@loopandlift), if you want to see what's coming.
+Until then I post the progress on Instagram almost every day (@playloopandlift), if you want to see what's coming.
 
 Talk soon,
 Elio` }),
@@ -384,7 +386,7 @@ Thank you so much for signing up, really.
 
 This test round filled up faster than I expected, so I couldn't fit everyone in. You're on my list for the next round, and I'll write to you myself when it opens.
 
-Meanwhile the game's progress is on Instagram (@loopandlift).
+Meanwhile the game's progress is on Instagram (@playloopandlift).
 
 Thanks for the support,
 Elio` })
@@ -525,7 +527,7 @@ sb.auth.onAuthStateChange((_e, session) => {
 // ---------- tabs ----------
 const LOADERS = {
   overview: loadOverview, players: loadPlayers, player: loadPlayer, feedback: loadFeedback, builds: loadBuilds,
-  settings: loadSettings, plans: loadPlans, invites: loadInvites, applications: loadApps
+  settings: loadSettings, plans: loadPlans, invites: loadInvites, waitlist: loadWaitlist, applications: loadApps
 };
 function here() {
   const [v, arg] = location.hash.slice(1).split('/');
@@ -1229,11 +1231,15 @@ async function loadSettings() {
   const el = $('v-settings');
   el.innerHTML = loading();
   config = await q(sb.from('game_config').select('*').eq('id', 1).single());
+  const plans = await q(sb.from('plans').select('id,name').order('sort'));
   const c = config;
+  const autoSub = on => on ? 'Everyone who signs up and confirms their email plays at once.' : 'New sign-ups wait for you in Players (Approve).';
   el.innerHTML = `
     <div class="vh"><h2>Game settings</h2><span class="sub">For every player, at their next check (about a minute)</span></div>
     <form class="panel" id="cfgForm" style="max-width:760px">
       <div class="swrow"><label class="switch"><input type="checkbox" id="cfgOpen"${c.open ? ' checked' : ''}><span></span></label><span>The game is open</span><span class="sub" id="cfgOpenSub">${c.open ? 'Approved players can play.' : 'Closed: only you can play.'}</span></div>
+      <div class="swrow"><label class="switch"><input type="checkbox" id="cfgAuto"${c.auto_approve ? ' checked' : ''}><span></span></label><span>Approve sign-ups automatically</span><span class="sub" id="cfgAutoSub">${autoSub(c.auto_approve)}</span></div>
+      <label class="field"><span>Plan for automatic sign-ups</span><select id="cfgPlan" style="width:220px">${plans.filter(p => p.id !== 'admin').map(p => `<option value="${esc(p.id)}"${p.id === c.auto_plan ? ' selected' : ''}>${esc(p.name)}</option>`).join('')}</select></label>
       <label class="field"><span>Maintenance message</span><textarea id="cfgMaint" maxlength="500" placeholder="Shown while the game is closed, e.g. Back in an hour with a new update!">${esc(c.maintenance || '')}</textarea></label>
       <label class="field"><span>Message to everyone</span><textarea id="cfgMsg" maxlength="500" placeholder="Shown to every player in the game. Empty = no message.">${esc(c.message || '')}</textarea></label>
       <label class="field"><span>Minimum version</span><input id="cfgMin" value="${esc(c.min_version || '')}" placeholder="e.g. 0.2.0" style="width:140px">
@@ -1243,6 +1249,7 @@ async function loadSettings() {
       <div class="acts" style="align-items:center"><button class="ok" type="submit">Save settings</button><span class="sub">Terms version ${esc(c.terms_version)} · last saved ${esc(when(c.updated_at))}</span></div>
     </form>`;
   $('cfgOpen').addEventListener('change', e => { $('cfgOpenSub').textContent = e.target.checked ? 'Approved players can play.' : 'Closed: only you can play.'; });
+  $('cfgAuto').addEventListener('change', e => { $('cfgAutoSub').textContent = autoSub(e.target.checked); });
   $('cfgForm').addEventListener('submit', saveSettings);
 }
 async function saveSettings(e) {
@@ -1252,7 +1259,7 @@ async function saveSettings(e) {
   if (!Number.isInteger(off) || off < 0 || off > 720) return toast('Offline hours: a whole number from 0 to 720');
   const open = $('cfgOpen').checked;
   if (!open && config.open && !await sure('Close the game for everyone except you?')) return;
-  const patch = { open, maintenance: $('cfgMaint').value.trim() || null, message: $('cfgMsg').value.trim() || null, min_version: min || null, offline_hours: off, updated_at: new Date().toISOString() };
+  const patch = { open, auto_approve: $('cfgAuto').checked, auto_plan: $('cfgPlan').value, maintenance: $('cfgMaint').value.trim() || null, message: $('cfgMsg').value.trim() || null, min_version: min || null, offline_hours: off, updated_at: new Date().toISOString() };
   const { data, error } = await sb.from('game_config').update(patch).eq('id', 1).select('*');
   if (error || !data?.length) return toast('Not saved: ' + (error?.message || 'no access'));
   config = data[0]; toast('Settings saved');
@@ -1403,6 +1410,35 @@ $('v-plans').addEventListener('submit', async e => {
     toast(`${key} added`); loadPlans();
   }
 });
+
+// =====================================================================================================
+// Waitlist: phone visitors who asked the download page to email them the link
+// =====================================================================================================
+async function loadWaitlist() {
+  const el = $('v-waitlist');
+  if (!el.dataset.ok) el.innerHTML = loading();
+  const rows = await q(sb.from('waitlist').select('*').order('created_at', { ascending: false }).limit(5000));
+  // who went on to make an account (same email)
+  const joined = new Set((await q(sb.from('players').select('email'))).map(p => p.email.toLowerCase()));
+  el.dataset.ok = 1;
+  const n = rows.filter(r => joined.has(r.email)).length;
+  el.innerHTML = `
+    <div class="vh"><h2>Waitlist</h2><span class="sub">People on a phone who asked the download page to email them the link</span><button class="tool" data-reload type="button">${ICON.refresh}Refresh</button></div>
+    <div class="panel"><h3>${num(rows.length)} emails <span class="sub">${num(n)} of them made an account since</span>
+      ${rows.length ? `<button class="tool sm" type="button" id="wlCopy" style="margin-left:auto">${ICON.copy}Copy all emails</button>` : ''}</h3>
+      ${rows.length ? `<div class="tw"><table class="tbl"><tr><th>Email</th><th>From</th><th>Asked</th><th>Link sent</th><th>Account</th><th></th></tr>
+      ${rows.map(r => `<tr data-wl="${esc(r.email)}"><td>${esc(r.email)}</td><td>${esc(r.source || '')}</td><td class="nowrap">${esc(when(r.created_at))}</td>
+        <td>${r.mailed_at ? 'yes' : '<span class="sub">no</span>'}</td><td>${joined.has(r.email) ? 'yes' : ''}</td>
+        <td><button class="tool sm no" type="button" data-wldel>Remove</button></td></tr>`).join('')}</table></div>` : '<div class="empty sm">Nobody yet.</div>'}</div>`;
+  $('wlCopy')?.addEventListener('click', async () => { await navigator.clipboard.writeText(rows.map(r => r.email).join(', ')); toast('Copied ' + rows.length + ' emails'); });
+  el.querySelectorAll('[data-wldel]').forEach(b => b.addEventListener('click', async () => {
+    const email = b.closest('tr').dataset.wl;
+    if (!await sure(`Remove ${email} from the waitlist?`)) return;
+    const { error } = await sb.from('waitlist').delete().eq('email', email);
+    if (error) return toast('Not removed: ' + error.message);
+    toast('Removed'); loadWaitlist();
+  }));
+}
 
 // =====================================================================================================
 // Invites

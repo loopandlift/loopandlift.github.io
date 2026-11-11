@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3a0f63">
+<title>Loop &amp; Lift - Build your dream theme park</title>
+<meta name="description" content="Build the theme park of your dreams: design your own roller coasters piece by piece, fill the park with guests, and ride what you built. Free on Windows in Early Access.">
+<link rel="canonical" href="https://loopandlift.github.io/play/">
+<link rel="icon" type="image/png" href="img/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Loop &amp; Lift">
+<meta property="og:title" content="Loop &amp; Lift - Build your dream theme park">
+<meta property="og:description" content="Design your own roller coasters, fill the park with guests, then ride what you built. Free on Windows in Early Access.">
+<meta property="og:url" content="https://loopandlift.github.io/play/">
+<meta property="og:image" content="https://loopandlift.github.io/play/img/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="img/hero-aerial.webp" as="image" type="image/webp">
+<script>
+// Windows PCs get the download; phones, tablets and Macs get "email me the link" (an .exe is no use there). Set before
+// the page draws, so neither version flashes up first.
+window.WIN = /Windows/i.test(navigator.userAgent) && !/Phone|Android|iPad|iPhone|Mobile/i.test(navigator.userAgent);
+document.documentElement.classList.add(WIN ? 'is-win' : 'no-win');
+</script>
+<link rel="preload" href="../assets/fonts/fredoka-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face { font-family: 'Fredoka'; font-weight: 700; font-display: swap; src: url(../assets/fonts/fredoka-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Fredoka'; font-weight: 600; font-display: swap; src: url(../assets/fonts/fredoka-latin-600-normal.woff2) format('woff2'); }
+:root {
+  --ink: #3a0f63; --ink-2: #2a0948; --night: #17082a; --pink: #ff4fa0; --gold: #ffd23f; --mint: #7dffb0;
+  --muted: #6d5a8a; --card: #fff; --soft: #f6f0ff; --line: #eee4fa;
+  --f: 'Fredoka', 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { background: var(--night); scroll-behavior: smooth; }
+body { margin: 0; font-family: var(--f); color: var(--ink); background: linear-gradient(180deg, #2a0948 0, #602b89 30%, #953d6c 70%, #602b89 100%); overflow-x: hidden; }
+img, video { display: block; max-width: 100%; }
+a { color: #b0137a; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+/* ---------- hero ---------- */
+.hero { position: relative; min-height: min(100svh, 900px); display: grid; align-items: center; color: #fff; isolation: isolate; overflow: hidden; }
+.hero-bg { position: absolute; inset: 0; z-index: -2; background: #2a0948 url(img/hero-aerial.webp) center 40% / cover no-repeat; animation: drift 30s ease-in-out infinite alternate; }
+.hero::after { content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(23, 8, 42, .55) 0%, rgba(23, 8, 42, .15) 32%, rgba(23, 8, 42, .35) 62%, rgba(42, 9, 72, .96) 100%),
+              radial-gradient(ellipse at 50% 46%, rgba(23, 8, 42, .45), transparent 62%); }
+@keyframes drift { from { transform: scale(1.06) translate(0, 0); } to { transform: scale(1.12) translate(-1.5%, -1%); } }
+@media (prefers-reduced-motion: reduce) { .hero-bg { animation: none; } html { scroll-behavior: auto; } }
+.hero-in { text-align: center; display: grid; gap: 16px; justify-items: center; padding: 70px 16px 90px; }
+.badge { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; letter-spacing: .14em; padding: 7px 14px; border-radius: 99px; color: #fff;
+  background: linear-gradient(180deg, #ff8ac4, #ff4fa0 55%, #e0237f); box-shadow: 0 0 0 3px var(--ink); }
+.badge i { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 8px var(--mint); animation: blink 1.6s infinite; }
+@keyframes blink { 50% { opacity: .35; } }
+.logo { margin: 0; font-weight: 700; line-height: .9; white-space: nowrap; font-size: clamp(54px, 11vw, 128px); color: #ffb52e;
+  background: linear-gradient(180deg, #fffbe0 0%, #ffe14f 36%, #ffa51f 62%, #ff7a1a 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(3px 0 0 var(--ink)) drop-shadow(-3px 0 0 var(--ink)) drop-shadow(0 3px 0 var(--ink)) drop-shadow(0 -3px 0 var(--ink)) drop-shadow(0 8px 0 var(--ink-2)) drop-shadow(0 16px 26px rgba(23, 8, 42, .55)); }
+.logo .amp { background: linear-gradient(180deg, #ffd0ea, #ff4fa0 55%, #c3166e); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.tag { margin: 0; font-weight: 700; font-size: clamp(24px, 3.4vw, 40px); line-height: 1.1; text-shadow: 0 3px 0 rgba(42, 9, 72, .85), 0 0 24px rgba(23, 8, 42, .6); }
+.sub { margin: 0; max-width: 600px; font-weight: 600; font-size: clamp(16px, 1.8vw, 20px); line-height: 1.45; text-shadow: 0 2px 2px rgba(23, 8, 42, .8), 0 0 18px rgba(23, 8, 42, .7); }
+.btn { font-family: var(--f); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 12px; border-radius: 20px; border: 0; cursor: pointer;
+  transition: translate .15s ease, scale .15s ease, box-shadow .15s ease; line-height: 1; }
+.btn-main { font-size: clamp(22px, 2.6vw, 30px); padding: 20px 36px; color: #fff; background: linear-gradient(180deg, #ff8ac4 0%, #ff4fa0 45%, #e0237f 100%);
+  box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2), 0 18px 44px rgba(255, 79, 160, .55); text-shadow: 0 2px 0 rgba(58, 15, 99, .55); }
+.btn-main:hover { translate: 0 -3px; scale: 1.02; }
+.btn-main:active { translate: 0 4px; box-shadow: 0 0 0 4px var(--ink), 0 4px 0 4px var(--ink-2), 0 10px 24px rgba(255, 79, 160, .4); }
+.btn-main svg { width: 30px; height: 30px; flex: none; }
+.btn-ghost { font-size: 17px; padding: 12px 20px; color: #fff; background: rgba(23, 8, 42, .45); box-shadow: 0 0 0 3px rgba(255, 255, 255, .85); backdrop-filter: blur(4px); }
+.btn-ghost:hover { background: rgba(23, 8, 42, .65); }
+.btn-ghost svg { width: 18px; height: 18px; }
+.fine { font-size: 14px; font-weight: 600; opacity: .95; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+.fine a { color: #fff; }
+.row { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: center; }
+.is-win .nowin-only, .no-win .win-only { display: none !important; }
+
+/* the "email me the link" form (phones, Macs) */
+.mail { width: min(520px, 100%); background: rgba(255, 255, 255, .96); color: var(--ink); border-radius: 20px; padding: 16px; box-shadow: 0 0 0 4px var(--ink), 0 8px 0 4px var(--ink-2), 0 18px 40px rgba(23, 8, 42, .4); text-align: left; }
+.mail b { display: block; font-size: 19px; margin-bottom: 4px; }
+.mail p { margin: 0 0 12px; font-weight: 600; font-size: 15px; line-height: 1.4; color: #4d3a6b; }
+.mail form { display: flex; gap: 8px; }
+.mail input { flex: 1; min-width: 0; font: 600 17px var(--f); color: var(--ink); padding: 13px 14px; border-radius: 14px; border: 3px solid var(--ink); background: #fff; outline: none; }
+.mail input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255, 79, 160, .25); }
+.mail button { font: 700 17px var(--f); color: #fff; padding: 0 16px; border-radius: 14px; border: 3px solid var(--ink); cursor: pointer; white-space: nowrap;
+  background: linear-gradient(180deg, #ff8ac4, #ff4fa0 55%, #e0237f); }
+.mail button:disabled { opacity: .6; cursor: wait; }
+.mail .msg { margin: 10px 0 0; font-size: 14.5px; font-weight: 700; min-height: 1em; }
+.mail .msg.ok { color: #0f8a4a; } .mail .msg.err { color: #c3166e; }
+.mail small { display: block; margin-top: 8px; color: var(--muted); font-weight: 600; font-size: 12.5px; }
+@media (max-width: 420px) { .mail form { flex-direction: column; } .mail button { padding: 13px; } }
+.alt-link { background: none; border: 0; padding: 0; color: #fff; font: 600 14px var(--f); text-decoration: underline; cursor: pointer; text-shadow: 0 1px 3px rgba(0, 0, 0, .6); }
+
+/* ---------- facts strip ---------- */
+.facts { margin-top: -46px; position: relative; z-index: 2; }
+.facts ul { list-style: none; margin: 0; padding: 14px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; background: var(--card); border-radius: 22px;
+  box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2), 0 22px 50px rgba(23, 8, 42, .4); }
+.facts li { text-align: center; padding: 8px 4px; border-radius: 14px; background: var(--soft); }
+.facts b { display: block; font-size: clamp(22px, 2.6vw, 30px); color: var(--ink); line-height: 1.05; }
+.facts span { display: block; font-weight: 600; font-size: 14px; color: var(--muted); }
+@media (max-width: 760px) { .facts ul { grid-template-columns: repeat(2, 1fr); } .facts li:last-child { grid-column: 1 / -1; } }
+
+/* ---------- sections ---------- */
+section.wrap { margin-top: 72px; }
+.h { text-align: center; color: #fff; margin: 0 0 8px; font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; text-shadow: 0 3px 0 var(--ink-2), 0 0 24px rgba(23, 8, 42, .5); }
+.hs { text-align: center; color: #fff; margin: 0 auto 28px; max-width: 640px; font-weight: 600; font-size: 18px; line-height: 1.45; opacity: .95; }
+.frame { border-radius: 22px; overflow: hidden; background: #000; box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2), 0 24px 60px rgba(23, 8, 42, .45); }
+.video video { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+
+.feat { display: grid; grid-template-columns: 1.25fr 1fr; gap: 34px; align-items: center; margin-bottom: 44px; }
+.feat:nth-child(even) { grid-template-columns: 1fr 1.25fr; }
+.feat:nth-child(even) .frame { order: 2; }
+.feat .frame img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.feat .txt { background: var(--card); border-radius: 22px; padding: 24px 26px; box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2); }
+.feat .kick { font-weight: 700; font-size: 13px; letter-spacing: .14em; color: var(--pink); }
+.feat h3 { margin: 4px 0 8px; font-size: clamp(26px, 3vw, 34px); line-height: 1.05; }
+.feat p { margin: 0; font-weight: 600; font-size: 17px; line-height: 1.5; color: #4d3a6b; }
+@media (max-width: 820px) { .feat, .feat:nth-child(even) { grid-template-columns: 1fr; gap: 0; } .feat:nth-child(even) .frame { order: 0; } .feat .txt { margin: -26px 12px 0; position: relative; } }
+
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.gallery button { padding: 0; border: 0; cursor: zoom-in; border-radius: 18px; overflow: hidden; background: #000; box-shadow: 0 0 0 4px var(--ink), 0 7px 0 4px var(--ink-2); transition: translate .15s ease; }
+.gallery button:hover { translate: 0 -3px; }
+.gallery img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.gallery .big { grid-column: span 2; grid-row: span 2; }
+.gallery .big img { aspect-ratio: auto; height: 100%; }
+.gallery .big { display: block; }
+@media (max-width: 700px) { .gallery { grid-template-columns: 1fr 1fr; } .gallery .big, .gallery button:last-child { grid-column: 1 / -1; grid-row: auto; } .gallery .big img { aspect-ratio: 16 / 9; } }
+dialog.lb { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 92vh; }
+dialog.lb::backdrop { background: rgba(23, 8, 42, .88); }
+dialog.lb img { max-width: 96vw; max-height: 86vh; border-radius: 14px; box-shadow: 0 0 0 3px #fff; }
+dialog.lb p { color: #fff; text-align: center; font-weight: 600; margin: 10px 0 0; }
+dialog.lb button { position: fixed; top: 14px; right: 14px; width: 46px; height: 46px; border-radius: 50%; border: 3px solid #fff; background: var(--ink); color: #fff; font: 700 24px var(--f); cursor: pointer; }
+
+/* ---------- price ---------- */
+.prices { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; max-width: 900px; margin: 0 auto; }
+.price { background: var(--card); border-radius: 24px; padding: 26px; box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2), 0 22px 50px rgba(23, 8, 42, .35); display: grid; gap: 10px; align-content: start; position: relative; }
+.price.hot { background: linear-gradient(180deg, #fff 0%, #fff6fb 100%); box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2), 0 0 0 10px rgba(255, 79, 160, .45), 0 22px 50px rgba(23, 8, 42, .35); }
+.price .ribbon { position: absolute; top: -16px; right: 22px; background: var(--gold); color: var(--ink); font-weight: 700; font-size: 14px; letter-spacing: .08em; padding: 6px 12px; border-radius: 99px; box-shadow: 0 0 0 3px var(--ink); }
+.price h3 { margin: 0; font-size: 26px; }
+.price .amt { font-size: 56px; font-weight: 700; line-height: 1; }
+.price .amt small { font-size: 18px; color: var(--muted); font-weight: 600; margin-left: 6px; }
+.price .when { font-weight: 700; color: var(--pink); }
+.price ul { margin: 6px 0 4px; padding: 0; list-style: none; display: grid; gap: 8px; }
+.price li { font-weight: 600; font-size: 16px; line-height: 1.4; color: #4d3a6b; padding-left: 30px; position: relative; }
+.price li::before { content: ''; position: absolute; left: 0; top: 1px; width: 21px; height: 21px; border-radius: 50%; background: #2fbf71 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center / 14px no-repeat; }
+.price .btn-main { font-size: 22px; padding: 16px 24px; margin-top: 6px; }
+.price .note { font-size: 14px; font-weight: 600; color: var(--muted); margin: 0; }
+@media (max-width: 760px) { .prices { grid-template-columns: 1fr; } }
+
+/* ---------- steps, specs, faq ---------- */
+.card { background: var(--card); border-radius: 22px; padding: 24px; box-shadow: 0 0 0 4px var(--ink), 0 9px 0 4px var(--ink-2), 0 22px 50px rgba(23, 8, 42, .3); }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.step { background: var(--soft); border-radius: 16px; padding: 16px; display: grid; gap: 8px; align-content: start; }
+.step b { font-size: 20px; }
+.step p { margin: 0; font-weight: 600; font-size: 15.5px; line-height: 1.45; color: #4d3a6b; }
+.num { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 21px; font-weight: 700; background: linear-gradient(180deg, #ff8ac4, #ff4fa0 55%, #e0237f); box-shadow: 0 0 0 3px var(--ink); }
+/* a little picture of Windows' warning, so nobody is scared off by it */
+.ss { background: #0f4c81; color: #fff; border-radius: 6px; padding: 10px 11px; font: 13px 'Segoe UI', system-ui, sans-serif; display: grid; gap: 6px; }
+.ss .t { font-size: 15px; font-weight: 600; }
+.ss u { color: #cfe6ff; }
+.ss .r { display: flex; justify-content: flex-end; gap: 6px; }
+.ss span.b { border: 1px solid #fff; padding: 3px 10px; border-radius: 2px; }
+.ss span.b.hi { background: #fff; color: #0f4c81; outline: 3px solid #ffd23f; outline-offset: 2px; }
+@media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px; }
+.two h3 { margin: 0 0 10px; font-size: 26px; }
+.two ul { margin: 0; padding-left: 20px; font-weight: 600; line-height: 1.6; color: #4d3a6b; }
+@media (max-width: 820px) { .two { grid-template-columns: 1fr; } }
+details { border-top: 2px solid var(--line); padding: 12px 0; }
+details:first-of-type { border-top: 0; }
+summary { cursor: pointer; font-size: 19px; font-weight: 700; }
+details p { margin: 8px 0 0; font-weight: 600; line-height: 1.5; color: #4d3a6b; }
+code { background: #f1e9ff; padding: 1px 6px; border-radius: 6px; font-size: 14px; }
+
+.final { text-align: center; color: #fff; padding: 70px 0 30px; display: grid; gap: 16px; justify-items: center; }
+footer { text-align: center; padding: 26px 16px 40px; color: #fff; font-weight: 600; opacity: .95; }
+footer a { color: #fff; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-bg" role="img" aria-label="An aerial view of Loopa Park, a theme park built in Loop & Lift"></div>
+  <div class="hero-in">
+    <span class="badge"><i></i>EARLY ACCESS · FREE ON WINDOWS</span>
+    <h1 class="logo" aria-label="Loop &amp; Lift">Loop <span class="amp">&amp;</span> Lift</h1>
+    <p class="tag">Build the theme park of your dreams.</p>
+    <p class="sub">Design your own roller coasters piece by piece, fill the park with thousands of guests, then jump in the front seat and ride what you built.</p>
+    <div class="win-only row">
+      <a class="btn btn-main" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="hero">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
+        Download free
+      </a>
+    </div>
+    <div class="win-only fine">Windows 10 and 11 · about 20 MB · free while in Early Access</div>
+    <div class="nowin-only mail" data-mail="hero"></div>
+    <div class="row">
+      <a class="btn btn-ghost" href="#video"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>See it in action</a>
+      <button class="win-only alt-link" type="button" data-show-mail>Not on your PC right now? Email me the link</button>
+    </div>
+    <div class="win-only mail" data-mail="hero-pc" hidden></div>
+  </div>
+</header>
+
+<div class="wrap facts">
+  <ul>
+    <li><b>20</b><span>coaster types</span></li>
+    <li><b>18</b><span>flat rides</span></li>
+    <li><b>1000s</b><span>of guests</span></li>
+    <li><b>Day &amp; night</b><span>with light shows</span></li>
+    <li><b>Offline</b><span>parks saved on your PC</span></li>
+  </ul>
+</div>
+
+<section id="video" class="wrap video">
+  <h2 class="h">See it move</h2>
+  <p class="hs">Loopa Park: every ride, path and tree in it was built in the game.</p>
+  <div class="frame"><video src="img/clip.mp4" poster="img/clip.webp" autoplay muted loop playsinline preload="metadata" aria-label="Loop & Lift gameplay: coasters looping, a Ferris wheel, front-seat rides"></video></div>
+</section>
+
+<section class="wrap" id="features">
+  <h2 class="h">What you can do</h2>
+  <p class="hs">A theme park builder made by coaster fans, for coaster fans.</p>
+  <div class="feat">
+    <div class="frame"><img src="img/aqua-loop.webp" alt="A blue looping coaster with a train upside down at the top of a loop" loading="lazy" width="1280" height="720"></div>
+    <div class="txt"><span class="kick">DESIGN</span><h3>Shape every curve</h3>
+      <p>Lay your coaster piece by piece: drag a curve, stretch a drop, roll it upside down. Loops, corkscrews, cobra rolls, launches and splashdowns, joined into one smooth ride. Switch on the G-force view to see what your riders will feel.</p></div>
+  </div>
+  <div class="feat">
+    <div class="frame"><img src="img/pov-skyking.webp" alt="The view from the front seat at the top of a 139 metre launched coaster" loading="lazy" width="1280" height="720"></div>
+    <div class="txt"><span class="kick">RIDE</span><h3>Then ride it</h3>
+      <p>Every coaster you build can be ridden from any seat. Hang over the top of a 139 m tower, or watch the train from the ground like a TV crew filming it.</p></div>
+  </div>
+  <div class="feat">
+    <div class="frame"><img src="img/crowd-1.webp" alt="A lake with palm trees and cherry blossoms in front of a giant observation wheel" loading="lazy" width="1280" height="720"></div>
+    <div class="txt"><span class="kick">MANAGE</span><h3>A park that's alive</h3>
+      <p>Thousands of guests walk your paths, pick the rides they like, queue, eat and scream. Kids head for the gentle rides, thrill seekers for your tallest coaster. Keep them happy and the money rolls in.</p></div>
+  </div>
+  <div class="feat">
+    <div class="frame"><img src="img/eye-night.webp" alt="A giant observation wheel running a light show at night" loading="lazy" width="1280" height="720"></div>
+    <div class="txt"><span class="kick">NIGHT</span><h3>Stay after dark</h3>
+      <p>Day turns into night. The big wheels run light shows, the rides light up and the park keeps going.</p></div>
+  </div>
+  <div class="feat">
+    <div class="frame"><img src="img/kids-drone.webp" alt="A fairy tale corner of the park with cherry trees, a pink castle and coasters behind" loading="lazy" width="1280" height="720"></div>
+    <div class="txt"><span class="kick">CREATE</span><h3>Make it yours</h3>
+      <p>Castles and palaces, rock caves, waterfalls, fairy tale and desert island scenery, bridges and lakes. Shape the land, paint the ground and build a park nobody else has.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="gallery">
+  <h2 class="h">Screenshots</h2>
+  <p class="hs">Straight from the game. Tap one to see it big.</p>
+  <div class="gallery">
+    <button class="big" type="button" data-full="img/hero-aerial.webp"><img src="img/hero-aerial.webp" alt="Loopa Park from the air: a plaza, a lake, waterfalls, a Ferris wheel and coasters" loading="lazy"></button>
+    <button type="button" data-full="img/aqua-loop.webp"><img src="img/aqua-loop.webp" alt="A looping coaster with a train upside down" loading="lazy"></button>
+    <button type="button" data-full="img/eye-night.webp"><img src="img/eye-night.webp" alt="An observation wheel light show at night" loading="lazy"></button>
+    <button type="button" data-full="img/kids-drone.webp"><img src="img/kids-drone.webp" alt="The fairy tale corner of the park" loading="lazy"></button>
+    <button type="button" data-full="img/fairy-night.webp"><img src="img/fairy-night.webp" alt="The fairy wheel and cherry trees at night" loading="lazy"></button>
+    <button type="button" data-full="img/crowd-1.webp"><img src="img/crowd-1.webp" alt="A lake with palm trees and an observation wheel" loading="lazy"></button>
+  </div>
+</section>
+
+<section class="wrap" id="price">
+  <h2 class="h">Price</h2>
+  <p class="hs">Play the whole game free while it's in Early Access.</p>
+  <div class="prices">
+    <div class="price hot">
+      <span class="ribbon">NOW</span>
+      <h3>Early Access</h3>
+      <div class="amt">Free</div>
+      <div class="when">Download and play today</div>
+      <ul>
+        <li>The whole game as it is today</li>
+        <li>Every new version, installed by itself</li>
+        <li>The Founding Tester medal and your own number</li>
+        <li>Your name in the credits</li>
+        <li>A direct line to the team: Feedback (F8) in the game</li>
+      </ul>
+      <a class="btn btn-main win-only" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="price">Download free</a>
+      <a class="btn btn-main nowin-only" href="#top" data-jump-mail>Email me the link</a>
+    </div>
+    <div class="price">
+      <h3>Full release</h3>
+      <div class="amt">$19.99<small>planned price</small></div>
+      <div class="when">Out when we reach 30,000 followers</div>
+      <ul>
+        <li>Everything from Early Access, finished and polished</li>
+        <li>More coasters, rides and scenery</li>
+        <li>Early Access players hear about it first</li>
+      </ul>
+      <p class="note">Every follower on Instagram brings it closer: <a href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">follow @playloopandlift</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="start">
+  <h2 class="h">Playing in 3 minutes</h2>
+  <p class="hs">No credit card, no store, no admin rights.</p>
+  <div class="card">
+    <div class="steps">
+      <div class="step"><span class="num">1</span><b>Download</b><p>Press the pink button. The installer is small and installs just for you.</p></div>
+      <div class="step"><span class="num">2</span><b>Run it</b><p>Windows doesn't know this new game yet and shows a blue warning. Press <b>More info</b>, then <b>Run anyway</b>.</p>
+        <div class="ss" aria-hidden="true"><div class="t">Windows protected your PC</div><div>Microsoft Defender SmartScreen prevented an unrecognized app from starting. <u>More info</u></div><div class="r"><span class="b hi">Run anyway</span><span class="b">Don't run</span></div></div></div>
+      <div class="step"><span class="num">3</span><b>Make your free account</b><p>The game opens on the station. Pick a username and a password, type in the code we email you, and you're in the park.</p></div>
+    </div>
+  </div>
+  <div class="two">
+    <div class="card">
+      <h3>Your computer</h3>
+      <ul>
+        <li>Windows 10 or 11, 64-bit</li>
+        <li>A graphics card from the last few years (laptops with Intel Iris Xe or better run it on Medium/High)</li>
+        <li>8 GB of memory</li>
+        <li>About 200 MB free</li>
+        <li>Internet to sign in (then it also plays offline for a couple of days)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Questions</h3>
+      <details><summary>Is it really free?</summary><p>Yes. Loop &amp; Lift is free while it's in Early Access. The full game is planned at $19.99 when it launches.</p></details>
+      <details><summary>Why do I need an account?</summary><p>So your parks' backups, your Founding Tester number and your feedback stay yours, and every update reaches you. It takes a minute: a username, a password and the code we email you.</p></details>
+      <details><summary>Why does Windows warn me?</summary><p>Loop &amp; Lift is a brand-new game by a small team, and Windows warns about any program it hasn't seen many people download yet. The installer only puts the game in your user folder.</p></details>
+      <details><summary>Can I share videos and screenshots?</summary><p>Please do! To share the game itself, send friends this page, so they always get the newest version.</p></details>
+      <details><summary>Where are my parks saved?</summary><p>On your computer, in <code>%APPDATA%\com.loopandlift.game\saves</code>. They stay when the game updates.</p></details>
+      <details><summary>What do you collect?</summary><p>Your account, how you play (time, rides you build, frame rate, crashes) and copies of your parks, to fix bugs and make the game better. Nothing outside the game. Details in the <a href="../privacy/">Privacy Notice</a> and the <a href="../terms/">Terms</a>.</p></details>
+      <details><summary>Mac or phone?</summary><p>Not yet: Windows first. Follow <a href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">@playloopandlift</a> to hear when.</p></details>
+      <details><summary>How do I uninstall it?</summary><p>Windows Settings, Apps, Installed apps, Loop and Lift, Uninstall.</p></details>
+    </div>
+  </div>
+</section>
+
+<div class="wrap final">
+  <h2 class="h">Your park is waiting.</h2>
+  <a class="btn btn-main win-only" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="bottom">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
+    Download free for Windows
+  </a>
+  <div class="nowin-only mail" data-mail="bottom"></div>
+</div>
+
+<footer><a href="../">loopandlift.github.io</a> · <a href="../terms/">Terms</a> · <a href="../privacy/">Privacy</a> · <a href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">Instagram</a></footer>
+
+<dialog class="lb" id="lb"><button type="button" aria-label="Close" id="lbX">&times;</button><img alt="" id="lbImg"><p id="lbCap"></p></dialog>
+
+<script>
+const CFG = /*CFG*/{"url":"https://xirdyrvodzieqsuzcmyv.supabase.co","anon":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpcmR5cnZvZHppZXFzdXpjbXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTg5NzgsImV4cCI6MjEwOTc5NDk3OH0.rhFU6zEreDXFGGWiSPB9il8DYDRRLr1eUJ38js3ATvA"}/*CFG*/;
+// ---------- email me the link ----------
+const mailHTML = `<b>Get the link on your computer</b>
+  <p>Loop &amp; Lift is a Windows PC game. Leave your email and we'll send you the download link, ready for when you're at your computer.</p>
+  <form novalidate><input type="email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required aria-label="Your email"><button type="submit">Send me the link</button></form>
+  <div class="msg" role="status"></div><small>One email with the link. No spam.</small>`;
+for (const box of document.querySelectorAll('[data-mail]')) {
+  box.innerHTML = mailHTML;
+  const form = box.querySelector('form'), msg = box.querySelector('.msg'), input = form.email, btn = form.querySelector('button');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = input.value.trim();
+    msg.className = 'msg';
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) { msg.classList.add('err'); msg.textContent = 'That email doesn’t look right.'; input.focus(); return; }
+    if (!CFG) { msg.classList.add('err'); msg.textContent = 'Not working right now, sorry. Follow @playloopandlift and try again soon.'; return; }
+    btn.disabled = true; msg.textContent = 'Sending…';
+    try {
+      const r = await fetch(CFG.url + '/functions/v1/game', { method: 'POST', headers: { 'content-type': 'application/json', apikey: CFG.anon, Authorization: 'Bearer ' + CFG.anon },
+        body: JSON.stringify({ action: 'remind', email, source: (box.dataset.mail + ' ' + (new URLSearchParams(location.search).get('from') || document.referrer.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] || 'direct')).slice(0, 60) }) });
+      if (r.status === 429) throw new Error('busy');
+      if (!r.ok) throw new Error('bad');
+      msg.classList.add('ok'); msg.textContent = 'Sent! Check your inbox (and the spam folder, just in case).';
+      form.reset();
+    } catch (err) {
+      msg.classList.add('err');
+      msg.textContent = err.message === 'busy' ? 'Lots of people right now! Try again in a few minutes.' : 'Couldn’t send it. Check the address and try again.';
+    } finally { btn.disabled = false; }
+  });
+}
+document.querySelector('[data-show-mail]')?.addEventListener('click', e => {
+  const box = document.querySelector('[data-mail="hero-pc"]');
+  box.hidden = false; e.currentTarget.hidden = true; box.querySelector('input').focus();
+});
+document.querySelector('[data-jump-mail]')?.addEventListener('click', e => {
+  e.preventDefault();
+  const box = document.querySelector('[data-mail="hero"]');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => box.querySelector('input').focus({ preventScroll: true }), 500);
+});
+
+// ---------- screenshots, big ----------
+const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
+for (const b of document.querySelectorAll('[data-full]')) b.addEventListener('click', () => {
+  const img = b.querySelector('img');
+  lbImg.src = b.dataset.full; lbImg.alt = img.alt; lbCap.textContent = img.alt;
+  lb.showModal();
+});
+document.getElementById('lbX').addEventListener('click', () => lb.close());
+lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+
+// ---------- the video plays only while it's on screen ----------
+const vid = document.querySelector('.video video');
+if ('IntersectionObserver' in window) new IntersectionObserver(([en]) => { en.isIntersecting ? vid.play().catch(() => {}) : vid.pause(); }, { threshold: .25 }).observe(vid);
+</script>
+</body>
+</html>
