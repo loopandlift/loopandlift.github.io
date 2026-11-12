@@ -386,7 +386,7 @@ footer a { color: #fff; }
       <p>Drag a curve, stretch a drop, roll it upside down. <b>Loops, corkscrews, cobra rolls, launches and splashdowns</b> flow into one smooth ride, and the G-force view shows what your riders will feel.</p></div>
   </div>
   <div class="panel">
-    <div class="pic"><img src="img/pov-skyking.webp" alt="The view from the front seat at the top of a 139 metre launched coaster" loading="lazy" width="1280" height="720"></div>
+    <div class="pic"><img src="img/front-seat.webp" alt="The front seat of a hyper coaster cresting its hill at sunset, the snowy mountains lit pink ahead" loading="lazy" width="1920" height="1080"></div>
     <div class="txt"><div class="n">02</div><h3>Take the front seat</h3>
       <p>Every coaster you build can be ridden <b>from any seat</b>. Hang over the top of a 139 m tower, or watch the train from the ground like a TV crew filming it.</p></div>
   </div>
@@ -401,7 +401,7 @@ footer a { color: #fff; }
       <p>The sun goes down, <b>the big wheels start their light shows</b> and the park keeps going all night.</p></div>
   </div>
   <div class="panel">
-    <div class="pic"><img src="img/kids-drone.webp" alt="A fairy tale corner of the park with cherry trees, a pink castle and coasters behind" loading="lazy" width="1280" height="720"></div>
+    <div class="pic"><img src="img/falls-sunset.webp" alt="Waterfalls tumbling off red rocks into a lake with palms at sunset, snowy mountains behind" loading="lazy" width="1920" height="1080"></div>
     <div class="txt"><div class="n">05</div><h3>Make it yours</h3>
       <p><b>Castles, caves, waterfalls</b>, fairy tale and desert island scenery, bridges and lakes. Shape the land, paint the ground and build a park nobody else has.</p></div>
   </div>
@@ -410,10 +410,19 @@ footer a { color: #fff; }
 <section class="sec" id="gallery">
   <div class="wrap center"><span class="kick">Straight from the game</span><h2 class="h">Screenshots</h2></div>
   <div class="strip">
+    <button type="button" data-full="img/g-castle.webp"><img src="img/g-castle-t.webp" alt="A castle and a wooden coaster under snowy mountains at sunset" loading="lazy"></button>
+    <button type="button" data-full="img/g-island.webp"><img src="img/g-island-t.webp" alt="A desert island with a shipwreck on its shore at sunset" loading="lazy"></button>
+    <button type="button" data-full="img/g-skyking-top.webp"><img src="img/g-skyking-top-t.webp" alt="The front seat at the top of a 139 m launch tower, the park far below" loading="lazy"></button>
+    <button type="button" data-full="img/g-fairy.webp"><img src="img/g-fairy-t.webp" alt="A pink princess palace and a fairy tale corner among blossom trees" loading="lazy"></button>
+    <button type="button" data-full="img/g-volcano-seat.webp"><img src="img/g-volcano-seat-t.webp" alt="Riding a wooden coaster toward the setting sun" loading="lazy"></button>
+    <button type="button" data-full="img/g-palace.webp"><img src="img/g-palace-t.webp" alt="A princess palace under a sky of small pink clouds" loading="lazy"></button>
+    <button type="button" data-full="img/g-serpent-seat.webp"><img src="img/g-serpent-seat-t.webp" alt="Riders sitting back to back on a spinning coaster at sunset" loading="lazy"></button>
+    <button type="button" data-full="img/g-volcano.webp"><img src="img/g-volcano-t.webp" alt="A wooden coaster beside a waterfall at dusk" loading="lazy"></button>
+    <button type="button" data-full="img/g-loop-seat.webp"><img src="img/g-loop-seat-t.webp" alt="Upside down in the front seat at the top of a loop" loading="lazy"></button>
+    <button type="button" data-full="img/g-loop-riders.webp"><img src="img/g-loop-riders-t.webp" alt="A full train of riders with their hands up, upside down at the top of a loop" loading="lazy"></button>
     <button type="button" data-full="img/hero-aerial.webp"><img src="img/hero-aerial.webp" alt="Loopa Park from the air: a plaza, a lake, waterfalls, a Ferris wheel and coasters" loading="lazy"></button>
     <button type="button" data-full="img/aqua-loop.webp"><img src="img/aqua-loop.webp" alt="A looping coaster with a train upside down" loading="lazy"></button>
     <button type="button" data-full="img/eye-night.webp"><img src="img/eye-night.webp" alt="An observation wheel light show at night" loading="lazy"></button>
-    <button type="button" data-full="img/kids-drone.webp"><img src="img/kids-drone.webp" alt="The fairy tale corner of the park" loading="lazy"></button>
     <button type="button" data-full="img/fairy-night.webp"><img src="img/fairy-night.webp" alt="The fairy wheel and cherry trees at night" loading="lazy"></button>
     <button type="button" data-full="img/crowd-1.webp"><img src="img/crowd-1.webp" alt="A lake with palm trees and an observation wheel" loading="lazy"></button>
   </div>
@@ -584,7 +593,7 @@ else if ('IntersectionObserver' in window) {
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/, W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
   const scene = document.getElementById('scene');
   if (!MS || !W || !('IntersectionObserver' in window)) { scene.classList.remove('wait'); return; }
-  const A = '../assets/', V = '?v=' + /*VER*/1794476698/*VER*/;
+  const A = '../assets/', V = '?v=' + /*VER*/1794480853/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel');
   const pct = v => (v / MS.frame) * 100 + '%';
   let vid = null, shown = false, timer = 0;
