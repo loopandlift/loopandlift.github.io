@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en" class="k30">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14072a">
+<title>Loop &amp; Lift - Build it. Ride it. Scream.</title>
+<meta name="description" content="Build the theme park of your dreams: design your own roller coasters curve by curve, fill the park with guests, and ride what you built. Free on Windows in Early Access.">
+<link rel="canonical" href="https://loopandlift.github.io/30k/">
+<link rel="icon" type="image/png" href="../play/img/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Loop &amp; Lift">
+<meta property="og:title" content="Loop &amp; Lift - Build it. Ride it. Scream.">
+<meta property="og:description" content="Design your own roller coasters, fill the park with guests, then ride what you built. Free on Windows in Early Access.">
+<meta property="og:url" content="https://loopandlift.github.io/30k/">
+<meta property="og:image" content="https://loopandlift.github.io/play/img/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script>
+// Windows PCs get the download; phones, tablets and Macs get "email me the link" (an .exe is no use there). Set before
+// the page draws, so neither version flashes up first.
+window.WIN = /Windows/i.test(navigator.userAgent) && !/Phone|Android|iPad|iPhone|Mobile/i.test(navigator.userAgent);
+document.documentElement.classList.add(WIN ? 'is-win' : 'no-win');
+</script>
+<link rel="preload" href="../play/img/hero.webp" as="image" type="image/webp">
+<link rel="preload" href="../assets/fonts/lilita-one-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/fredoka-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face { font-family: 'Lilita One'; font-weight: 400; font-display: swap; src: url(../assets/fonts/lilita-one-latin-400.woff2) format('woff2'); }
+@font-face { font-family: 'Fredoka'; font-weight: 700; font-display: swap; src: url(../assets/fonts/fredoka-latin-700-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Fredoka'; font-weight: 600; font-display: swap; src: url(../assets/fonts/fredoka-latin-600-normal.woff2) format('woff2'); }
+:root {
+  --night: #14072a; --night-2: #1f0b3d; --ink: #3a0f63; --ink-2: #2a0948;
+  --pink: #ff4fa0; --pink-d: #e0237f; --gold: #ffd23f; --orange: #ff8a1f; --aqua: #2ee6d6; --mint: #7dffb0;
+  --text: #f4ecff; --soft: #c9b8e6;
+  --f: 'Fredoka', 'Arial Rounded MT Bold', 'Trebuchet MS', system-ui, sans-serif;
+  --d: 'Lilita One', 'Fredoka', 'Arial Black', system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+/* no sideways drift on phones: html and body both (iOS Safari pans the page with only one), clip where supported */
+html { background: var(--night); scroll-behavior: smooth; overflow-x: hidden; }
+body { margin: 0; font-family: var(--f); color: var(--text); background: var(--night); overflow-x: hidden; position: relative; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
+img, video { display: block; max-width: 100%; }
+a { color: var(--gold); }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.is-win .nowin-only, .no-win .win-only { display: none !important; }
+/* one file, two pages (build.py): /play = the download (testers: the game and the emails send them here),
+   /30k = the Instagram page, where the download opens at 30,000 followers (html.k30): .dl only on /play, .k30 only there */
+html:not(.k30) .k30, html.k30 .dl { display: none !important; }
+.final .k30-note { margin: 0; font-weight: 600; text-shadow: 0 1px 3px rgba(0, 0, 0, .8); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; } }
+
+/* ---------- buttons: chunky, pressable, like the game's own ---------- */
+.btn { font-family: var(--d); font-weight: 400; letter-spacing: .02em; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  border-radius: 0; border: 0; cursor: pointer; line-height: 1; transition: translate .12s ease, box-shadow .12s ease, filter .12s ease; }
+.btn-main { font-size: clamp(22px, 2.4vw, 30px); padding: 19px 34px 21px; color: #fff; text-transform: uppercase;
+  background: linear-gradient(180deg, #ff9bcc 0%, #ff4fa0 42%, #e0237f 100%);
+  box-shadow: 0 0 0 4px var(--ink), 0 8px 0 4px var(--ink-2), 0 16px 40px rgba(255, 79, 160, .55), inset 0 2px 0 rgba(255, 255, 255, .45); text-shadow: 0 2px 0 rgba(58, 15, 99, .6); }
+.btn-main:hover { translate: 0 -3px; filter: brightness(1.06); }
+.btn-main:active { translate: 0 5px; box-shadow: 0 0 0 4px var(--ink), 0 3px 0 4px var(--ink-2), 0 8px 20px rgba(255, 79, 160, .4), inset 0 2px 0 rgba(255, 255, 255, .45); }
+.btn-main svg { width: 30px; height: 30px; flex: none; }
+.btn-gold { color: var(--ink); text-shadow: none; background: linear-gradient(180deg, #fff3a8 0%, #ffd23f 45%, #ffad1f 100%);
+  box-shadow: 0 0 0 4px var(--ink), 0 8px 0 4px var(--ink-2), 0 16px 40px rgba(255, 190, 40, .45), inset 0 2px 0 rgba(255, 255, 255, .6); }
+.btn-ghost { font-size: 18px; padding: 14px 20px; color: #fff; text-transform: uppercase; background: rgba(20, 7, 42, .5); box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .9); backdrop-filter: blur(6px); }
+.btn-ghost:hover { background: rgba(20, 7, 42, .75); }
+.btn-ghost svg { width: 18px; height: 18px; }
+.alt-link { background: none; border: 0; padding: 0; color: #fff; font: 600 15px var(--f); text-decoration: underline; cursor: pointer; text-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
+
+/* ---------- top bar ---------- */
+.top { position: fixed; inset: 0 0 auto; z-index: 50; display: flex; align-items: center; gap: 22px; padding: 12px max(16px, calc(50vw - 600px)); transition: background .25s ease, box-shadow .25s ease; }
+.top.solid { background: rgba(20, 7, 42, .88); backdrop-filter: blur(10px); box-shadow: 0 2px 0 rgba(255, 255, 255, .06), 0 10px 30px rgba(0, 0, 0, .3); }
+.mark { font: 700 26px var(--f); text-decoration: none; white-space: nowrap; color: var(--gold);
+  background: linear-gradient(180deg, #fffbe0, #ffe14f 40%, #ff8a1f); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(2px 0 0 var(--ink)) drop-shadow(-2px 0 0 var(--ink)) drop-shadow(0 2px 0 var(--ink)) drop-shadow(0 -2px 0 var(--ink)) drop-shadow(0 4px 0 var(--ink-2)); }
+.mark i { font-style: normal; background: linear-gradient(180deg, #ffd0ea, #ff4fa0 55%, #c3166e); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.top nav { display: flex; gap: 22px; margin-left: auto; }
+.top nav a { color: #fff; text-decoration: none; font: 400 17px var(--d); letter-spacing: .06em; text-transform: uppercase; text-shadow: 0 2px 6px rgba(0, 0, 0, .6); opacity: .92; }
+.top nav a:hover { color: var(--gold); opacity: 1; }
+.top .btn-main { font-size: 17px; padding: 11px 18px 12px; border-radius: 0; box-shadow: 0 0 0 3px var(--ink), 0 5px 0 3px var(--ink-2), inset 0 2px 0 rgba(255, 255, 255, .45); }
+.top .btn-main svg { width: 20px; height: 20px; }
+@media (max-width: 860px) { .top nav { display: none; } .top .btn-main { margin-left: auto; } }
+
+/* ---------- hero: the game in motion, full screen ---------- */
+.hero { position: relative; min-height: 100svh; display: grid; align-items: end; isolation: isolate; overflow: hidden; color: #fff; }
+.hero video, .hero .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; }
+.hero .poster { background: #14072a url(../play/img/hero.webp) center / cover no-repeat; z-index: -4; }
+.hero::after { content: ''; position: absolute; inset: 0; z-index: -2;
+  background: linear-gradient(180deg, rgba(20, 7, 42, .55) 0%, rgba(20, 7, 42, 0) 22%, rgba(20, 7, 42, 0) 45%, rgba(20, 7, 42, .7) 78%, var(--night) 100%),
+              linear-gradient(90deg, rgba(20, 7, 42, .6) 0%, rgba(20, 7, 42, 0) 55%); }
+.hero-in { padding: 120px 16px 150px; max-width: 1200px; width: 100%; margin: 0 auto; display: grid; gap: 14px; justify-items: start; }
+.logo { margin: 0; font-weight: 700; line-height: .9; white-space: nowrap; font-size: clamp(60px, 10.5vw, 150px); color: #ffb52e;
+  background: linear-gradient(180deg, #fffbe0 0%, #ffe14f 36%, #ffa51f 62%, #ff7a1a 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(4px 0 0 var(--ink)) drop-shadow(-4px 0 0 var(--ink)) drop-shadow(0 4px 0 var(--ink)) drop-shadow(0 -4px 0 var(--ink)) drop-shadow(0 10px 0 var(--ink-2)) drop-shadow(0 18px 30px rgba(0, 0, 0, .5)); }
+.logo .amp { background: linear-gradient(180deg, #ffd0ea, #ff4fa0 55%, #c3166e); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.slogan { margin: 4px 0 0; font: 400 clamp(30px, 4.6vw, 64px) / 1 var(--d); text-transform: uppercase; letter-spacing: .01em;
+  text-shadow: 0 4px 0 var(--pink-d), 0 8px 0 var(--ink-2), 0 0 30px rgba(0, 0, 0, .55); }
+.slogan b { color: var(--gold); font-weight: 400; }
+.sub { margin: 0; max-width: 560px; font-weight: 600; font-size: clamp(17px, 1.7vw, 21px); line-height: 1.45; text-shadow: 0 2px 3px rgba(0, 0, 0, .8), 0 0 20px rgba(0, 0, 0, .6); }
+.cta { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 8px; }
+.fine { font-size: 15px; font-weight: 600; text-shadow: 0 1px 3px rgba(0, 0, 0, .8); opacity: .95; }
+.hero .mail { margin-top: 4px; }
+@media (max-width: 640px) {
+  /* the phone's first screen is for the coaster: the video fills the top, the logo sits over its foot */
+  .hero { min-height: 0; align-items: start; }
+  .hero video, .hero .poster { height: 62svh; bottom: auto; }
+  .hero::after { height: 62svh; bottom: auto; background: linear-gradient(180deg, rgba(20, 7, 42, .45) 0%, rgba(20, 7, 42, 0) 18%, rgba(20, 7, 42, 0) 55%, var(--night) 100%); }
+  .hero-in { padding: calc(62svh - 120px) 16px 110px; justify-items: center; text-align: center; gap: 12px; }
+  .cta { justify-content: center; }
+  .hero .mail p, .hero .mail small { display: none; }
+  .sub { font-size: 16px; }
+}
+
+/* the little coaster running along the bottom of the hero */
+.rail { position: absolute; left: 0; right: 0; bottom: -2px; height: 120px; z-index: -1; pointer-events: none; }
+.rail svg { width: 100%; height: 100%; display: block; }
+
+/* ---------- ticker ---------- */
+/* tilted, so it sits in a box that clips it (else the page scrolls sideways) */
+.tickwrap { position: relative; z-index: 2; overflow: hidden; margin-top: -40px; padding: 14px 0 18px; }
+.ticker { overflow: hidden; background: var(--gold); color: var(--ink); border-block: 4px solid var(--ink); transform: rotate(-1.2deg); margin: 0 -20px; box-shadow: 0 10px 0 rgba(0, 0, 0, .25); }
+.ticker div { display: flex; width: max-content; animation: tick 34s linear infinite; }
+.ticker span { font: 400 clamp(20px, 2.2vw, 28px) / 1 var(--d); text-transform: uppercase; letter-spacing: .04em; padding: 14px 0 12px; white-space: nowrap; }
+.ticker span::after { content: '★'; color: var(--pink-d); margin: 0 26px; }
+@keyframes tick { to { transform: translateX(-50%); } }
+
+/* ---------- section headings ---------- */
+/* top padding only: the shorthand wiped .wrap's 16 px sides, and the phone's ride carousel (margin -16 px) stuck out of the screen */
+.sec { padding-top: 96px; }
+.kick { display: inline-block; font: 400 15px var(--d); letter-spacing: .16em; text-transform: uppercase; color: var(--ink); background: var(--aqua); padding: 6px 12px 5px; border-radius: 8px; box-shadow: 0 0 0 3px var(--ink); }
+.h { margin: 14px 0 10px; font: 400 clamp(40px, 6vw, 80px) / .95 var(--d); text-transform: uppercase; color: #fff;
+  text-shadow: 0 5px 0 var(--pink-d), 0 10px 0 var(--ink-2), 0 0 40px rgba(255, 79, 160, .35); }
+.hs { margin: 0 0 32px; max-width: 640px; font-weight: 600; font-size: 19px; line-height: 1.5; color: var(--soft); }
+.center { text-align: center; }
+.center .hs { margin-left: auto; margin-right: auto; }
+
+/* ---------- rides: one card per coaster, each a looping clip ---------- */
+.rides { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.ride { position: relative; border-radius: 0; overflow: hidden; background: #000; aspect-ratio: 16 / 10; box-shadow: 0 0 0 4px var(--ink), 0 8px 0 4px #0b0318; isolation: isolate; transition: translate .2s ease; }
+.ride:hover { translate: 0 -4px; }
+.ride video, .ride img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.ride::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(10, 3, 22, .88) 100%); }
+.ride .cap { position: absolute; left: 16px; right: 16px; bottom: 14px; }
+.ride .cap b { display: block; font: 400 clamp(24px, 2.4vw, 30px) / 1 var(--d); text-transform: uppercase; color: #fff; text-shadow: 0 3px 0 var(--ink-2); }
+.ride .cap span { display: block; margin-top: 5px; font-weight: 600; font-size: 15.5px; color: #e9dcff; text-shadow: 0 1px 3px #000; }
+@media (max-width: 900px) { .rides { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) {
+  .rides { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px; margin: 0 -16px; padding: 4px 16px 18px; scrollbar-width: none; }
+  .rides::-webkit-scrollbar { display: none; }
+  .ride { flex: 0 0 84%; scroll-snap-align: center; }
+}
+
+/* ---------- feature panels ---------- */
+.panels { margin-top: 110px; display: grid; gap: 0; }
+.panel { position: relative; display: grid; grid-template-columns: 1.35fr 1fr; align-items: center; min-height: 520px; background: var(--night-2); }
+.panel:nth-child(even) { grid-template-columns: 1fr 1.35fr; background: var(--night); }
+.panel .pic { position: relative; height: 100%; min-height: 360px; overflow: hidden; clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%); }
+.panel:nth-child(even) .pic { order: 2; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%); }
+.panel .pic img, .panel .pic video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.panel .txt { padding: 48px clamp(20px, 5vw, 72px); max-width: 620px; }
+.panel .n { font: 400 88px / .8 var(--d); color: transparent; -webkit-text-stroke: 3px var(--pink); opacity: .9; }
+.panel h3 { margin: 10px 0 12px; font: 400 clamp(34px, 4vw, 54px) / .95 var(--d); text-transform: uppercase; color: #fff; text-shadow: 0 4px 0 var(--ink-2); }
+.panel p { margin: 0; font-weight: 600; font-size: 18.5px; line-height: 1.55; color: var(--soft); }
+.panel p b { color: #fff; }
+@media (max-width: 820px) {
+  .panel, .panel:nth-child(even) { grid-template-columns: 1fr; min-height: 0; }
+  .panel .pic, .panel:nth-child(even) .pic { order: 0; min-height: 0; aspect-ratio: 16 / 10; clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%); }
+  .panel .txt { padding: 18px 20px 46px; }
+  .panel .n { font-size: 64px; }
+}
+
+/* ---------- screenshots: a filmstrip ---------- */
+.strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(300px, 40%); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 16px 22px; scrollbar-width: thin; scrollbar-color: var(--pink) transparent; }
+.strip button { scroll-snap-align: center; padding: 0; border: 0; cursor: zoom-in; border-radius: 0; overflow: hidden; background: #000; box-shadow: 0 0 0 4px var(--ink), 0 7px 0 4px #0b0318; transition: translate .15s ease; }
+.strip button:hover { translate: 0 -4px; }
+.strip img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+@media (max-width: 600px) { .strip { grid-auto-columns: 84%; } }
+dialog.lb { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 92vh; }
+dialog.lb::backdrop { background: rgba(10, 3, 22, .9); }
+dialog.lb img { max-width: 96vw; max-height: 86vh; border-radius: 0; box-shadow: 0 0 0 3px #fff; }
+dialog.lb p { color: #fff; text-align: center; font-weight: 600; margin: 10px 0 0; }
+dialog.lb button { position: fixed; top: 14px; right: 14px; width: 46px; height: 46px; border-radius: 50%; border: 3px solid #fff; background: var(--ink); color: #fff; font: 700 24px var(--f); cursor: pointer; }
+
+/* ---------- tickets (price) ---------- */
+.tickets { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; max-width: 980px; margin: 0 auto; }
+.ticket { position: relative; display: grid; grid-template-columns: 1fr 86px; color: var(--ink); filter: drop-shadow(0 8px 0 #0b0318) drop-shadow(0 22px 40px rgba(0, 0, 0, .45)); }
+.ticket .main, .ticket .stub { background: #fff8e6; }
+.ticket.hot .main, .ticket.hot .stub { background: linear-gradient(160deg, #fff3a8, #ffd23f 60%, #ffbe2e); }
+/* punched notches where the stub tears off, round corners cut in */
+.ticket .main { padding: 26px 26px 24px; border-radius: 20px 0 0 20px; display: grid; gap: 10px; align-content: start;
+  -webkit-mask: radial-gradient(circle 14px at 100% 0, #0000 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 14px at 100% 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+  mask: radial-gradient(circle 14px at 100% 0, #0000 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 14px at 100% 100%, #0000 98%, #000) bottom / 100% 51% no-repeat; }
+.ticket .stub { border-radius: 0 20px 20px 0; border-left: 3px dashed rgba(58, 15, 99, .35); display: grid; place-items: center;
+  -webkit-mask: radial-gradient(circle 14px at 0 0, #0000 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 14px at 0 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+  mask: radial-gradient(circle 14px at 0 0, #0000 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 14px at 0 100%, #0000 98%, #000) bottom / 100% 51% no-repeat; }
+.ticket .stub span { writing-mode: vertical-rl; transform: rotate(180deg); font: 400 20px var(--d); letter-spacing: .2em; text-transform: uppercase; color: var(--ink); opacity: .8; }
+.ticket .tt { font: 400 15px var(--d); letter-spacing: .18em; text-transform: uppercase; opacity: .75; }
+.ticket h3 { margin: 0; font: 400 30px / 1 var(--d); text-transform: uppercase; }
+.ticket .amt { font: 400 72px / .9 var(--d); }
+.ticket .amt small { font: 600 17px var(--f); margin-left: 6px; opacity: .75; }
+.ticket .when { font-weight: 700; color: var(--pink-d); }
+.ticket.hot .when { color: var(--ink); }
+.ticket ul { margin: 4px 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.ticket li { font-weight: 600; font-size: 16px; line-height: 1.4; padding-left: 30px; position: relative; }
+.ticket li::before { content: ''; position: absolute; left: 0; top: 1px; width: 21px; height: 21px; border-radius: 50%; background: #1fae63 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center / 14px no-repeat; }
+.ticket .btn-main { font-size: 22px; padding: 16px 22px 17px; margin-top: 8px; justify-self: start; }
+.ticket .note { font-size: 14.5px; font-weight: 600; margin: 0; opacity: .85; }
+.ticket .note a { color: var(--pink-d); }
+@media (max-width: 800px) { .tickets { grid-template-columns: 1fr; } .ticket { grid-template-columns: 1fr 64px; } .ticket .amt { font-size: 60px; } .ticket .amt small { display: block; margin: 6px 0 0; } }
+
+/* ---------- start, specs, faq ---------- */
+.card { background: var(--night-2); border-radius: 22px; padding: 24px; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .08), 0 8px 0 #0b0318; }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.step { display: grid; gap: 8px; align-content: start; }
+.step b { font: 400 24px var(--d); text-transform: uppercase; color: #fff; }
+.step p { margin: 0; font-weight: 600; font-size: 16px; line-height: 1.5; color: var(--soft); }
+.step p b { font: 700 16px var(--f); text-transform: none; }
+.num { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; color: #fff; font: 400 24px var(--d); background: linear-gradient(180deg, #ff9bcc, #ff4fa0 50%, #e0237f); box-shadow: 0 0 0 3px var(--ink), 0 4px 0 3px #0b0318; }
+/* a little picture of Windows' warning, so nobody is scared off by it */
+.ss { background: #0f4c81; color: #fff; border-radius: 0; padding: 10px 11px; font: 13px 'Segoe UI', system-ui, sans-serif; display: grid; gap: 6px; }
+.ss .t { font-size: 15px; font-weight: 600; }
+.ss u { color: #cfe6ff; }
+.ss .r { display: flex; justify-content: flex-end; gap: 6px; }
+.ss span.b { border: 1px solid #fff; padding: 3px 10px; border-radius: 2px; }
+.ss span.b.hi { background: #fff; color: #0f4c81; outline: 3px solid #ffd23f; outline-offset: 2px; }
+@media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+.two { display: grid; grid-template-columns: 1fr 1.3fr; gap: 22px; margin-top: 22px; }
+.two h3 { margin: 0 0 12px; font: 400 28px var(--d); text-transform: uppercase; color: #fff; }
+.two ul { margin: 0; padding-left: 20px; font-weight: 600; line-height: 1.65; color: var(--soft); }
+@media (max-width: 820px) { .two { grid-template-columns: 1fr; } }
+details { border-top: 2px solid rgba(255, 255, 255, .08); padding: 13px 0; }
+details:first-of-type { border-top: 0; }
+summary { cursor: pointer; font-size: 18.5px; font-weight: 700; color: #fff; }
+summary::marker { color: var(--pink); }
+details p { margin: 8px 0 0; font-weight: 600; line-height: 1.55; color: var(--soft); }
+code { background: rgba(255, 255, 255, .1); padding: 1px 6px; border-radius: 6px; font-size: 14px; color: #fff; }
+
+/* ---------- "email me the link" (phones, Macs) ---------- */
+.mail { width: min(520px, 100%); background: #fff; color: var(--ink); border-radius: 0; padding: 16px; box-shadow: 0 0 0 4px var(--ink), 0 8px 0 4px var(--ink-2), 0 18px 40px rgba(0, 0, 0, .4); text-align: left; }
+.mail b { display: block; font: 400 21px var(--d); text-transform: uppercase; margin-bottom: 4px; }
+.mail p { margin: 0 0 12px; font-weight: 600; font-size: 15px; line-height: 1.4; color: #4d3a6b; }
+.mail form { display: flex; gap: 8px; }
+.mail input { flex: 1; min-width: 0; font: 600 17px var(--f); color: var(--ink); padding: 13px 14px; border-radius: 0; border: 3px solid var(--ink); background: #fff; outline: none; }
+.mail input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255, 79, 160, .25); }
+.mail button { font: 400 18px var(--d); text-transform: uppercase; color: #fff; padding: 0 16px; border-radius: 0; border: 3px solid var(--ink); cursor: pointer; white-space: nowrap;
+  background: linear-gradient(180deg, #ff9bcc, #ff4fa0 50%, #e0237f); }
+.mail button:disabled { opacity: .6; cursor: wait; }
+.mail .msg { margin: 10px 0 0; font-size: 14.5px; font-weight: 700; min-height: 1em; }
+.mail .msg:empty { display: none; }
+.mail .msg.ok { color: #0f8a4a; } .mail .msg.err { color: #c3166e; }
+.mail small { display: block; margin-top: 8px; color: #6d5a8a; font-weight: 600; font-size: 12.5px; }
+@media (max-width: 420px) { .mail form { flex-direction: column; } .mail button { padding: 13px; } }
+
+/* ---------- the last call ---------- */
+.final { position: relative; clip-path: inset(0); margin-top: 110px; height: 100vh; height: 100svh; min-height: 600px; max-height: 1100px; display: grid; place-items: center; text-align: center; isolation: isolate; overflow: hidden;
+  background: linear-gradient(180deg, #6a2fb8 0%, #e0609e 60%, #b0428f 100%); }
+/* the landing page's scene, layer for layer: the pink sunset sky, the Moon Serpent's tower with the train's real
+   climb (a transparent video), the Mega Wheel's depth slices turning; sized by the section (container units) */
+.final .scene { position: absolute; inset: 0; z-index: -2; container-type: size; overflow: hidden; clip-path: inset(0); }
+.final .sky { position: absolute; inset: 0; background: center 70% / cover no-repeat; }
+.final .sky::after { content: ''; position: absolute; inset: auto 0 0 0; height: 18%; background: linear-gradient(180deg, rgba(176, 66, 143, 0), rgba(150, 50, 130, .55) 100%); }
+.final .ms { position: absolute; aspect-ratio: 1; height: var(--ms-h); left: var(--ms-x); top: var(--ms-y); pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 56%, transparent 95%); mask-image: linear-gradient(180deg, #000 56%, transparent 95%);
+  --ms-h: min(112cqh, 110cqw); --ms-x: calc(-2cqw - min(112cqh, 110cqw) * .26); --ms-y: -6cqh; }
+/* (max-width: none: the page's img/video rule would squeeze them, the wheel's to nothing inside its 0-size 3D layers) */
+.final .ms img, .final .ms video, .final .ms canvas { position: absolute; display: block; user-select: none; max-width: none; }
+.final .stage { position: absolute; inset: 0; perspective: 9000px; perspective-origin: 50% 50%; pointer-events: none; overflow: hidden; clip-path: inset(0); }
+.final .wheel { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+.final .wheel div { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
+.final .wheel img { display: block; position: absolute; user-select: none; max-width: none; }
+.final .wheel .turn, .final .wheel .arm { animation: spin var(--T) linear infinite; animation-delay: var(--d, 0s); will-change: transform; }
+.final .wheel .level { animation: unspin var(--T) linear infinite; animation-delay: var(--d, 0s); will-change: transform; }
+.final .wheel .pos { transform: translateY(var(--r)); }
+.final .wheel .face { transform: rotateY(calc(var(--tilt) * -1)); }
+.final .scene.off .wheel .turn, .final .scene.off .wheel .arm, .final .scene.off .wheel .level { animation-play-state: paused; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes unspin { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+/* every layer fades in together once decoded */
+.final .scene > * { transition: opacity .8s ease; }
+.final .scene.wait > * { opacity: 0; }
+/* the page above flows into the sunset, and the sunset into the footer */
+.final::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, var(--night) 0%, rgba(20, 7, 42, 0) 18%, rgba(20, 7, 42, 0) 84%, var(--night) 100%); }
+.final .in { display: grid; gap: 18px; justify-items: center; padding: 60px 16px 12vh; }
+.final .h { text-shadow: 0 5px 0 var(--ink-2), 0 0 26px rgba(42, 9, 72, .55); }
+@media (max-width: 720px) {
+  .final { place-items: start center; }
+  .final .in { padding-top: 14vh; }
+  /* the tower stands on the bottom of the screen, its top ring under the button */
+  .final .ms { --ms-h: 118cqw; --ms-x: -30cqw; --ms-y: calc(100cqh - 118cqw * .9);
+    -webkit-mask-image: linear-gradient(180deg, #000 66%, transparent 98%); mask-image: linear-gradient(180deg, #000 66%, transparent 98%); }
+}
+footer { text-align: center; padding: 26px 16px 44px; color: var(--soft); font-weight: 600; }
+footer a { color: #fff; }
+</style>
+</head>
+<body>
+
+<div class="top" id="top">
+  <a class="mark" href="#">Loop <i>&amp;</i> Lift</a>
+  <nav><a href="#rides">Rides</a><a href="#features">Features</a><a href="#price">Price</a><a href="#start">FAQ</a></nav>
+  <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download</a>
+  <a class="btn btn-main nowin-only dl" href="#get" data-jump-mail>Get it</a>
+  <a class="btn btn-main k30" href="#price">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Free at 30K</a>
+</div>
+
+<header class="hero" id="get">
+  <div class="poster" aria-hidden="true"></div>
+  <video id="heroVid" autoplay muted loop playsinline preload="auto" poster="../play/img/hero.webp" aria-label="Loop & Lift gameplay: roller coasters racing through a theme park">
+    <source src="../play/img/hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero-in">
+    <h1 class="logo" aria-label="Loop &amp; Lift">Loop <span class="amp">&amp;</span> Lift</h1>
+    <p class="slogan">Build it. Ride it. <b>Scream.</b></p>
+    <p class="sub">Design roller coasters curve by curve, fill your park with thousands of guests, then take the front seat on what you built.</p>
+    <div class="cta win-only dl">
+      <a class="btn btn-main" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="hero">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
+        Download free
+      </a>
+      <a class="btn btn-ghost" href="#rides"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>See the rides</a>
+    </div>
+    <div class="win-only fine dl">Windows 10 and 11 · about 20 MB · free in Early Access · <button class="alt-link" type="button" data-show-mail>Not on your PC? Email me the link</button></div>
+    <div class="win-only mail dl" data-mail="hero-pc" hidden></div>
+    <div class="cta nowin-only dl">
+      <button class="btn btn-main" type="button" data-jump-mail>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        Email me the link
+      </button>
+      <a class="btn btn-ghost" href="#rides"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>See the rides</a>
+    </div>
+    <div class="nowin-only fine dl">A free Windows PC game · we'll send the download link to your inbox</div>
+    <div class="nowin-only mail dl" data-mail="hero" hidden></div>
+    <div class="cta k30">
+      <a class="btn btn-main" href="#price">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
+        Free download at 30K
+      </a>
+      <a class="btn btn-ghost" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor" stroke="none"/></svg>@playloopandlift</a>
+    </div>
+    <div class="fine k30">A Windows PC game · the free download opens when we reach 30,000 followers on Instagram</div>
+  </div>
+  <div class="rail" aria-hidden="true">
+    <svg viewBox="0 0 1600 120" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <path id="track" d="M-60 92 C 80 92 120 40 220 40 S 340 96 460 96 S 600 18 720 18 S 860 100 980 100 S 1110 50 1200 50 S 1320 92 1420 92 S 1560 70 1680 70"/>
+        <g id="car"><rect x="-13" y="-11" width="26" height="9" rx="3" fill="#2f6bff" stroke="#14072a" stroke-width="2"/><circle cx="-6" cy="-14" r="3.2" fill="#ffd23f"/><circle cx="5" cy="-14" r="3.2" fill="#ff4fa0"/></g>
+      </defs>
+      <g stroke="#e8e0f5" stroke-width="3" opacity=".55">
+        <path d="M220 42V120M460 98V120M720 20V120M980 102V120M1200 52V120M1420 94V120M100 75V120M590 50V120M850 60V120M1090 72V120M1310 70V120"/>
+      </g>
+      <use href="#track" fill="none" stroke="#14072a" stroke-width="9"/>
+      <use href="#track" fill="none" stroke="#2ee6d6" stroke-width="5"/>
+      <use href="#track" fill="none" stroke="#14072a" stroke-width="1.5" stroke-dasharray="2 10"/>
+      <g>
+        <use href="#car"><animateMotion dur="11s" repeatCount="indefinite" rotate="auto" begin="0s"><mpath href="#track"/></animateMotion></use>
+        <use href="#car"><animateMotion dur="11s" repeatCount="indefinite" rotate="auto" begin="-.2s"><mpath href="#track"/></animateMotion></use>
+        <use href="#car"><animateMotion dur="11s" repeatCount="indefinite" rotate="auto" begin="-.4s"><mpath href="#track"/></animateMotion></use>
+        <use href="#car"><animateMotion dur="11s" repeatCount="indefinite" rotate="auto" begin="-.6s"><mpath href="#track"/></animateMotion></use>
+      </g>
+    </svg>
+  </div>
+</header>
+
+<div class="tickwrap"><div class="ticker" aria-label="20 coaster types, 18 flat rides, thousands of guests, ride every coaster, day and night, plays offline, free in Early Access">
+  <div aria-hidden="true">
+    <span>20 coaster types</span><span>18 flat rides</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span>Free in Early Access</span>
+    <span>20 coaster types</span><span>18 flat rides</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span>Free in Early Access</span>
+  </div>
+</div></div>
+
+<section class="sec wrap" id="rides">
+  <span class="kick">20 coaster types</span>
+  <h2 class="h">Pick your thrill</h2>
+  <p class="hs">From a coaster that skims the lake to a 139 m launch tower. Build any of them, shape every curve, then ride it from any seat.</p>
+  <div class="rides">
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-skyking.webp" data-auto aria-label="An accelerator coaster launching past the camera"><source src="../play/img/r-skyking.mp4" type="video/mp4"></video>
+      <div class="cap"><b>Accelerator coaster</b><span>A hydraulic launch, then 139 m straight up and over the top.</span></div></div>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-aqua.webp" data-auto aria-label="A blue launched coaster flying through its loops"><source src="../play/img/r-aqua.mp4" type="video/mp4"></video>
+      <div class="cap"><b>Launched coaster</b><span>Launched over the lake, then loop after loop through the park.</span></div></div>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-skyrocket.webp" data-auto aria-label="A green hyper coaster cresting a hill"><source src="../play/img/r-skyrocket.mp4" type="video/mp4"></video>
+      <div class="cap"><b>Hyper coaster</b><span>Big hills, long drops and pure airtime.</span></div></div>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-serpent.webp" data-auto aria-label="Spinning cars at the top of a launch tower"><source src="../play/img/r-serpent.mp4" type="video/mp4"></video>
+      <div class="cap"><b>Spinning launch</b><span>Spinning cars shot up a tower, round the crown and back down.</span></div></div>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-volcano.webp" data-auto aria-label="A wooden coaster racing over its hills"><source src="../play/img/r-volcano.mp4" type="video/mp4"></video>
+      <div class="cap"><b>Wooden coaster</b><span>Rattling timber hills, right through a smoking volcano.</span></div></div>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-dive.webp" data-auto aria-label="A dive coaster bursting out of a lava cave over the water, spray flying, then up into its loop"><source src="../play/img/r-dive.mp4" type="video/mp4"></video>
+      <div class="cap"><b>Dive coaster</b><span>Held over the edge, 51 m straight down, out over the water and up into the loop.</span></div></div>
+  </div>
+</section>
+
+<section class="panels" id="features">
+  <div class="panel">
+    <div class="pic"><img src="../play/img/aqua-loop.webp" alt="A blue looping coaster with a train upside down at the top of a loop" loading="lazy" width="1280" height="720"></div>
+    <div class="txt"><div class="n">01</div><h3>Shape every curve</h3>
+      <p>Drag a curve, stretch a drop, roll it upside down. <b>Loops, corkscrews, cobra rolls, launches and splashdowns</b> flow into one smooth ride, and the G-force view shows what your riders will feel.</p></div>
+  </div>
+  <div class="panel">
+    <div class="pic"><img src="../play/img/front-seat.webp" alt="The front seat of a hyper coaster cresting its hill at sunset, the snowy mountains lit pink ahead" loading="lazy" width="1920" height="1080"></div>
+    <div class="txt"><div class="n">02</div><h3>Take the front seat</h3>
+      <p>Every coaster you build can be ridden <b>from any seat</b>. Hang over the top of a 139 m tower, or watch the train from the ground like a TV crew filming it.</p></div>
+  </div>
+  <div class="panel">
+    <div class="pic"><img src="../play/img/crowd-1.webp" alt="A lake with palm trees and cherry blossoms in front of a giant observation wheel" loading="lazy" width="1280" height="720"></div>
+    <div class="txt"><div class="n">03</div><h3>A park that's alive</h3>
+      <p><b>Thousands of guests</b> walk your paths, queue, eat and scream. Kids run to the gentle rides, thrill seekers to your tallest coaster. Keep them happy and the money rolls in.</p></div>
+  </div>
+  <div class="panel">
+    <div class="pic"><img src="../play/img/eye-night.webp" alt="A giant observation wheel running a light show at night" loading="lazy" width="1280" height="720"></div>
+    <div class="txt"><div class="n">04</div><h3>Stay after dark</h3>
+      <p>The sun goes down, <b>the big wheels start their light shows</b> and the park keeps going all night.</p></div>
+  </div>
+  <div class="panel">
+    <div class="pic"><img src="../play/img/falls-sunset.webp" alt="Waterfalls tumbling off red rocks into a lake with palms at sunset, snowy mountains behind" loading="lazy" width="1920" height="1080"></div>
+    <div class="txt"><div class="n">05</div><h3>Make it yours</h3>
+      <p><b>Castles, caves, waterfalls</b>, fairy tale and desert island scenery, bridges and lakes. Shape the land, paint the ground and build a park nobody else has.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="gallery">
+  <div class="wrap center"><span class="kick">Straight from the game</span><h2 class="h">Screenshots</h2></div>
+  <div class="strip">
+    <button type="button" data-full="../play/img/g-castle.webp"><img src="../play/img/g-castle-t.webp" alt="A castle and a wooden coaster under snowy mountains at sunset" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-island.webp"><img src="../play/img/g-island-t.webp" alt="A desert island with a shipwreck on its shore at sunset" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-skyking-top.webp"><img src="../play/img/g-skyking-top-t.webp" alt="The front seat at the top of a 139 m launch tower, the park far below" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-fairy.webp"><img src="../play/img/g-fairy-t.webp" alt="A pink princess palace and a fairy tale corner among blossom trees" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-volcano-seat.webp"><img src="../play/img/g-volcano-seat-t.webp" alt="Riding a wooden coaster toward the setting sun" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-palace.webp"><img src="../play/img/g-palace-t.webp" alt="A princess palace under a sky of small pink clouds" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-serpent-seat.webp"><img src="../play/img/g-serpent-seat-t.webp" alt="Riders sitting back to back on a spinning coaster at sunset" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-volcano.webp"><img src="../play/img/g-volcano-t.webp" alt="A wooden coaster beside a waterfall at dusk" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-loop-seat.webp"><img src="../play/img/g-loop-seat-t.webp" alt="Upside down in the front seat at the top of a loop" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-loop-riders.webp"><img src="../play/img/g-loop-riders-t.webp" alt="A full train of riders with their hands up, upside down at the top of a loop" loading="lazy"></button>
+    <button type="button" data-full="../play/img/hero-aerial.webp"><img src="../play/img/hero-aerial.webp" alt="Loopa Park from the air: a plaza, a lake, waterfalls, a Ferris wheel and coasters" loading="lazy"></button>
+    <button type="button" data-full="../play/img/aqua-loop.webp"><img src="../play/img/aqua-loop.webp" alt="A looping coaster with a train upside down" loading="lazy"></button>
+    <button type="button" data-full="../play/img/eye-night.webp"><img src="../play/img/eye-night.webp" alt="An observation wheel light show at night" loading="lazy"></button>
+    <button type="button" data-full="../play/img/fairy-night.webp"><img src="../play/img/fairy-night.webp" alt="The fairy wheel and cherry trees at night" loading="lazy"></button>
+    <button type="button" data-full="../play/img/crowd-1.webp"><img src="../play/img/crowd-1.webp" alt="A lake with palm trees and an observation wheel" loading="lazy"></button>
+  </div>
+</section>
+
+<section class="sec wrap" id="price">
+  <div class="center"><span class="kick">Price</span><h2 class="h">Grab your ticket</h2>
+    <p class="hs dl">Play the whole game free while it's in Early Access.</p>
+    <p class="hs k30">Free for everyone the day we reach 30,000 followers on Instagram.</p></div>
+  <div class="tickets">
+    <div class="ticket hot">
+      <div class="main">
+        <span class="tt">Early Access · admit one</span>
+        <div class="amt dl">Free</div>
+        <div class="amt k30">Free<small>at 30K followers</small></div>
+        <div class="when dl">Download and play today</div>
+        <div class="when k30">The download opens at 30,000 followers</div>
+        <ul>
+          <li>The whole game as it is today</li>
+          <li>Every new version, installed by itself</li>
+          <li>The Founding Tester medal and your own number</li>
+          <li>Your name in the credits</li>
+          <li>A direct line to the team: Feedback (F8) in the game</li>
+        </ul>
+        <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="price">Download free</a>
+        <a class="btn btn-main nowin-only dl" href="#get" data-jump-mail>Email me the link</a>
+        <a class="btn btn-main k30" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">Follow @playloopandlift</a>
+      </div>
+      <div class="stub"><span class="dl">Now open</span><span class="k30">At 30K</span></div>
+    </div>
+    <div class="ticket">
+      <div class="main">
+        <span class="tt">Full release</span>
+        <div class="amt">$19.99<small>planned price</small></div>
+        <div class="when dl">Out when we reach 30,000 followers</div>
+        <div class="when k30">After Early Access</div>
+        <ul>
+          <li>Everything from Early Access, finished and polished</li>
+          <li>More coasters, rides and scenery</li>
+          <li>Early Access players hear about it first</li>
+        </ul>
+        <p class="note">Every follower on Instagram brings it closer: <a href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">follow @playloopandlift</a></p>
+      </div>
+      <div class="stub"><span>Coming</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec wrap" id="start">
+  <div class="center dl"><span class="kick">No card, no store, no admin rights</span><h2 class="h">Playing in 3 minutes</h2></div>
+  <div class="center k30"><span class="kick">Before you ask</span><h2 class="h">Good to know</h2></div>
+  <div class="card dl">
+    <div class="steps">
+      <div class="step"><span class="num">1</span><b>Download</b><p class="dl">Press the pink button. The installer is small and installs just for you.</p><p class="k30">At 30,000 followers the pink button turns into the download. The installer is small and installs just for you.</p></div>
+      <div class="step"><span class="num">2</span><b>Run it</b><p>Windows doesn't know this new game yet and shows a blue warning. Press <b>More info</b>, then <b>Run anyway</b>.</p>
+        <div class="ss" aria-hidden="true"><div class="t">Windows protected your PC</div><div>Microsoft Defender SmartScreen prevented an unrecognized app from starting. <u>More info</u></div><div class="r"><span class="b hi">Run anyway</span><span class="b">Don't run</span></div></div></div>
+      <div class="step"><span class="num">3</span><b>Make your free account</b><p>The game opens on the station. Pick a username and a password, type in the code we email you, and you're in the park.</p></div>
+    </div>
+  </div>
+  <div class="two">
+    <div class="card">
+      <h3>Your computer</h3>
+      <ul>
+        <li>Windows 10 or 11, 64-bit</li>
+        <li>A graphics card from the last few years (laptops with Intel Iris Xe or better run it on Medium/High)</li>
+        <li>8 GB of memory</li>
+        <li>About 200 MB free</li>
+        <li>Internet to sign in (then it also plays offline for a couple of days)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Questions</h3>
+      <details><summary>Is it really free?</summary><p class="dl">Yes. Loop &amp; Lift is free while it's in Early Access. The full game is planned at $19.99 when it launches.</p><p class="k30">Yes. The download opens free for everyone when we reach 30,000 followers on Instagram. The full game is planned at $19.99 when it launches.</p></details>
+      <details><summary>Why do I need an account?</summary><p>So your parks' backups, your Founding Tester number and your feedback stay yours, and every update reaches you. It takes a minute: a username, a password and the code we email you.</p></details>
+      <details class="dl"><summary>Why does Windows warn me?</summary><p>Loop &amp; Lift is a brand-new game by a small team, and Windows warns about any program it hasn't seen many people download yet. The installer only puts the game in your user folder.</p></details>
+      <details><summary>Can I share videos and screenshots?</summary><p>Please do! To share the game itself, send friends this page, so they always get the newest version.</p></details>
+      <details><summary>Where are my parks saved?</summary><p>On your computer, in <code>%APPDATA%\com.loopandlift.game\saves</code>. They stay when the game updates.</p></details>
+      <details><summary>What do you collect?</summary><p>Your account, how you play (time, rides you build, frame rate, crashes) and copies of your parks, to fix bugs and make the game better. Nothing outside the game. Details in the <a href="../privacy/">Privacy Notice</a> and the <a href="../terms/">Terms</a>.</p></details>
+      <details><summary>Mac or phone?</summary><p>Not yet: Windows first. Follow <a href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">@playloopandlift</a> to hear when.</p></details>
+      <details class="dl"><summary>How do I uninstall it?</summary><p>Windows Settings, Apps, Installed apps, Loop and Lift, Uninstall.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="final" id="last">
+  <div class="scene wait" id="scene" aria-hidden="true">
+    <div class="sky"></div>
+    <div class="ms" id="ms"></div>
+    <div class="stage"><div class="wheel" id="wheel"></div></div>
+  </div>
+  <div class="in">
+    <h2 class="h">Your park is waiting</h2>
+    <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="bottom">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
+      Download free for Windows
+    </a>
+    <div class="nowin-only mail dl" data-mail="bottom"></div>
+    <a class="btn btn-main k30" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor" stroke="none"/></svg>Follow @playloopandlift</a>
+    <p class="k30-note k30">Free download at 30,000 followers</p>
+  </div>
+</section>
+
+<footer><a href="../">loopandlift.github.io</a> · <a href="../terms/">Terms</a> · <a href="../privacy/">Privacy</a> · <a href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">Instagram</a></footer>
+
+<dialog class="lb" id="lb"><button type="button" aria-label="Close" id="lbX">&times;</button><img alt="" id="lbImg"><p id="lbCap"></p></dialog>
+
+<script>
+const CFG = /*CFG*/{"url":"https://xirdyrvodzieqsuzcmyv.supabase.co","anon":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhpcmR5cnZvZHppZXFzdXpjbXl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQyMTg5NzgsImV4cCI6MjEwOTc5NDk3OH0.rhFU6zEreDXFGGWiSPB9il8DYDRRLr1eUJ38js3ATvA"}/*CFG*/;
+// ---------- email me the link ----------
+const mailHTML = `<b>Get the link on your computer</b>
+  <p>Loop &amp; Lift is a Windows PC game. Leave your email and we'll send you the download link, ready for when you're at your computer.</p>
+  <form novalidate><input type="email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required aria-label="Your email"><button type="submit">Send me the link</button></form>
+  <div class="msg" role="status"></div><small>One email with the link. No spam.</small>`;
+for (const box of document.querySelectorAll('[data-mail]')) {
+  box.innerHTML = mailHTML;
+  const form = box.querySelector('form'), msg = box.querySelector('.msg'), input = form.email, btn = form.querySelector('button');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = input.value.trim();
+    msg.className = 'msg';
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) { msg.classList.add('err'); msg.textContent = 'That email doesn’t look right.'; input.focus(); return; }
+    if (!CFG) { msg.classList.add('err'); msg.textContent = 'Not working right now, sorry. Follow @playloopandlift and try again soon.'; return; }
+    btn.disabled = true; msg.textContent = 'Sending…';
+    try {
+      const r = await fetch(CFG.url + '/functions/v1/game', { method: 'POST', headers: { 'content-type': 'application/json', apikey: CFG.anon, Authorization: 'Bearer ' + CFG.anon },
+        body: JSON.stringify({ action: 'remind', email, source: (box.dataset.mail + ' ' + (new URLSearchParams(location.search).get('from') || document.referrer.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] || 'direct')).slice(0, 60) }) });
+      if (r.status === 429) throw new Error('busy');
+      if (!r.ok) throw new Error('bad');
+      msg.classList.add('ok'); msg.textContent = 'Sent! Check your inbox (and the spam folder, just in case).';
+      form.reset();
+    } catch (err) {
+      msg.classList.add('err');
+      msg.textContent = err.message === 'busy' ? 'Lots of people right now! Try again in a few minutes.' : 'Couldn’t send it. Check the address and try again.';
+    } finally { btn.disabled = false; }
+  });
+}
+document.querySelector('[data-show-mail]')?.addEventListener('click', e => {
+  const box = document.querySelector('[data-mail="hero-pc"]');
+  box.hidden = false; e.currentTarget.hidden = true; box.querySelector('input').focus();
+});
+for (const a of document.querySelectorAll('[data-jump-mail]')) a.addEventListener('click', e => {
+  e.preventDefault();
+  const box = document.querySelector('[data-mail="hero"]');
+  box.hidden = false;
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => box.querySelector('input').focus({ preventScroll: true }), 500);
+});
+
+// ---------- the top bar turns solid once the hero scrolls away ----------
+const bar = document.getElementById('top');
+const onScroll = () => bar.classList.toggle('solid', scrollY > 60);
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+// ---------- screenshots, big ----------
+const lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap');
+for (const b of document.querySelectorAll('[data-full]')) b.addEventListener('click', () => {
+  const img = b.querySelector('img');
+  lbImg.src = b.dataset.full; lbImg.alt = img.alt; lbCap.textContent = img.alt;
+  lb.showModal();
+});
+document.getElementById('lbX').addEventListener('click', () => lb.close());
+lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+
+// ---------- clips play only while they're on screen (the hero too), and never for reduced motion ----------
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const vids = [document.getElementById('heroVid'), ...document.querySelectorAll('video[data-auto]')];
+if (still) for (const v of vids) { v.removeAttribute('autoplay'); v.pause(); }
+else if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(es => { for (const en of es) en.isIntersecting ? en.target.play().catch(() => {}) : en.target.pause(); }, { threshold: .2 });
+  for (const v of vids) io.observe(v);
+}
+
+// ---------- the last call: the landing page's scene (built when it comes near, running only while on screen) ----------
+(() => {
+  // layout data written by the render scripts (build.py puts ../assets/ms.json and wheel.json here)
+  const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/, W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
+  const scene = document.getElementById('scene');
+  if (!MS || !W || !('IntersectionObserver' in window)) { scene.classList.remove('wait'); return; }
+  const A = '../assets/', V = '?v=' + /*VER*/1794481818/*VER*/;
+  const ms = document.getElementById('ms'), wheel = document.getElementById('wheel');
+  const pct = v => (v / MS.frame) * 100 + '%';
+  let vid = null, shown = false, timer = 0;
+  const build = () => {
+    const ready = [];
+    const img = src => { const im = new Image(); im.src = A + src + V; im.alt = ''; ready.push(im.decode().catch(() => {})); return im; };
+    const sky = img('sky.jpg');
+    scene.querySelector('.sky').style.backgroundImage = `url(${sky.src})`;
+    // Moon Serpent: the tower, the train's climb as a transparent video (WebM; a still of the train at the top where
+    // that can't play: Apple's WebKit drops WebM's transparency, reduced motion)
+    const tower = img('climb-tower.webp');
+    Object.assign(tower.style, { left: pct(MS.tower[0]), top: pct(MS.tower[1]), width: pct(MS.tower[2] - MS.tower[0]), height: pct(MS.tower[3] - MS.tower[1]) });
+    ms.append(tower);
+    const c = MS.clip, place = el => Object.assign(el.style, { left: pct(c.x), top: pct(c.y), width: pct(c.width), height: pct(c.height) });
+    const ua = navigator.userAgent;
+    const webkitOnly = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) || (/Safari\//.test(ua) && !/Chrome|Chromium|Edg|OPR|Firefox/.test(ua));
+    const v0 = document.createElement('video');
+    const stacked = !still && webkitOnly ? stackedCanvas(v0) : null;
+    if (!still && (stacked || v0.canPlayType('video/webm; codecs="vp09.00.10.08"'))) {
+      vid = v0;
+      vid.muted = true; vid.playsInline = true; vid.preload = 'auto'; vid.setAttribute('muted', ''); vid.setAttribute('playsinline', '');
+      vid.src = A + (stacked ? 'climb-train-stacked.mp4' : 'climb-train.webm') + V;
+      place(vid);
+      if (stacked) {
+        // the MP4 has the colour on top and the alpha below, put back together in WebGL; iOS decodes a video only
+        // while it is in the page: a 1 px invisible copy feeds the canvas
+        place(stacked); ms.append(stacked);
+        Object.assign(vid.style, { left: 0, top: 0, width: '1px', height: '1px', opacity: 0 });
+      }
+      ms.append(vid);
+      ready.push(new Promise(r => { vid.addEventListener('loadeddata', r, { once: true }); setTimeout(r, 3000); }));
+      // the track stands empty a few seconds between runs, as on the landing page
+      const GAP = 7;
+      vid.addEventListener('ended', () => { timer = setTimeout(() => { timer = 0; vid.currentTime = 0; if (shown) vid.play().catch(() => {}); }, Math.max(0, GAP - (MS.emptyHead ?? 0) - (MS.emptyTail ?? 0)) * 1000); });
+    } else { const top = img('climb-train-top.webp'); place(top); ms.append(top); }
+    // Mega Wheel: depth slices + capsules that stay level (slice > turn > img; capsule: arm > pos > level > face > img)
+    const TILT = 28, T = 360 / 1.6;
+    wheel.style.setProperty('--T', T + 's');
+    wheel.style.setProperty('--tilt', TILT + 'deg');
+    const div = (cls, parent) => { const d = document.createElement('div'); d.className = cls; parent.append(d); return d; };
+    const slices = W.z.map((z, k) => { const d = div('slice', wheel), t = div('turn', d), im = img(`wheel-z${k}.webp`); t.append(im); return { d, im, z }; });
+    const caps = [], capLayer = document.createElement('div');
+    for (let k = 0; k < W.N; k++) {
+      const a0 = (k / W.N) * 360, arm = div('arm', capLayer);
+      arm.style.setProperty('--d', -(((360 - a0) % 360) / 360) * T + 's');
+      const face = div('face', div('level', div('pos', arm))), im = img('capsule.webp');
+      face.append(im); caps.push(im);
+    }
+    // the capsules sit between the two rims: after the back slices, before the front ones
+    wheel.insertBefore(capLayer, slices[slices.findIndex(s => s.z >= 0)].d);
+    const layout = () => {
+      const w = scene.clientWidth, h = scene.clientHeight;
+      // the hub sits past the bottom-right corner: only the top of the rim and its capsules show
+      const Rpx = Math.min(h * 0.8, w * 0.64), k = Rpx / W.R;
+      wheel.style.transform = `translate3d(${w + Rpx * 0.2}px, ${h + Rpx * 0.3}px, 0) rotateY(${TILT}deg)`;
+      wheel.style.setProperty('--r', W.R * k + 'px');
+      const size = W.px * W.mPerPx * k, cs = W.capPx * W.capMPerPx * k;
+      for (const s of slices) { s.d.style.transform = `translateZ(${s.z * k}px)`; Object.assign(s.im.style, { width: size + 'px', height: size + 'px', left: -size / 2 + 'px', top: -size / 2 + 'px' }); }
+      for (const im of caps) Object.assign(im.style, { width: cs + 'px', height: cs + 'px', left: -cs / 2 + 'px', top: -cs / 2 + 'px' });
+    };
+    if (still) wheel.querySelectorAll('.turn, .arm, .level').forEach(e => { e.style.animation = 'none'; });
+    layout();
+    addEventListener('resize', layout);
+    Promise.race([Promise.all(ready), new Promise(r => setTimeout(r, 8000))]).then(() => {
+      scene.classList.remove('wait');
+      if (vid && shown) vid.play().catch(() => {});
+    });
+  };
+  /** A canvas showing the stacked MP4 (colour above, alpha below) with its transparency, or null without WebGL. */
+  function stackedCanvas(video) {
+    const cv = document.createElement('canvas');
+    const gl = cv.getContext('webgl', { premultipliedAlpha: true, alpha: true, antialias: false });
+    if (!gl) return null;
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+    const pr = gl.createProgram();
+    gl.attachShader(pr, sh(gl.VERTEX_SHADER, 'attribute vec2 p; varying vec2 uv; void main() { uv = vec2(p.x * .5 + .5, .5 - p.y * .5); gl_Position = vec4(p, 0., 1.); }'));
+    gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, 'precision mediump float; varying vec2 uv; uniform sampler2D t; void main() {' +
+      ' vec3 c = texture2D(t, vec2(uv.x, uv.y * .5)).rgb; float a = texture2D(t, vec2(uv.x, .5 + uv.y * .5)).r;' +
+      ' a = clamp((a - .04) / .92, 0., 1.); gl_FragColor = vec4(c * a, a); }'));
+    gl.linkProgram(pr); gl.useProgram(pr);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
+    for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]]) gl.texParameteri(gl.TEXTURE_2D, k, v);
+    const draw = () => {
+      if (video.readyState >= 2) {
+        const w = video.videoWidth, h = video.videoHeight / 2;
+        if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; gl.viewport(0, 0, w, h); }
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, video);
+        gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+      if (video.requestVideoFrameCallback) video.requestVideoFrameCallback(draw); else requestAnimationFrame(draw);
+    };
+    video.addEventListener('loadeddata', draw, { once: true });
+    return cv;
+  }
+  // built a screen before it shows; runs only while it is on screen
+  new IntersectionObserver((es, o) => { if (es.some(e => e.isIntersecting)) { o.disconnect(); build(); } }, { rootMargin: '900px 0px' }).observe(scene);
+  new IntersectionObserver(es => {
+    shown = es[es.length - 1].isIntersecting;
+    scene.classList.toggle('off', !shown);
+    if (!vid) return;
+    if (shown) { if (vid.paused && !timer && !scene.classList.contains('wait')) vid.play().catch(() => {}); }
+    else vid.pause();
+  }, { threshold: .1 }).observe(scene);
+})();
+</script>
+</body>
+</html>
