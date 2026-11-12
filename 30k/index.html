@@ -50,6 +50,9 @@ a { color: var(--gold); }
 /* one file, two pages (build.py): /play = the download (testers: the game and the emails send them here),
    /30k = the Instagram page, where the download opens at 30,000 followers (html.k30): .dl only on /play, .k30 only there */
 html:not(.k30) .k30, html.k30 .dl { display: none !important; }
+/* a hidden button stays hidden (.btn sets its own display) */
+[hidden] { display: none !important; }
+.top .btn-main { white-space: nowrap; }
 .final .k30-note { margin: 0; font-weight: 600; text-shadow: 0 1px 3px rgba(0, 0, 0, .8); }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; } }
 
@@ -300,10 +303,7 @@ footer a { color: #fff; }
 
 <div class="top" id="top">
   <a class="mark" href="#">Loop <i>&amp;</i> Lift</a>
-  <nav><a href="#rides">Rides</a><a href="#features">Features</a><a href="#price">Price</a><a href="#start" class="dl">FAQ</a></nav>
-  <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download</a>
-  <a class="btn btn-main nowin-only dl" href="#get" data-jump-mail>Get it</a>
+  <nav><a href="#rides">Rides</a><a href="#features">Features</a><a href="#price">Price</a></nav>
   <a class="btn btn-main k30" href="#price">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download at 30K</a>
 </div>
@@ -317,32 +317,15 @@ footer a { color: #fff; }
     <h1 class="logo" aria-label="Loop &amp; Lift">Loop <span class="amp">&amp;</span> Lift</h1>
     <p class="slogan">Build it. Ride it. <b>Scream.</b></p>
     <p class="sub">Design roller coasters curve by curve, fill your park with thousands of guests, then take the front seat on what you built.</p>
-    <div class="cta win-only dl">
-      <a class="btn btn-main" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="hero">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
-        Download free
-      </a>
-      <a class="btn btn-ghost" href="#rides"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>See the rides</a>
-    </div>
-    <div class="win-only fine dl">Windows 10 and 11 · about 20 MB · free in Early Access · <button class="alt-link" type="button" data-show-mail>Not on your PC? Email me the link</button></div>
-    <div class="win-only mail dl" data-mail="hero-pc" hidden></div>
-    <div class="cta nowin-only dl">
-      <button class="btn btn-main" type="button" data-jump-mail>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-        Email me the link
-      </button>
-      <a class="btn btn-ghost" href="#rides"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>See the rides</a>
-    </div>
-    <div class="nowin-only fine dl">A free Windows PC game · we'll send the download link to your inbox</div>
-    <div class="nowin-only mail dl" data-mail="hero" hidden></div>
     <div class="cta k30">
       <a class="btn btn-main" href="#price">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
         Download at 30K
       </a>
-      <a class="btn btn-ghost" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor" stroke="none"/></svg>@playloopandlift</a>
+      <button class="btn btn-ghost" type="button" data-show-wish><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.1 5.2 3 1.6-1.9 3.1-3 5.2-3 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Join the wishlist</button>
     </div>
     <div class="fine k30">A Windows PC game · the download opens when we reach 30,000 followers on Instagram</div>
+    <div class="mail k30" data-wish="hero" hidden></div>
   </div>
   <div class="rail" aria-hidden="true">
     <svg viewBox="0 0 1600 120" preserveAspectRatio="xMidYMax slice">
@@ -366,15 +349,14 @@ footer a { color: #fff; }
   </div>
 </header>
 
-<div class="tickwrap"><div class="ticker" aria-label="20 coaster types, 18 flat rides, thousands of guests, ride every coaster, day and night, plays offline, free in Early Access">
+<div class="tickwrap"><div class="ticker" aria-label="Coasters of every kind, flat rides for the whole family, thousands of guests, ride every coaster, day and night, plays offline">
   <div aria-hidden="true">
-    <span>20 coaster types</span><span>18 flat rides</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span>Free in Early Access</span>
-    <span>20 coaster types</span><span>18 flat rides</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span>Free in Early Access</span>
+    <span>Coasters of every kind</span><span>Flat rides for the whole family</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span class="k30">Download at 30K</span>
+    <span>Coasters of every kind</span><span>Flat rides for the whole family</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span class="k30">Download at 30K</span>
   </div>
 </div></div>
 
 <section class="sec wrap" id="rides">
-  <span class="kick">20 coaster types</span>
   <h2 class="h">Pick your thrill</h2>
   <p class="hs">From a coaster that skims the lake to a 139 m launch tower. Build any of them, shape every curve, then ride it from any seat.</p>
   <div class="rides">
@@ -444,35 +426,27 @@ footer a { color: #fff; }
 
 <section class="sec wrap" id="price">
   <div class="center"><span class="kick">Price</span><h2 class="h">Grab your ticket</h2>
-    <p class="hs dl">Play the whole game free while it's in Early Access.</p>
     <p class="hs k30">The download opens for everyone the day we reach 30,000 followers on Instagram.</p></div>
   <div class="tickets">
     <div class="ticket hot">
       <div class="main">
         <span class="tt">Early Access · admit one</span>
-        <div class="amt dl">Free</div>
         <div class="amt k30">Free<small>download at 30K</small></div>
-        <div class="when dl">Download and play today</div>
         <div class="when k30">The download opens at 30,000 followers</div>
         <ul>
-          <li class="dl">The whole game as it is today</li>
-          <li class="dl">Every new version, installed by itself</li>
           <li class="k30">A free download when we reach 30K</li>
           <li>The Founding Tester medal and your own number</li>
           <li>Your name in the credits</li>
           <li>A direct line to the team: Feedback (F8) in the game</li>
         </ul>
-        <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="price">Download free</a>
-        <a class="btn btn-main nowin-only dl" href="#get" data-jump-mail>Email me the link</a>
-        <a class="btn btn-main k30" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">Follow @playloopandlift</a>
+        <a class="btn btn-main k30" href="#last" data-jump-wish>Join the wishlist</a>
       </div>
-      <div class="stub"><span class="dl">Now open</span><span class="k30">At 30K</span></div>
+      <div class="stub"><span class="k30">At 30K</span></div>
     </div>
     <div class="ticket">
       <div class="main">
         <span class="tt">Full release</span>
         <div class="amt">$19.99<small>planned price</small></div>
-        <div class="when dl">Out when we reach 30,000 followers</div>
         <div class="when k30">After Early Access</div>
         <ul>
           <li>Everything from Early Access, finished and polished</li>
@@ -486,41 +460,6 @@ footer a { color: #fff; }
   </div>
 </section>
 
-<section class="sec wrap dl" id="start">
-  <div class="center dl"><span class="kick">No card, no store, no admin rights</span><h2 class="h">Playing in 3 minutes</h2></div>
-  <div class="center k30"><span class="kick">Before you ask</span><h2 class="h">Good to know</h2></div>
-  <div class="card dl">
-    <div class="steps">
-      <div class="step"><span class="num">1</span><b>Download</b><p class="dl">Press the pink button. The installer is small and installs just for you.</p><p class="k30">At 30,000 followers the pink button turns into the download. The installer is small and installs just for you.</p></div>
-      <div class="step"><span class="num">2</span><b>Run it</b><p>Windows doesn't know this new game yet and shows a blue warning. Press <b>More info</b>, then <b>Run anyway</b>.</p>
-        <div class="ss" aria-hidden="true"><div class="t">Windows protected your PC</div><div>Microsoft Defender SmartScreen prevented an unrecognized app from starting. <u>More info</u></div><div class="r"><span class="b hi">Run anyway</span><span class="b">Don't run</span></div></div></div>
-      <div class="step"><span class="num">3</span><b>Make your free account</b><p>The game opens on the station. Pick a username and a password, type in the code we email you, and you're in the park.</p></div>
-    </div>
-  </div>
-  <div class="two">
-    <div class="card">
-      <h3>Your computer</h3>
-      <ul>
-        <li>Windows 10 or 11, 64-bit</li>
-        <li>A graphics card from the last few years (laptops with Intel Iris Xe or better run it on Medium/High)</li>
-        <li>8 GB of memory</li>
-        <li>About 200 MB free</li>
-        <li>Internet to sign in (then it also plays offline for a couple of days)</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Questions</h3>
-      <details><summary>Is it really free?</summary><p class="dl">Yes. Loop &amp; Lift is free while it's in Early Access. The full game is planned at $19.99 when it launches.</p><p class="k30">Yes. The download opens free for everyone when we reach 30,000 followers on Instagram. The full game is planned at $19.99 when it launches.</p></details>
-      <details><summary>Why do I need an account?</summary><p>So your parks' backups, your Founding Tester number and your feedback stay yours, and every update reaches you. It takes a minute: a username, a password and the code we email you.</p></details>
-      <details class="dl"><summary>Why does Windows warn me?</summary><p>Loop &amp; Lift is a brand-new game by a small team, and Windows warns about any program it hasn't seen many people download yet. The installer only puts the game in your user folder.</p></details>
-      <details><summary>Can I share videos and screenshots?</summary><p>Please do! To share the game itself, send friends this page, so they always get the newest version.</p></details>
-      <details><summary>Where are my parks saved?</summary><p>On your computer, in <code>%APPDATA%\com.loopandlift.game\saves</code>. They stay when the game updates.</p></details>
-      <details><summary>What do you collect?</summary><p>Your account, how you play (time, rides you build, frame rate, crashes) and copies of your parks, to fix bugs and make the game better. Nothing outside the game. Details in the <a href="../privacy/">Privacy Notice</a> and the <a href="../terms/">Terms</a>.</p></details>
-      <details><summary>Mac or phone?</summary><p>Not yet: Windows first. Follow <a href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">@playloopandlift</a> to hear when.</p></details>
-      <details class="dl"><summary>How do I uninstall it?</summary><p>Windows Settings, Apps, Installed apps, Loop and Lift, Uninstall.</p></details>
-    </div>
-  </div>
-</section>
 
 <section class="final" id="last">
   <div class="scene wait" id="scene" aria-hidden="true">
@@ -530,13 +469,7 @@ footer a { color: #fff; }
   </div>
   <div class="in">
     <h2 class="h">Your park is waiting</h2>
-    <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="bottom">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
-      Download free for Windows
-    </a>
-    <div class="nowin-only mail dl" data-mail="bottom"></div>
-    <a class="btn btn-main k30" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor" stroke="none"/></svg>Follow @playloopandlift</a>
-    <p class="k30-note k30">Download at 30,000 followers</p>
+    <div class="mail k30" data-wish="bottom"></div>
   </div>
 </section>
 
@@ -586,6 +519,45 @@ for (const a of document.querySelectorAll('[data-jump-mail]')) a.addEventListene
   setTimeout(() => box.querySelector('input').focus({ preventScroll: true }), 500);
 });
 
+// ---------- the wishlist (the Instagram page): everyone on it hears the day the download opens ----------
+const wishHTML = `<b>Join the wishlist</b>
+  <p>The download opens when we reach 30,000 followers. Leave your email and we'll tell you the day it's out.</p>
+  <form novalidate><input type="email" name="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required aria-label="Your email"><button type="submit">Join</button></form>
+  <div class="msg" role="status"></div><small>Only about the game coming out. No spam.</small>`;
+for (const box of document.querySelectorAll('[data-wish]')) {
+  box.innerHTML = wishHTML;
+  const form = box.querySelector('form'), msg = box.querySelector('.msg'), input = form.email, btn = form.querySelector('button');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = input.value.trim();
+    msg.className = 'msg';
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) { msg.classList.add('err'); msg.textContent = 'That email doesn’t look right.'; input.focus(); return; }
+    if (!CFG) { msg.classList.add('err'); msg.textContent = 'Not working right now, sorry. Try again soon.'; return; }
+    btn.disabled = true; msg.textContent = 'Adding you…';
+    try {
+      const r = await fetch(CFG.url + '/functions/v1/game', { method: 'POST', headers: { 'content-type': 'application/json', apikey: CFG.anon, Authorization: 'Bearer ' + CFG.anon },
+        body: JSON.stringify({ action: 'wishlist', email, source: ('30k-' + box.dataset.wish + ' ' + (new URLSearchParams(location.search).get('from') || document.referrer.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] || 'direct')).slice(0, 60) }) });
+      if (r.status === 429) throw new Error('busy');
+      if (!r.ok) throw new Error('bad');
+      msg.classList.add('ok'); msg.textContent = 'You’re on the list! We’ll email you the day it’s out.';
+      form.reset();
+    } catch (err) {
+      msg.classList.add('err');
+      msg.textContent = err.message === 'busy' ? 'Lots of people right now! Try again in a few minutes.' : 'Couldn’t add you. Check the address and try again.';
+    } finally { btn.disabled = false; }
+  });
+}
+document.querySelector('[data-show-wish]')?.addEventListener('click', e => {
+  const box = document.querySelector('[data-wish="hero"]');
+  box.hidden = false; e.currentTarget.hidden = true; box.querySelector('input').focus();
+});
+for (const a of document.querySelectorAll('[data-jump-wish]')) a.addEventListener('click', e => {
+  e.preventDefault();
+  const box = document.querySelector('[data-wish="bottom"]');
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => box.querySelector('input').focus({ preventScroll: true }), 600);
+});
+
 // ---------- the top bar turns solid once the hero scrolls away ----------
 const bar = document.getElementById('top');
 const onScroll = () => bar.classList.toggle('solid', scrollY > 60);
@@ -616,7 +588,7 @@ else if ('IntersectionObserver' in window) {
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/, W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
   const scene = document.getElementById('scene');
   if (!MS || !W || !('IntersectionObserver' in window)) { scene.classList.remove('wait'); return; }
-  const A = '../assets/', V = '?v=' + /*VER*/1794482094/*VER*/;
+  const A = '../assets/', V = '?v=' + /*VER*/1794482889/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel');
   const pct = v => (v / MS.frame) * 100 + '%';
   let vid = null, shown = false, timer = 0;

@@ -272,6 +272,7 @@ details > summary { cursor: pointer; font-weight: 600; font-size: 14px; }
     <a href="#settings" data-v="settings">Game settings</a>
     <a href="#plans" data-v="plans">Plans &amp; features</a>
     <a href="#invites" data-v="invites">Invites</a>
+    <a href="#wishlist" data-v="wishlist">Wishlist</a>
     <a href="#waitlist" data-v="waitlist">Waitlist</a>
     <a href="#applications" data-v="applications">Applications</a>
   </nav>
@@ -302,6 +303,7 @@ details > summary { cursor: pointer; font-weight: 600; font-size: 14px; }
     <section class="view hidden" id="v-settings"></section>
     <section class="view hidden" id="v-plans"></section>
     <section class="view hidden" id="v-invites"></section>
+    <section class="view hidden" id="v-wishlist"></section>
     <section class="view hidden" id="v-waitlist"></section>
     <!-- the landing page's "Join as tester" sign-ups -->
     <section class="view hidden" id="v-applications">
@@ -527,7 +529,7 @@ sb.auth.onAuthStateChange((_e, session) => {
 // ---------- tabs ----------
 const LOADERS = {
   overview: loadOverview, players: loadPlayers, player: loadPlayer, feedback: loadFeedback, builds: loadBuilds,
-  settings: loadSettings, plans: loadPlans, invites: loadInvites, waitlist: loadWaitlist, applications: loadApps
+  settings: loadSettings, plans: loadPlans, invites: loadInvites, wishlist: loadWishlist, waitlist: loadWaitlist, applications: loadApps
 };
 function here() {
   const [v, arg] = location.hash.slice(1).split('/');
@@ -1410,6 +1412,35 @@ $('v-plans').addEventListener('submit', async e => {
     toast(`${key} added`); loadPlans();
   }
 });
+
+// =====================================================================================================
+// Wishlist: people waiting for the game (the Instagram page /30k: the download opens at 30,000 followers). They got a
+// "you're on the list" email, never a link; the day the download opens, Copy all emails and tell them.
+// =====================================================================================================
+async function loadWishlist() {
+  const el = $('v-wishlist');
+  if (!el.dataset.ok) el.innerHTML = loading();
+  const rows = await q(sb.from('wishlist').select('*').order('created_at', { ascending: false }).limit(10000));
+  el.dataset.ok = 1;
+  const day = 864e5, now = Date.now();
+  const today = rows.filter(r => now - new Date(r.created_at) < day).length, week = rows.filter(r => now - new Date(r.created_at) < 7 * day).length;
+  el.innerHTML = `
+    <div class="vh"><h2>Wishlist</h2><span class="sub">People waiting for the download (the Instagram page loopandlift.github.io/30k)</span><button class="tool" data-reload type="button">${ICON.refresh}Refresh</button></div>
+    <div class="panel"><h3>${num(rows.length)} people <span class="sub">${num(today)} in the last day · ${num(week)} in the last week</span>
+      ${rows.length ? `<button class="tool sm" type="button" id="wiCopy" style="margin-left:auto">${ICON.copy}Copy all emails</button>` : ''}</h3>
+      ${rows.length ? `<div class="tw"><table class="tbl"><tr><th>Email</th><th>From</th><th>Joined</th><th>Welcome email</th><th></th></tr>
+      ${rows.map(r => `<tr data-wi="${esc(r.email)}"><td>${esc(r.email)}</td><td>${esc(r.source || '')}</td><td class="nowrap">${esc(when(r.created_at))}</td>
+        <td>${r.mailed_at ? 'sent' : '<span class="sub">no</span>'}</td>
+        <td><button class="tool sm no" type="button" data-widel>Remove</button></td></tr>`).join('')}</table></div>` : '<div class="empty sm">Nobody yet.</div>'}</div>`;
+  $('wiCopy')?.addEventListener('click', async () => { await navigator.clipboard.writeText(rows.map(r => r.email).join(', ')); toast('Copied ' + rows.length + ' emails'); });
+  el.querySelectorAll('[data-widel]').forEach(b => b.addEventListener('click', async () => {
+    const email = b.closest('tr').dataset.wi;
+    if (!await sure(`Remove ${email} from the wishlist?`)) return;
+    const { error } = await sb.from('wishlist').delete().eq('email', email);
+    if (error) return toast('Not removed: ' + error.message);
+    toast('Removed'); loadWishlist();
+  }));
+}
 
 // =====================================================================================================
 // Waitlist: phone visitors who asked the download page to email them the link
