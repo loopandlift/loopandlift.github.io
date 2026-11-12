@@ -322,10 +322,9 @@ footer a { color: #fff; }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
         Download at 30K
       </a>
-      <button class="btn btn-ghost" type="button" data-show-wish><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.1 5.2 3 1.6-1.9 3.1-3 5.2-3 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Join the wishlist</button>
+      <a class="btn btn-ghost" href="#last" data-jump-wish><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.1 5.2 3 1.6-1.9 3.1-3 5.2-3 3.8 0 5.9 3.9 4.4 7.3C19.5 16.4 12 21 12 21z"/></svg>Join the wishlist</a>
     </div>
     <div class="fine k30">A Windows PC game · the download opens when we reach 30,000 followers on Instagram</div>
-    <div class="mail k30" data-wish="hero" hidden></div>
   </div>
   <div class="rail" aria-hidden="true">
     <svg viewBox="0 0 1600 120" preserveAspectRatio="xMidYMax slice">
@@ -547,10 +546,6 @@ for (const box of document.querySelectorAll('[data-wish]')) {
     } finally { btn.disabled = false; }
   });
 }
-document.querySelector('[data-show-wish]')?.addEventListener('click', e => {
-  const box = document.querySelector('[data-wish="hero"]');
-  box.hidden = false; e.currentTarget.hidden = true; box.querySelector('input').focus();
-});
 for (const a of document.querySelectorAll('[data-jump-wish]')) a.addEventListener('click', e => {
   e.preventDefault();
   const box = document.querySelector('[data-wish="bottom"]');
@@ -588,7 +583,7 @@ else if ('IntersectionObserver' in window) {
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/, W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
   const scene = document.getElementById('scene');
   if (!MS || !W || !('IntersectionObserver' in window)) { scene.classList.remove('wait'); return; }
-  const A = '../assets/', V = '?v=' + /*VER*/1794483242/*VER*/;
+  const A = '../assets/', V = '?v=' + /*VER*/1794483345/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel');
   const pct = v => (v / MS.frame) * 100 + '%';
   let vid = null, shown = false, timer = 0;
