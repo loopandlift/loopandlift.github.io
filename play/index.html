@@ -39,8 +39,10 @@ document.documentElement.classList.add(WIN ? 'is-win' : 'no-win');
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-html { background: var(--night); scroll-behavior: smooth; }
-body { margin: 0; font-family: var(--f); color: var(--text); background: var(--night); overflow-x: hidden; }
+/* no sideways drift on phones: html and body both (iOS Safari pans the page with only one), clip where supported */
+html { background: var(--night); scroll-behavior: smooth; overflow-x: hidden; }
+body { margin: 0; font-family: var(--f); color: var(--text); background: var(--night); overflow-x: hidden; position: relative; }
+@supports (overflow: clip) { html, body { overflow-x: clip; } }
 img, video { display: block; max-width: 100%; }
 a { color: var(--gold); }
 .wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
@@ -49,7 +51,7 @@ a { color: var(--gold); }
 
 /* ---------- buttons: chunky, pressable, like the game's own ---------- */
 .btn { font-family: var(--d); font-weight: 400; letter-spacing: .02em; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 12px;
-  border-radius: 18px; border: 0; cursor: pointer; line-height: 1; transition: translate .12s ease, box-shadow .12s ease, filter .12s ease; }
+  border-radius: 0; border: 0; cursor: pointer; line-height: 1; transition: translate .12s ease, box-shadow .12s ease, filter .12s ease; }
 .btn-main { font-size: clamp(22px, 2.4vw, 30px); padding: 19px 34px 21px; color: #fff; text-transform: uppercase;
   background: linear-gradient(180deg, #ff9bcc 0%, #ff4fa0 42%, #e0237f 100%);
   box-shadow: 0 0 0 4px var(--ink), 0 8px 0 4px var(--ink-2), 0 16px 40px rgba(255, 79, 160, .55), inset 0 2px 0 rgba(255, 255, 255, .45); text-shadow: 0 2px 0 rgba(58, 15, 99, .6); }
@@ -73,7 +75,7 @@ a { color: var(--gold); }
 .top nav { display: flex; gap: 22px; margin-left: auto; }
 .top nav a { color: #fff; text-decoration: none; font: 400 17px var(--d); letter-spacing: .06em; text-transform: uppercase; text-shadow: 0 2px 6px rgba(0, 0, 0, .6); opacity: .92; }
 .top nav a:hover { color: var(--gold); opacity: 1; }
-.top .btn-main { font-size: 17px; padding: 11px 18px 12px; border-radius: 14px; box-shadow: 0 0 0 3px var(--ink), 0 5px 0 3px var(--ink-2), inset 0 2px 0 rgba(255, 255, 255, .45); }
+.top .btn-main { font-size: 17px; padding: 11px 18px 12px; border-radius: 0; box-shadow: 0 0 0 3px var(--ink), 0 5px 0 3px var(--ink-2), inset 0 2px 0 rgba(255, 255, 255, .45); }
 .top .btn-main svg { width: 20px; height: 20px; }
 @media (max-width: 860px) { .top nav { display: none; } .top .btn-main { margin-left: auto; } }
 
@@ -85,10 +87,6 @@ a { color: var(--gold); }
   background: linear-gradient(180deg, rgba(20, 7, 42, .55) 0%, rgba(20, 7, 42, 0) 22%, rgba(20, 7, 42, 0) 45%, rgba(20, 7, 42, .7) 78%, var(--night) 100%),
               linear-gradient(90deg, rgba(20, 7, 42, .6) 0%, rgba(20, 7, 42, 0) 55%); }
 .hero-in { padding: 120px 16px 150px; max-width: 1200px; width: 100%; margin: 0 auto; display: grid; gap: 14px; justify-items: start; }
-.badge { display: inline-flex; align-items: center; gap: 8px; font: 400 15px var(--d); letter-spacing: .12em; padding: 8px 14px 7px; border-radius: 99px; color: var(--ink);
-  background: linear-gradient(180deg, #fff3a8, #ffd23f 55%, #ffad1f); box-shadow: 0 0 0 3px var(--ink), 0 4px 0 3px var(--ink-2); }
-.badge i { width: 9px; height: 9px; border-radius: 50%; background: #1fd16b; box-shadow: 0 0 0 2px var(--ink); animation: blink 1.4s infinite; }
-@keyframes blink { 50% { opacity: .3; } }
 .logo { margin: 0; font-weight: 700; line-height: .9; white-space: nowrap; font-size: clamp(60px, 10.5vw, 150px); color: #ffb52e;
   background: linear-gradient(180deg, #fffbe0 0%, #ffe14f 36%, #ffa51f 62%, #ff7a1a 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   filter: drop-shadow(4px 0 0 var(--ink)) drop-shadow(-4px 0 0 var(--ink)) drop-shadow(0 4px 0 var(--ink)) drop-shadow(0 -4px 0 var(--ink)) drop-shadow(0 10px 0 var(--ink-2)) drop-shadow(0 18px 30px rgba(0, 0, 0, .5)); }
@@ -125,7 +123,8 @@ a { color: var(--gold); }
 @keyframes tick { to { transform: translateX(-50%); } }
 
 /* ---------- section headings ---------- */
-.sec { padding: 96px 0 0; }
+/* top padding only: the shorthand wiped .wrap's 16 px sides, and the phone's ride carousel (margin -16 px) stuck out of the screen */
+.sec { padding-top: 96px; }
 .kick { display: inline-block; font: 400 15px var(--d); letter-spacing: .16em; text-transform: uppercase; color: var(--ink); background: var(--aqua); padding: 6px 12px 5px; border-radius: 8px; box-shadow: 0 0 0 3px var(--ink); }
 .h { margin: 14px 0 10px; font: 400 clamp(40px, 6vw, 80px) / .95 var(--d); text-transform: uppercase; color: #fff;
   text-shadow: 0 5px 0 var(--pink-d), 0 10px 0 var(--ink-2), 0 0 40px rgba(255, 79, 160, .35); }
@@ -236,13 +235,13 @@ details p { margin: 8px 0 0; font-weight: 600; line-height: 1.55; color: var(--s
 code { background: rgba(255, 255, 255, .1); padding: 1px 6px; border-radius: 6px; font-size: 14px; color: #fff; }
 
 /* ---------- "email me the link" (phones, Macs) ---------- */
-.mail { width: min(520px, 100%); background: #fff; color: var(--ink); border-radius: 20px; padding: 16px; box-shadow: 0 0 0 4px var(--ink), 0 8px 0 4px var(--ink-2), 0 18px 40px rgba(0, 0, 0, .4); text-align: left; }
+.mail { width: min(520px, 100%); background: #fff; color: var(--ink); border-radius: 0; padding: 16px; box-shadow: 0 0 0 4px var(--ink), 0 8px 0 4px var(--ink-2), 0 18px 40px rgba(0, 0, 0, .4); text-align: left; }
 .mail b { display: block; font: 400 21px var(--d); text-transform: uppercase; margin-bottom: 4px; }
 .mail p { margin: 0 0 12px; font-weight: 600; font-size: 15px; line-height: 1.4; color: #4d3a6b; }
 .mail form { display: flex; gap: 8px; }
-.mail input { flex: 1; min-width: 0; font: 600 17px var(--f); color: var(--ink); padding: 13px 14px; border-radius: 14px; border: 3px solid var(--ink); background: #fff; outline: none; }
+.mail input { flex: 1; min-width: 0; font: 600 17px var(--f); color: var(--ink); padding: 13px 14px; border-radius: 0; border: 3px solid var(--ink); background: #fff; outline: none; }
 .mail input:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255, 79, 160, .25); }
-.mail button { font: 400 18px var(--d); text-transform: uppercase; color: #fff; padding: 0 16px; border-radius: 14px; border: 3px solid var(--ink); cursor: pointer; white-space: nowrap;
+.mail button { font: 400 18px var(--d); text-transform: uppercase; color: #fff; padding: 0 16px; border-radius: 0; border: 3px solid var(--ink); cursor: pointer; white-space: nowrap;
   background: linear-gradient(180deg, #ff9bcc, #ff4fa0 50%, #e0237f); }
 .mail button:disabled { opacity: .6; cursor: wait; }
 .mail .msg { margin: 10px 0 0; font-size: 14.5px; font-weight: 700; min-height: 1em; }
@@ -252,11 +251,11 @@ code { background: rgba(255, 255, 255, .1); padding: 1px 6px; border-radius: 6px
 @media (max-width: 420px) { .mail form { flex-direction: column; } .mail button { padding: 13px; } }
 
 /* ---------- the last call ---------- */
-.final { position: relative; margin-top: 110px; height: 100vh; height: 100svh; min-height: 600px; max-height: 1100px; display: grid; place-items: center; text-align: center; isolation: isolate; overflow: hidden;
+.final { position: relative; clip-path: inset(0); margin-top: 110px; height: 100vh; height: 100svh; min-height: 600px; max-height: 1100px; display: grid; place-items: center; text-align: center; isolation: isolate; overflow: hidden;
   background: linear-gradient(180deg, #6a2fb8 0%, #e0609e 60%, #b0428f 100%); }
 /* the landing page's scene, layer for layer: the pink sunset sky, the Moon Serpent's tower with the train's real
    climb (a transparent video), the Mega Wheel's depth slices turning; sized by the section (container units) */
-.final .scene { position: absolute; inset: 0; z-index: -2; container-type: size; overflow: hidden; }
+.final .scene { position: absolute; inset: 0; z-index: -2; container-type: size; overflow: hidden; clip-path: inset(0); }
 .final .sky { position: absolute; inset: 0; background: center 70% / cover no-repeat; }
 .final .sky::after { content: ''; position: absolute; inset: auto 0 0 0; height: 18%; background: linear-gradient(180deg, rgba(176, 66, 143, 0), rgba(150, 50, 130, .55) 100%); }
 .final .ms { position: absolute; aspect-ratio: 1; height: var(--ms-h); left: var(--ms-x); top: var(--ms-y); pointer-events: none;
@@ -264,7 +263,7 @@ code { background: rgba(255, 255, 255, .1); padding: 1px 6px; border-radius: 6px
   --ms-h: min(112cqh, 110cqw); --ms-x: calc(-2cqw - min(112cqh, 110cqw) * .26); --ms-y: -6cqh; }
 /* (max-width: none: the page's img/video rule would squeeze them, the wheel's to nothing inside its 0-size 3D layers) */
 .final .ms img, .final .ms video, .final .ms canvas { position: absolute; display: block; user-select: none; max-width: none; }
-.final .stage { position: absolute; inset: 0; perspective: 9000px; perspective-origin: 50% 50%; pointer-events: none; overflow: hidden; }
+.final .stage { position: absolute; inset: 0; perspective: 9000px; perspective-origin: 50% 50%; pointer-events: none; overflow: hidden; clip-path: inset(0); }
 .final .wheel { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
 .final .wheel div { position: absolute; left: 0; top: 0; transform-style: preserve-3d; }
 .final .wheel img { display: block; position: absolute; user-select: none; max-width: none; }
@@ -310,7 +309,6 @@ footer a { color: #fff; }
     <source src="img/hero.mp4" type="video/mp4">
   </video>
   <div class="hero-in">
-    <span class="badge"><i></i>EARLY ACCESS · FREE ON WINDOWS</span>
     <h1 class="logo" aria-label="Loop &amp; Lift">Loop <span class="amp">&amp;</span> Lift</h1>
     <p class="slogan">Build it. Ride it. <b>Scream.</b></p>
     <p class="sub">Design roller coasters curve by curve, fill your park with thousands of guests, then take the front seat on what you built.</p>
@@ -587,7 +585,7 @@ else if ('IntersectionObserver' in window) {
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/, W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
   const scene = document.getElementById('scene');
   if (!MS || !W || !('IntersectionObserver' in window)) { scene.classList.remove('wait'); return; }
-  const A = '../assets/', V = '?v=' + /*VER*/1794467091/*VER*/;
+  const A = '../assets/', V = '?v=' + /*VER*/1794468007/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel');
   const pct = v => (v / MS.frame) * 100 + '%';
   let vid = null, shown = false, timer = 0;
