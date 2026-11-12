@@ -138,7 +138,6 @@ a { color: var(--gold); }
 .ride:hover { translate: 0 -4px; }
 .ride video, .ride img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
 .ride::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(10, 3, 22, .88) 100%); }
-.ride .stat { position: absolute; top: 12px; right: 12px; font: 400 17px var(--d); letter-spacing: .03em; color: var(--ink); background: var(--gold); padding: 6px 11px 5px; border-radius: 10px; box-shadow: 0 0 0 3px var(--ink); }
 .ride .cap { position: absolute; left: 16px; right: 16px; bottom: 14px; }
 .ride .cap b { display: block; font: 400 clamp(24px, 2.4vw, 30px) / 1 var(--d); text-transform: uppercase; color: #fff; text-shadow: 0 3px 0 var(--ink-2); }
 .ride .cap span { display: block; margin-top: 5px; font-weight: 600; font-size: 15.5px; color: #e9dcff; text-shadow: 0 1px 3px #000; }
@@ -366,17 +365,17 @@ footer a { color: #fff; }
   <p class="hs">From a coaster that skims the lake to a 139 m launch tower. Build any of them, shape every curve, then ride it from any seat.</p>
   <div class="rides">
     <div class="ride"><video muted loop playsinline preload="none" poster="img/r-skyking.webp" data-auto aria-label="An accelerator coaster launching past the camera"><source src="img/r-skyking.mp4" type="video/mp4"></video>
-      <span class="stat">206 km/h</span><div class="cap"><b>Accelerator coaster</b><span>A hydraulic launch, then 139 m straight up and over the top.</span></div></div>
+      <div class="cap"><b>Accelerator coaster</b><span>A hydraulic launch, then 139 m straight up and over the top.</span></div></div>
     <div class="ride"><video muted loop playsinline preload="none" poster="img/r-aqua.webp" data-auto aria-label="A blue launched coaster flying through its loops"><source src="img/r-aqua.mp4" type="video/mp4"></video>
-      <span class="stat">4 inversions</span><div class="cap"><b>Launched coaster</b><span>Launched over the lake, then loop after loop through the park.</span></div></div>
+      <div class="cap"><b>Launched coaster</b><span>Launched over the lake, then loop after loop through the park.</span></div></div>
     <div class="ride"><video muted loop playsinline preload="none" poster="img/r-skyrocket.webp" data-auto aria-label="A green hyper coaster cresting a hill"><source src="img/r-skyrocket.mp4" type="video/mp4"></video>
-      <span class="stat">36 m drop</span><div class="cap"><b>Hyper coaster</b><span>Big hills, long drops and pure airtime.</span></div></div>
+      <div class="cap"><b>Hyper coaster</b><span>Big hills, long drops and pure airtime.</span></div></div>
     <div class="ride"><video muted loop playsinline preload="none" poster="img/r-serpent.webp" data-auto aria-label="Spinning cars at the top of a launch tower"><source src="img/r-serpent.mp4" type="video/mp4"></video>
-      <span class="stat">116 m tower</span><div class="cap"><b>Spinning launch</b><span>Spinning cars shot up a tower, round the crown and back down.</span></div></div>
+      <div class="cap"><b>Spinning launch</b><span>Spinning cars shot up a tower, round the crown and back down.</span></div></div>
     <div class="ride"><video muted loop playsinline preload="none" poster="img/r-volcano.webp" data-auto aria-label="A wooden coaster racing over its hills"><source src="img/r-volcano.mp4" type="video/mp4"></video>
-      <span class="stat">1,345 m of track</span><div class="cap"><b>Wooden coaster</b><span>Rattling timber hills, right through a smoking volcano.</span></div></div>
+      <div class="cap"><b>Wooden coaster</b><span>Rattling timber hills, right through a smoking volcano.</span></div></div>
     <div class="ride"><video muted loop playsinline preload="none" poster="img/r-dive.webp" data-auto aria-label="A dive coaster bursting out of a lava cave over the water, spray flying, then up into its loop"><source src="img/r-dive.mp4" type="video/mp4"></video>
-      <span class="stat">90° drop</span><div class="cap"><b>Dive coaster</b><span>Held over the edge, 51 m straight down, out over the water and up into the loop.</span></div></div>
+      <div class="cap"><b>Dive coaster</b><span>Held over the edge, 51 m straight down, out over the water and up into the loop.</span></div></div>
   </div>
 </section>
 
@@ -585,7 +584,7 @@ else if ('IntersectionObserver' in window) {
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/, W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
   const scene = document.getElementById('scene');
   if (!MS || !W || !('IntersectionObserver' in window)) { scene.classList.remove('wait'); return; }
-  const A = '../assets/', V = '?v=' + /*VER*/1794468007/*VER*/;
+  const A = '../assets/', V = '?v=' + /*VER*/1794468207/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel');
   const pct = v => (v / MS.frame) * 100 + '%';
   let vid = null, shown = false, timer = 0;
