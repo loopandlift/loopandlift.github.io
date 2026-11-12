@@ -300,12 +300,12 @@ footer a { color: #fff; }
 
 <div class="top" id="top">
   <a class="mark" href="#">Loop <i>&amp;</i> Lift</a>
-  <nav><a href="#rides">Rides</a><a href="#features">Features</a><a href="#price">Price</a><a href="#start">FAQ</a></nav>
+  <nav><a href="#rides">Rides</a><a href="#features">Features</a><a href="#price">Price</a><a href="#start" class="dl">FAQ</a></nav>
   <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="top">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download</a>
   <a class="btn btn-main nowin-only dl" href="#get" data-jump-mail>Get it</a>
   <a class="btn btn-main k30" href="#price">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Free at 30K</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download at 30K</a>
 </div>
 
 <header class="hero" id="get">
@@ -338,11 +338,11 @@ footer a { color: #fff; }
     <div class="cta k30">
       <a class="btn btn-main" href="#price">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
-        Free download at 30K
+        Download at 30K
       </a>
       <a class="btn btn-ghost" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor" stroke="none"/></svg>@playloopandlift</a>
     </div>
-    <div class="fine k30">A Windows PC game · the free download opens when we reach 30,000 followers on Instagram</div>
+    <div class="fine k30">A Windows PC game · the download opens when we reach 30,000 followers on Instagram</div>
   </div>
   <div class="rail" aria-hidden="true">
     <svg viewBox="0 0 1600 120" preserveAspectRatio="xMidYMax slice">
@@ -445,13 +445,13 @@ footer a { color: #fff; }
 <section class="sec wrap" id="price">
   <div class="center"><span class="kick">Price</span><h2 class="h">Grab your ticket</h2>
     <p class="hs dl">Play the whole game free while it's in Early Access.</p>
-    <p class="hs k30">Free for everyone the day we reach 30,000 followers on Instagram.</p></div>
+    <p class="hs k30">The download opens for everyone the day we reach 30,000 followers on Instagram.</p></div>
   <div class="tickets">
     <div class="ticket hot">
       <div class="main">
         <span class="tt">Early Access · admit one</span>
         <div class="amt dl">Free</div>
-        <div class="amt k30">Free<small>at 30K followers</small></div>
+        <div class="amt k30">Free<small>download at 30K</small></div>
         <div class="when dl">Download and play today</div>
         <div class="when k30">The download opens at 30,000 followers</div>
         <ul>
@@ -485,7 +485,7 @@ footer a { color: #fff; }
   </div>
 </section>
 
-<section class="sec wrap" id="start">
+<section class="sec wrap dl" id="start">
   <div class="center dl"><span class="kick">No card, no store, no admin rights</span><h2 class="h">Playing in 3 minutes</h2></div>
   <div class="center k30"><span class="kick">Before you ask</span><h2 class="h">Good to know</h2></div>
   <div class="card dl">
@@ -535,7 +535,7 @@ footer a { color: #fff; }
     </a>
     <div class="nowin-only mail dl" data-mail="bottom"></div>
     <a class="btn btn-main k30" href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.3" fill="currentColor" stroke="none"/></svg>Follow @playloopandlift</a>
-    <p class="k30-note k30">Free download at 30,000 followers</p>
+    <p class="k30-note k30">Download at 30,000 followers</p>
   </div>
 </section>
 
@@ -615,7 +615,7 @@ else if ('IntersectionObserver' in window) {
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/, W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
   const scene = document.getElementById('scene');
   if (!MS || !W || !('IntersectionObserver' in window)) { scene.classList.remove('wait'); return; }
-  const A = '../assets/', V = '?v=' + /*VER*/1794481818/*VER*/;
+  const A = '../assets/', V = '?v=' + /*VER*/1794482002/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel');
   const pct = v => (v / MS.frame) * 100 + '%';
   let vid = null, shown = false, timer = 0;
