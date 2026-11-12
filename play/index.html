@@ -1,18 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="k30">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#14072a">
 <title>Loop &amp; Lift - Build it. Ride it. Scream.</title>
 <meta name="description" content="Build the theme park of your dreams: design your own roller coasters curve by curve, fill the park with guests, and ride what you built. Free on Windows in Early Access.">
-<link rel="canonical" href="https://loopandlift.github.io/play/">
-<link rel="icon" type="image/png" href="img/icon.png">
+<link rel="canonical" href="https://loopandlift.github.io/30k/">
+<link rel="icon" type="image/png" href="../play/img/icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Loop &amp; Lift">
 <meta property="og:title" content="Loop &amp; Lift - Build it. Ride it. Scream.">
 <meta property="og:description" content="Design your own roller coasters, fill the park with guests, then ride what you built. Free on Windows in Early Access.">
-<meta property="og:url" content="https://loopandlift.github.io/play/">
+<meta property="og:url" content="https://loopandlift.github.io/30k/">
 <meta property="og:image" content="https://loopandlift.github.io/play/img/share.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -23,7 +23,7 @@
 window.WIN = /Windows/i.test(navigator.userAgent) && !/Phone|Android|iPad|iPhone|Mobile/i.test(navigator.userAgent);
 document.documentElement.classList.add(WIN ? 'is-win' : 'no-win');
 </script>
-<link rel="preload" href="img/hero.webp" as="image" type="image/webp">
+<link rel="preload" href="../play/img/hero.webp" as="image" type="image/webp">
 <link rel="preload" href="../assets/fonts/lilita-one-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/fredoka-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -89,7 +89,7 @@ html:not(.k30) .k30, html.k30 .dl { display: none !important; }
 /* ---------- hero: the game in motion, full screen ---------- */
 .hero { position: relative; min-height: 100svh; display: grid; align-items: end; isolation: isolate; overflow: hidden; color: #fff; }
 .hero video, .hero .poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -3; }
-.hero .poster { background: #14072a url(img/hero.webp) center / cover no-repeat; z-index: -4; }
+.hero .poster { background: #14072a url(../play/img/hero.webp) center / cover no-repeat; z-index: -4; }
 .hero::after { content: ''; position: absolute; inset: 0; z-index: -2;
   background: linear-gradient(180deg, rgba(20, 7, 42, .55) 0%, rgba(20, 7, 42, 0) 22%, rgba(20, 7, 42, 0) 45%, rgba(20, 7, 42, .7) 78%, var(--night) 100%),
               linear-gradient(90deg, rgba(20, 7, 42, .6) 0%, rgba(20, 7, 42, 0) 55%); }
@@ -303,41 +303,20 @@ footer a { color: #fff; }
 
 <div class="top" id="top">
   <a class="mark" href="#">Loop <i>&amp;</i> Lift</a>
-  <nav><a href="#rides">Rides</a><a href="#features">Features</a><a href="#price">Price</a><a href="#start" class="dl">FAQ</a></nav>
-  <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download</a>
-  <a class="btn btn-main nowin-only dl" href="#get" data-jump-mail>Get it</a>
+  <nav><a href="#rides">Rides</a><a href="#features">Features</a><a href="#price">Price</a></nav>
   <a class="btn btn-main k30" href="#price">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>Download at 30K</a>
 </div>
 
 <header class="hero" id="get">
   <div class="poster" aria-hidden="true"></div>
-  <video id="heroVid" autoplay muted loop playsinline preload="auto" poster="img/hero.webp" aria-label="Loop & Lift gameplay: roller coasters racing through a theme park">
-    <source src="img/hero.mp4" type="video/mp4">
+  <video id="heroVid" autoplay muted loop playsinline preload="auto" poster="../play/img/hero.webp" aria-label="Loop & Lift gameplay: roller coasters racing through a theme park">
+    <source src="../play/img/hero.mp4" type="video/mp4">
   </video>
   <div class="hero-in">
     <h1 class="logo" aria-label="Loop &amp; Lift">Loop <span class="amp">&amp;</span> Lift</h1>
     <p class="slogan">Build it. Ride it. <b>Scream.</b></p>
     <p class="sub">Design roller coasters curve by curve, fill your park with thousands of guests, then take the front seat on what you built.</p>
-    <div class="cta win-only dl">
-      <a class="btn btn-main" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="hero">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
-        Download free
-      </a>
-      <a class="btn btn-ghost" href="#rides"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>See the rides</a>
-    </div>
-    <div class="win-only fine dl">Windows 10 and 11 · about 20 MB · free in Early Access · <button class="alt-link" type="button" data-show-mail>Not on your PC? Email me the link</button></div>
-    <div class="win-only mail dl" data-mail="hero-pc" hidden></div>
-    <div class="cta nowin-only dl">
-      <button class="btn btn-main" type="button" data-jump-mail>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-        Email me the link
-      </button>
-      <a class="btn btn-ghost" href="#rides"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>See the rides</a>
-    </div>
-    <div class="nowin-only fine dl">A free Windows PC game · we'll send the download link to your inbox</div>
-    <div class="nowin-only mail dl" data-mail="hero" hidden></div>
     <div class="cta k30">
       <a class="btn btn-main" href="#price">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
@@ -372,8 +351,8 @@ footer a { color: #fff; }
 
 <div class="tickwrap"><div class="ticker" aria-label="Coasters of every kind, flat rides for the whole family, thousands of guests, ride every coaster, day and night, plays offline">
   <div aria-hidden="true">
-    <span>Coasters of every kind</span><span>Flat rides for the whole family</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span class="dl">Free in Early Access</span><span class="k30">Download at 30K</span>
-    <span>Coasters of every kind</span><span>Flat rides for the whole family</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span class="dl">Free in Early Access</span><span class="k30">Download at 30K</span>
+    <span>Coasters of every kind</span><span>Flat rides for the whole family</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span class="k30">Download at 30K</span>
+    <span>Coasters of every kind</span><span>Flat rides for the whole family</span><span>Thousands of guests</span><span>Ride every coaster</span><span>Loops · launches · splashdowns</span><span>Day &amp; night</span><span>Plays offline</span><span class="k30">Download at 30K</span>
   </div>
 </div></div>
 
@@ -381,44 +360,44 @@ footer a { color: #fff; }
   <h2 class="h">Pick your thrill</h2>
   <p class="hs">From a coaster that skims the lake to a 139 m launch tower. Build any of them, shape every curve, then ride it from any seat.</p>
   <div class="rides">
-    <div class="ride"><video muted loop playsinline preload="none" poster="img/r-skyking.webp" data-auto aria-label="An accelerator coaster launching past the camera"><source src="img/r-skyking.mp4" type="video/mp4"></video>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-skyking.webp" data-auto aria-label="An accelerator coaster launching past the camera"><source src="../play/img/r-skyking.mp4" type="video/mp4"></video>
       <div class="cap"><b>Accelerator coaster</b><span>A hydraulic launch, then 139 m straight up and over the top.</span></div></div>
-    <div class="ride"><video muted loop playsinline preload="none" poster="img/r-aqua.webp" data-auto aria-label="A blue launched coaster flying through its loops"><source src="img/r-aqua.mp4" type="video/mp4"></video>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-aqua.webp" data-auto aria-label="A blue launched coaster flying through its loops"><source src="../play/img/r-aqua.mp4" type="video/mp4"></video>
       <div class="cap"><b>Launched coaster</b><span>Launched over the lake, then loop after loop through the park.</span></div></div>
-    <div class="ride"><video muted loop playsinline preload="none" poster="img/r-skyrocket.webp" data-auto aria-label="A green hyper coaster cresting a hill"><source src="img/r-skyrocket.mp4" type="video/mp4"></video>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-skyrocket.webp" data-auto aria-label="A green hyper coaster cresting a hill"><source src="../play/img/r-skyrocket.mp4" type="video/mp4"></video>
       <div class="cap"><b>Hyper coaster</b><span>Big hills, long drops and pure airtime.</span></div></div>
-    <div class="ride"><video muted loop playsinline preload="none" poster="img/r-serpent.webp" data-auto aria-label="Spinning cars at the top of a launch tower"><source src="img/r-serpent.mp4" type="video/mp4"></video>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-serpent.webp" data-auto aria-label="Spinning cars at the top of a launch tower"><source src="../play/img/r-serpent.mp4" type="video/mp4"></video>
       <div class="cap"><b>Spinning launch</b><span>Spinning cars shot up a tower, round the crown and back down.</span></div></div>
-    <div class="ride"><video muted loop playsinline preload="none" poster="img/r-volcano.webp" data-auto aria-label="A wooden coaster racing over its hills"><source src="img/r-volcano.mp4" type="video/mp4"></video>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-volcano.webp" data-auto aria-label="A wooden coaster racing over its hills"><source src="../play/img/r-volcano.mp4" type="video/mp4"></video>
       <div class="cap"><b>Wooden coaster</b><span>Rattling timber hills, right through a smoking volcano.</span></div></div>
-    <div class="ride"><video muted loop playsinline preload="none" poster="img/r-dive.webp" data-auto aria-label="A dive coaster bursting out of a lava cave over the water, spray flying, then up into its loop"><source src="img/r-dive.mp4" type="video/mp4"></video>
+    <div class="ride"><video muted loop playsinline preload="none" poster="../play/img/r-dive.webp" data-auto aria-label="A dive coaster bursting out of a lava cave over the water, spray flying, then up into its loop"><source src="../play/img/r-dive.mp4" type="video/mp4"></video>
       <div class="cap"><b>Dive coaster</b><span>Held over the edge, 51 m straight down, out over the water and up into the loop.</span></div></div>
   </div>
 </section>
 
 <section class="panels" id="features">
   <div class="panel">
-    <div class="pic"><img src="img/aqua-loop.webp" alt="A blue looping coaster with a train upside down at the top of a loop" loading="lazy" width="1280" height="720"></div>
+    <div class="pic"><img src="../play/img/aqua-loop.webp" alt="A blue looping coaster with a train upside down at the top of a loop" loading="lazy" width="1280" height="720"></div>
     <div class="txt"><div class="n">01</div><h3>Shape every curve</h3>
       <p>Drag a curve, stretch a drop, roll it upside down. <b>Loops, corkscrews, cobra rolls, launches and splashdowns</b> flow into one smooth ride, and the G-force view shows what your riders will feel.</p></div>
   </div>
   <div class="panel">
-    <div class="pic"><img src="img/front-seat.webp" alt="The front seat of a hyper coaster cresting its hill at sunset, the snowy mountains lit pink ahead" loading="lazy" width="1920" height="1080"></div>
+    <div class="pic"><img src="../play/img/front-seat.webp" alt="The front seat of a hyper coaster cresting its hill at sunset, the snowy mountains lit pink ahead" loading="lazy" width="1920" height="1080"></div>
     <div class="txt"><div class="n">02</div><h3>Take the front seat</h3>
       <p>Every coaster you build can be ridden <b>from any seat</b>. Hang over the top of a 139 m tower, or watch the train from the ground like a TV crew filming it.</p></div>
   </div>
   <div class="panel">
-    <div class="pic"><img src="img/crowd-1.webp" alt="A lake with palm trees and cherry blossoms in front of a giant observation wheel" loading="lazy" width="1280" height="720"></div>
+    <div class="pic"><img src="../play/img/crowd-1.webp" alt="A lake with palm trees and cherry blossoms in front of a giant observation wheel" loading="lazy" width="1280" height="720"></div>
     <div class="txt"><div class="n">03</div><h3>A park that's alive</h3>
       <p><b>Thousands of guests</b> walk your paths, queue, eat and scream. Kids run to the gentle rides, thrill seekers to your tallest coaster. Keep them happy and the money rolls in.</p></div>
   </div>
   <div class="panel">
-    <div class="pic"><img src="img/eye-night.webp" alt="A giant observation wheel running a light show at night" loading="lazy" width="1280" height="720"></div>
+    <div class="pic"><img src="../play/img/eye-night.webp" alt="A giant observation wheel running a light show at night" loading="lazy" width="1280" height="720"></div>
     <div class="txt"><div class="n">04</div><h3>Stay after dark</h3>
       <p>The sun goes down, <b>the big wheels start their light shows</b> and the park keeps going all night.</p></div>
   </div>
   <div class="panel">
-    <div class="pic"><img src="img/falls-sunset.webp" alt="Waterfalls tumbling off red rocks into a lake with palms at sunset, snowy mountains behind" loading="lazy" width="1920" height="1080"></div>
+    <div class="pic"><img src="../play/img/falls-sunset.webp" alt="Waterfalls tumbling off red rocks into a lake with palms at sunset, snowy mountains behind" loading="lazy" width="1920" height="1080"></div>
     <div class="txt"><div class="n">05</div><h3>Make it yours</h3>
       <p><b>Castles, caves, waterfalls</b>, fairy tale and desert island scenery, bridges and lakes. Shape the land, paint the ground and build a park nobody else has.</p></div>
   </div>
@@ -427,55 +406,47 @@ footer a { color: #fff; }
 <section class="sec" id="gallery">
   <div class="wrap center"><span class="kick">Straight from the game</span><h2 class="h">Screenshots</h2></div>
   <div class="strip">
-    <button type="button" data-full="img/g-castle.webp"><img src="img/g-castle-t.webp" alt="A castle and a wooden coaster under snowy mountains at sunset" loading="lazy"></button>
-    <button type="button" data-full="img/g-island.webp"><img src="img/g-island-t.webp" alt="A desert island with a shipwreck on its shore at sunset" loading="lazy"></button>
-    <button type="button" data-full="img/g-skyking-top.webp"><img src="img/g-skyking-top-t.webp" alt="The front seat at the top of a 139 m launch tower, the park far below" loading="lazy"></button>
-    <button type="button" data-full="img/g-fairy.webp"><img src="img/g-fairy-t.webp" alt="A pink princess palace and a fairy tale corner among blossom trees" loading="lazy"></button>
-    <button type="button" data-full="img/g-volcano-seat.webp"><img src="img/g-volcano-seat-t.webp" alt="Riding a wooden coaster toward the setting sun" loading="lazy"></button>
-    <button type="button" data-full="img/g-palace.webp"><img src="img/g-palace-t.webp" alt="A princess palace under a sky of small pink clouds" loading="lazy"></button>
-    <button type="button" data-full="img/g-serpent-seat.webp"><img src="img/g-serpent-seat-t.webp" alt="Riders sitting back to back on a spinning coaster at sunset" loading="lazy"></button>
-    <button type="button" data-full="img/g-volcano.webp"><img src="img/g-volcano-t.webp" alt="A wooden coaster beside a waterfall at dusk" loading="lazy"></button>
-    <button type="button" data-full="img/g-loop-seat.webp"><img src="img/g-loop-seat-t.webp" alt="Upside down in the front seat at the top of a loop" loading="lazy"></button>
-    <button type="button" data-full="img/g-loop-riders.webp"><img src="img/g-loop-riders-t.webp" alt="A full train of riders with their hands up, upside down at the top of a loop" loading="lazy"></button>
-    <button type="button" data-full="img/hero-aerial.webp"><img src="img/hero-aerial.webp" alt="Loopa Park from the air: a plaza, a lake, waterfalls, a Ferris wheel and coasters" loading="lazy"></button>
-    <button type="button" data-full="img/aqua-loop.webp"><img src="img/aqua-loop.webp" alt="A looping coaster with a train upside down" loading="lazy"></button>
-    <button type="button" data-full="img/eye-night.webp"><img src="img/eye-night.webp" alt="An observation wheel light show at night" loading="lazy"></button>
-    <button type="button" data-full="img/fairy-night.webp"><img src="img/fairy-night.webp" alt="The fairy wheel and cherry trees at night" loading="lazy"></button>
-    <button type="button" data-full="img/crowd-1.webp"><img src="img/crowd-1.webp" alt="A lake with palm trees and an observation wheel" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-castle.webp"><img src="../play/img/g-castle-t.webp" alt="A castle and a wooden coaster under snowy mountains at sunset" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-island.webp"><img src="../play/img/g-island-t.webp" alt="A desert island with a shipwreck on its shore at sunset" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-skyking-top.webp"><img src="../play/img/g-skyking-top-t.webp" alt="The front seat at the top of a 139 m launch tower, the park far below" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-fairy.webp"><img src="../play/img/g-fairy-t.webp" alt="A pink princess palace and a fairy tale corner among blossom trees" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-volcano-seat.webp"><img src="../play/img/g-volcano-seat-t.webp" alt="Riding a wooden coaster toward the setting sun" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-palace.webp"><img src="../play/img/g-palace-t.webp" alt="A princess palace under a sky of small pink clouds" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-serpent-seat.webp"><img src="../play/img/g-serpent-seat-t.webp" alt="Riders sitting back to back on a spinning coaster at sunset" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-volcano.webp"><img src="../play/img/g-volcano-t.webp" alt="A wooden coaster beside a waterfall at dusk" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-loop-seat.webp"><img src="../play/img/g-loop-seat-t.webp" alt="Upside down in the front seat at the top of a loop" loading="lazy"></button>
+    <button type="button" data-full="../play/img/g-loop-riders.webp"><img src="../play/img/g-loop-riders-t.webp" alt="A full train of riders with their hands up, upside down at the top of a loop" loading="lazy"></button>
+    <button type="button" data-full="../play/img/hero-aerial.webp"><img src="../play/img/hero-aerial.webp" alt="Loopa Park from the air: a plaza, a lake, waterfalls, a Ferris wheel and coasters" loading="lazy"></button>
+    <button type="button" data-full="../play/img/aqua-loop.webp"><img src="../play/img/aqua-loop.webp" alt="A looping coaster with a train upside down" loading="lazy"></button>
+    <button type="button" data-full="../play/img/eye-night.webp"><img src="../play/img/eye-night.webp" alt="An observation wheel light show at night" loading="lazy"></button>
+    <button type="button" data-full="../play/img/fairy-night.webp"><img src="../play/img/fairy-night.webp" alt="The fairy wheel and cherry trees at night" loading="lazy"></button>
+    <button type="button" data-full="../play/img/crowd-1.webp"><img src="../play/img/crowd-1.webp" alt="A lake with palm trees and an observation wheel" loading="lazy"></button>
   </div>
 </section>
 
 <section class="sec wrap" id="price">
   <div class="center"><span class="kick">Price</span><h2 class="h">Grab your ticket</h2>
-    <p class="hs dl">Play the whole game free while it's in Early Access.</p>
     <p class="hs k30">The download opens for everyone the day we reach 30,000 followers on Instagram.</p></div>
   <div class="tickets">
     <div class="ticket hot">
       <div class="main">
         <span class="tt">Early Access · admit one</span>
-        <div class="amt dl">Free</div>
         <div class="amt k30">Free<small>download at 30K</small></div>
-        <div class="when dl">Download and play today</div>
         <div class="when k30">The download opens at 30,000 followers</div>
         <ul>
-          <li class="dl">The whole game as it is today</li>
-          <li class="dl">Every new version, installed by itself</li>
           <li class="k30">A free download when we reach 30K</li>
           <li>The Founding Tester medal and your own number</li>
           <li>Your name in the credits</li>
           <li>A direct line to the team: Feedback (F8) in the game</li>
         </ul>
-        <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="price">Download free</a>
-        <a class="btn btn-main nowin-only dl" href="#get" data-jump-mail>Email me the link</a>
         <a class="btn btn-main k30" href="#last" data-jump-wish>Join the wishlist</a>
       </div>
-      <div class="stub"><span class="dl">Now open</span><span class="k30">At 30K</span></div>
+      <div class="stub"><span class="k30">At 30K</span></div>
     </div>
     <div class="ticket">
       <div class="main">
         <span class="tt">Full release</span>
         <div class="amt">$19.99<small>planned price</small></div>
-        <div class="when dl">Out when we reach 30,000 followers</div>
         <div class="when k30">After Early Access</div>
         <ul>
           <li>Everything from Early Access, finished and polished</li>
@@ -489,41 +460,6 @@ footer a { color: #fff; }
   </div>
 </section>
 
-<section class="sec wrap dl" id="start">
-  <div class="center dl"><span class="kick">No card, no store, no admin rights</span><h2 class="h">Playing in 3 minutes</h2></div>
-  <div class="center k30"><span class="kick">Before you ask</span><h2 class="h">Good to know</h2></div>
-  <div class="card dl">
-    <div class="steps">
-      <div class="step"><span class="num">1</span><b>Download</b><p class="dl">Press the pink button. The installer is small and installs just for you.</p><p class="k30">At 30,000 followers the pink button turns into the download. The installer is small and installs just for you.</p></div>
-      <div class="step"><span class="num">2</span><b>Run it</b><p>Windows doesn't know this new game yet and shows a blue warning. Press <b>More info</b>, then <b>Run anyway</b>.</p>
-        <div class="ss" aria-hidden="true"><div class="t">Windows protected your PC</div><div>Microsoft Defender SmartScreen prevented an unrecognized app from starting. <u>More info</u></div><div class="r"><span class="b hi">Run anyway</span><span class="b">Don't run</span></div></div></div>
-      <div class="step"><span class="num">3</span><b>Make your free account</b><p>The game opens on the station. Pick a username and a password, type in the code we email you, and you're in the park.</p></div>
-    </div>
-  </div>
-  <div class="two">
-    <div class="card">
-      <h3>Your computer</h3>
-      <ul>
-        <li>Windows 10 or 11, 64-bit</li>
-        <li>A graphics card from the last few years (laptops with Intel Iris Xe or better run it on Medium/High)</li>
-        <li>8 GB of memory</li>
-        <li>About 200 MB free</li>
-        <li>Internet to sign in (then it also plays offline for a couple of days)</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Questions</h3>
-      <details><summary>Is it really free?</summary><p class="dl">Yes. Loop &amp; Lift is free while it's in Early Access. The full game is planned at $19.99 when it launches.</p><p class="k30">Yes. The download opens free for everyone when we reach 30,000 followers on Instagram. The full game is planned at $19.99 when it launches.</p></details>
-      <details><summary>Why do I need an account?</summary><p>So your parks' backups, your Founding Tester number and your feedback stay yours, and every update reaches you. It takes a minute: a username, a password and the code we email you.</p></details>
-      <details class="dl"><summary>Why does Windows warn me?</summary><p>Loop &amp; Lift is a brand-new game by a small team, and Windows warns about any program it hasn't seen many people download yet. The installer only puts the game in your user folder.</p></details>
-      <details><summary>Can I share videos and screenshots?</summary><p>Please do! To share the game itself, send friends this page, so they always get the newest version.</p></details>
-      <details><summary>Where are my parks saved?</summary><p>On your computer, in <code>%APPDATA%\com.loopandlift.game\saves</code>. They stay when the game updates.</p></details>
-      <details><summary>What do you collect?</summary><p>Your account, how you play (time, rides you build, frame rate, crashes) and copies of your parks, to fix bugs and make the game better. Nothing outside the game. Details in the <a href="../privacy/">Privacy Notice</a> and the <a href="../terms/">Terms</a>.</p></details>
-      <details><summary>Mac or phone?</summary><p>Not yet: Windows first. Follow <a href="https://www.instagram.com/playloopandlift/" target="_blank" rel="noopener">@playloopandlift</a> to hear when.</p></details>
-      <details class="dl"><summary>How do I uninstall it?</summary><p>Windows Settings, Apps, Installed apps, Loop and Lift, Uninstall.</p></details>
-    </div>
-  </div>
-</section>
 
 <section class="final" id="last">
   <div class="scene wait" id="scene" aria-hidden="true">
@@ -533,11 +469,6 @@ footer a { color: #fff; }
   </div>
   <div class="in">
     <h2 class="h">Your park is waiting</h2>
-    <a class="btn btn-main win-only dl" href="https://github.com/loopandlift/beta/releases/latest/download/Loop-and-Lift-Beta-Setup.exe" data-dl="bottom">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M6 10l6 6 6-6M4 20h16"/></svg>
-      Download free for Windows
-    </a>
-    <div class="nowin-only mail dl" data-mail="bottom"></div>
     <div class="mail k30" data-wish="bottom"></div>
   </div>
 </section>
@@ -657,7 +588,7 @@ else if ('IntersectionObserver' in window) {
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/, W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
   const scene = document.getElementById('scene');
   if (!MS || !W || !('IntersectionObserver' in window)) { scene.classList.remove('wait'); return; }
-  const A = '../assets/', V = '?v=' + /*VER*/1794482889/*VER*/;
+  const A = '../assets/', V = '?v=' + /*VER*/1794483242/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel');
   const pct = v => (v / MS.frame) * 100 + '%';
   let vid = null, shown = false, timer = 0;
