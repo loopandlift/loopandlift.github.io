@@ -405,6 +405,7 @@ footer a { color: #fff; }
 <section class="sec" id="gallery">
   <div class="wrap center"><span class="kick">Straight from the game</span><h2 class="h">Screenshots</h2></div>
   <div class="strip">
+    <button type="button" data-full="../play/img/crowd-1.webp"><img src="../play/img/crowd-1.webp" alt="A lake with palm trees and an observation wheel" loading="lazy"></button>
     <button type="button" data-full="../play/img/g-castle.webp"><img src="../play/img/g-castle-t.webp" alt="A castle and a wooden coaster under snowy mountains at sunset" loading="lazy"></button>
     <button type="button" data-full="../play/img/g-island.webp"><img src="../play/img/g-island-t.webp" alt="A desert island with a shipwreck on its shore at sunset" loading="lazy"></button>
     <button type="button" data-full="../play/img/g-skyking-top.webp"><img src="../play/img/g-skyking-top-t.webp" alt="The front seat at the top of a 139 m launch tower, the park far below" loading="lazy"></button>
@@ -415,7 +416,6 @@ footer a { color: #fff; }
     <button type="button" data-full="../play/img/aqua-loop.webp"><img src="../play/img/aqua-loop.webp" alt="A looping coaster with a train upside down" loading="lazy"></button>
     <button type="button" data-full="../play/img/eye-night.webp"><img src="../play/img/eye-night.webp" alt="An observation wheel light show at night" loading="lazy"></button>
     <button type="button" data-full="../play/img/fairy-night.webp"><img src="../play/img/fairy-night.webp" alt="The fairy wheel and cherry trees at night" loading="lazy"></button>
-    <button type="button" data-full="../play/img/crowd-1.webp"><img src="../play/img/crowd-1.webp" alt="A lake with palm trees and an observation wheel" loading="lazy"></button>
   </div>
 </section>
 
@@ -579,7 +579,7 @@ else if ('IntersectionObserver' in window) {
   const MS = /*MS*/{"frame":1600,"tower":[445,331,1146,1604],"clip":{"x":335,"y":299,"width":796,"height":1300},"frames":788,"topFrame":379,"emptyHead":1.0666666666666667,"emptyTail":1.1}/*MS*/, W = /*WHEEL*/{"px":1946,"mPerPx":0.05712890625,"z":[-6.2,-4.2,-2.2,0.0,2.2,4.2,6.2],"capPx":686,"capMPerPx":0.008984375,"R":54.65,"N":48}/*WHEEL*/;
   const scene = document.getElementById('scene');
   if (!MS || !W || !('IntersectionObserver' in window)) { scene.classList.remove('wait'); return; }
-  const A = '../assets/', V = '?v=' + /*VER*/1794484353/*VER*/;
+  const A = '../assets/', V = '?v=' + /*VER*/1794484372/*VER*/;
   const ms = document.getElementById('ms'), wheel = document.getElementById('wheel');
   const pct = v => (v / MS.frame) * 100 + '%';
   let vid = null, shown = false, timer = 0;
