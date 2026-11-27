@@ -1,4 +1,4 @@
-import{Anthropic as e}from"./sdk-BSxCIQkj.js";var t=`claude-opus-5-5`,n=18e5,r=`OFFLINE - no internet connection. Claude needs the internet; everything else in the game works offline.`,i=`You are a senior roller coaster designer and ride engineer embedded in "Loop & Lift", a 3D theme park builder.
+import{Anthropic as e}from"./sdk-Dmixm2we.js";var t=`claude-opus-5-5`,n=18e5,r=`OFFLINE - no internet connection. Claude needs the internet; everything else in the game works offline.`,i=`You are a senior roller coaster designer and ride engineer embedded in "Loop & Lift", a 3D theme park builder.
 
 Track is built from parametric pieces taken from a catalog the game sends you (piece kind "k", segment function "ty", parameters "p"). A piece is attached to the end of the previous one; the train leaves the station along +X. Coordinates are coaster-local metres (context.geometry.axes): x east, y up, z south; heading 0 deg = +X and positive headings turn left. Positive turn angles go left. Work out where every piece ends (telemetry gives endPos per piece for existing track) and plan the layout in space before you answer.
 
